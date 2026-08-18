@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Anesthesia Products — Alpler Hospital Supplies</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #fff; color: #1a1a2a; overflow-x: hidden; }
+    .display { font-weight: 800; letter-spacing: -0.045em; line-height: 1.05; }
+    .title    { font-weight: 700; letter-spacing: -0.03em; line-height: 1.15; }
+    .label    { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+
+    /* Nav */
+    #nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(200,0,109,0.94); backdrop-filter: blur(20px) saturate(160%); border-bottom: 1px solid rgba(255,255,255,0.14); }
+    .nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 32px; height: 76px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-link { font-size: 13px; font-weight: 500; color: #fff; text-decoration: none; transition: color 0.2s; }
+    .nav-link:hover, .nav-link.active { color: #fff; }
+    .nav-cta { font-size: 13px; font-weight: 600; color: #c8006d; text-decoration: none; background: #fff; padding: 9px 20px; border-radius: 8px; transition: opacity 0.2s, transform 0.2s; }
+    .nav-cta:hover { opacity: 0.85; transform: translateY(-1px); }
+    .lang-switch { display: flex; align-items: center; gap: 2px; background: rgba(255,255,255,0.16); border-radius: 100px; padding: 3px; }
+    .lang-btn { font-size: 11px; font-weight: 700; letter-spacing: 0.03em; color: rgba(255,255,255,0.7); background: none; border: none; padding: 5px 11px; border-radius: 100px; cursor: pointer; transition: background 0.2s, color 0.2s; }
+    .lang-btn.active { background: #fff; color: #c8006d; }
+    .lang-btn:hover:not(.active) { color: #fff; }
+    .mobile-lang-switch { display: flex; align-items: center; gap: 2px; background: rgba(255,255,255,0.14); border-radius: 100px; padding: 3px; margin-top: 10px; width: fit-content; }
+    .mobile-lang-switch .lang-btn { padding: 6px 14px; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { width: 22px; height: 1.5px; background: rgba(255,255,255,0.7); border-radius: 2px; display: block; }
+    #mobile-nav { display: none; flex-direction: column; gap: 4px; padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.14); background: rgba(200,0,109,0.97); }
+    #mobile-nav.open { display: flex; }
+    #mobile-nav a { font-size: 15px; font-weight: 500; color: #fff; text-decoration: none; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    #mobile-nav a:last-child { border-bottom: none; color: #fff; font-weight: 700; }
+
+    /* Page hero */
+    .page-hero { background: linear-gradient(160deg, #2a0018 0%, #4a0028 45%, #1a000f 100%); padding: 140px 32px 80px; position: relative; overflow: hidden; }
+    .page-hero-glow { position: absolute; top: -100px; right: -100px; width: 600px; height: 600px; background: radial-gradient(ellipse, rgba(200,0,109,0.2) 0%, transparent 65%); pointer-events: none; }
+    .page-hero-inner { max-width: 1280px; margin: 0 auto; position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .page-hero-back { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: rgba(255,255,255,0.4); text-decoration: none; margin-bottom: 24px; transition: color 0.2s; }
+    .page-hero-back:hover { color: rgba(255,255,255,0.7); }
+    .page-hero-eyebrow { color: #c8006d; margin-bottom: 16px; display: block; }
+    .page-hero-h1 { font-size: clamp(40px, 5vw, 64px); color: #fff; margin-bottom: 20px; }
+    .page-hero-sub { font-size: 17px; color: rgba(255,255,255,0.5); line-height: 1.7; margin-bottom: 36px; }
+    .btn-prim { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: #fff; text-decoration: none; background: linear-gradient(135deg, #c8006d, #a8005b); padding: 14px 28px; border-radius: 10px; transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s; }
+    .btn-prim:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(200,0,109,0.4); }
+    .page-hero-img { border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); aspect-ratio: 4/3; position: relative; }
+    .page-hero-img img { width: 100%; height: 100%; object-fit: cover; }
+    .page-hero-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(42,0,24,0.6) 0%, transparent 55%); }
+
+    /* Breadcrumb bar */
+    .breadcrumb-bar { background: #f8f7fc; border-bottom: 1px solid rgba(0,0,0,0.06); padding: 14px 32px; }
+    .breadcrumb-inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; gap: 8px; font-size: 13px; color: #8a8a9a; }
+    .breadcrumb-inner a { color: #8a8a9a; text-decoration: none; transition: color 0.2s; }
+    .breadcrumb-inner a:hover { color: #c8006d; }
+    .breadcrumb-inner span { color: #1a1a2a; font-weight: 500; }
+
+    /* Category nav */
+    .cat-nav { background: #fff; border-bottom: 1px solid rgba(0,0,0,0.06); position: sticky; top: 76px; z-index: 50; }
+    .cat-nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 32px; display: flex; gap: 0; overflow-x: auto; }
+    .cat-nav-link { font-size: 13px; font-weight: 600; color: #8a8a9a; text-decoration: none; padding: 16px 20px; border-bottom: 2px solid transparent; white-space: nowrap; transition: color 0.2s, border-color 0.2s; }
+    .cat-nav-link:hover { color: #1a1a2a; }
+    .cat-nav-link.active { color: #c8006d; border-bottom-color: #c8006d; }
+
+    /* Product category section */
+    .prod-section { padding: 80px 32px; max-width: 1280px; margin: 0 auto; }
+    .prod-section + .prod-section { padding-top: 0; }
+    .prod-section-header { margin-bottom: 40px; padding-bottom: 24px; border-bottom: 1px solid rgba(0,0,0,0.06); display: flex; align-items: flex-start; justify-content: space-between; gap: 32px; flex-wrap: wrap; }
+    .prod-section-label { color: #c8006d; display: block; margin-bottom: 8px; }
+    .prod-section-h2 { font-size: clamp(24px, 2.5vw, 36px); color: #0f0f1a; }
+    .prod-section-desc { font-size: 15px; color: #6a6a7a; line-height: 1.7; max-width: 600px; }
+
+    /* Product grid */
+    .prod-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .prod-card { background: #fff; border: 1px solid rgba(0,0,0,0.08); border-radius: 16px; padding: 28px; transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1); }
+    .prod-card:hover { border-color: rgba(200,0,109,0.2); box-shadow: 0 4px 20px rgba(200,0,109,0.08), 0 12px 40px rgba(0,0,0,0.06); transform: translateY(-4px); }
+    .prod-card-icon { width: 44px; height: 44px; border-radius: 12px; background: rgba(200,0,109,0.08); border: 1px solid rgba(200,0,109,0.12); display: flex; align-items: center; justify-content: center; margin-bottom: 18px; }
+    .prod-card-name { font-size: 16px; font-weight: 700; color: #0f0f1a; margin-bottom: 8px; letter-spacing: -0.02em; }
+    .prod-card-desc { font-size: 14px; color: #6a6a7a; line-height: 1.65; margin-bottom: 16px; }
+    .prod-card-variants { list-style: none; display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid rgba(0,0,0,0.05); }
+    .prod-card-variants li { font-size: 12.5px; color: #5a5a72; display: flex; align-items: center; gap: 8px; }
+    .prod-card-variants li::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: #c8006d; flex-shrink: 0; }
+    .prod-card-footer { display: flex; align-items: center; justify-content: space-between; }
+    .prod-card-tag { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #a8a8b8; background: #f4f3f8; padding: 4px 10px; border-radius: 20px; }
+    .prod-card-cta { font-size: 13px; font-weight: 600; color: #c8006d; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: gap 0.2s; }
+    .prod-card-cta:hover { gap: 8px; }
+
+    /* Section alternating bg */
+    .section-alt { background: #f8f7fc; }
+
+    /* CTA */
+    .cta-section { background: #1a000f; padding: 100px 32px; position: relative; overflow: hidden; text-align: center; }
+    .cta-glow { position: absolute; bottom: -200px; left: 50%; transform: translateX(-50%); width: 900px; height: 500px; background: radial-gradient(ellipse, rgba(200,0,109,0.18) 0%, transparent 65%); pointer-events: none; }
+    .cta-inner { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
+    .cta-label { color: #c8006d; margin-bottom: 16px; display: block; }
+    .cta-h2 { font-size: clamp(32px, 4vw, 52px); color: #fff; margin-bottom: 16px; }
+    .cta-sub { font-size: 16px; color: rgba(255,255,255,0.45); margin-bottom: 40px; line-height: 1.7; }
+    .cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-ghost { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.7); text-decoration: none; border: 1px solid rgba(255,255,255,0.15); padding: 14px 28px; border-radius: 10px; transition: background 0.2s, border-color 0.2s, transform 0.2s; }
+    .btn-ghost:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.3); transform: translateY(-1px); }
+
+    /* Footer */
+    footer { background: #fafafa; border-top: 1px solid rgba(0,0,0,0.06); padding: 64px 0 40px; }
+    .footer-inner { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+    .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+    .footer-brand-desc { font-size: 14px; color: #8a8a9a; line-height: 1.7; margin: 16px 0 24px; max-width: 300px; }
+    .footer-col-title { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #1a1a2a; margin-bottom: 18px; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { font-size: 14px; color: #6a6a7a; text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: #c8006d; }
+    .footer-social { display: flex; gap: 10px; }
+    .footer-social a { width: 36px; height: 36px; border-radius: 8px; background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+    .footer-social a:hover { background: rgba(200,0,109,0.08); border-color: rgba(200,0,109,0.2); }
+    .footer-bottom { border-top: 1px solid rgba(0,0,0,0.06); padding-top: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .footer-copy { font-size: 13px; color: #9a9aaa; }
+    .footer-legal { display: flex; gap: 20px; }
+    .footer-legal a { font-size: 13px; color: #9a9aaa; text-decoration: none; }
+    .footer-legal a:hover { color: #c8006d; }
+
+    @media (max-width: 1024px) {
+      .page-hero-inner { grid-template-columns: 1fr; }
+      .prod-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .prod-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="index.html" style="flex-shrink:0;">
+      <img src="brand_assets/AlplerMedicalLogoPink-300x88.png" alt="Alpler Hospital Supplies" style="height:50px;width:auto;filter:brightness(0) invert(1);" />
+    </a>
+    <div class="nav-links">
+      <a href="index.html"         class="nav-link" data-tr="Ana Sayfa">Home</a>
+      <a href="index.html#about"    class="nav-link" data-tr="Hakkımızda">About</a>
+      <a href="products.html" class="nav-link active" data-tr="Ürünler">Products</a>
+      <a href="index.html#quality"  class="nav-link" data-tr="Kalite">Quality</a>
+      <a href="index.html#services" class="nav-link" data-tr="Hizmetler">Services</a>
+      <a href="index.html#contact"  class="nav-link" data-tr="İletişim">Contact</a>
+      <a href="index.html#contact"  class="nav-cta" data-tr="Teklif Alın">Get a Quote</a>
+      <div class="lang-switch">
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="tr">TR</button>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+  <div id="mobile-nav">
+    <a href="index.html" data-tr="Ana Sayfa">Home</a>
+    <a href="index.html#about" data-tr="Hakkımızda">About</a>
+    <a href="products.html" data-tr="Ürünler">Products</a>
+    <a href="index.html#quality" data-tr="Kalite">Quality</a>
+    <a href="index.html#contact" data-tr="İletişim">Contact</a>
+    <a href="index.html#contact" data-tr="Teklif Alın →">Get a Quote →</a>
+    <div class="mobile-lang-switch">
+      <button class="lang-btn active" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="tr">TR</button>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="page-hero-glow"></div>
+  <div class="page-hero-inner">
+    <div>
+      <a href="index.html" class="page-hero-back">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M11 7H3M6 4L3 7l3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span data-tr="Ana Sayfaya Dön">Back to Home</span>
+      </a>
+      <span class="label page-hero-eyebrow" data-tr="Anestezi ve Solunum">Anesthesia &amp; Respiratory</span>
+      <h1 class="display page-hero-h1" data-tr="Anestezi<br />Ürünleri">Anesthesia<br />Products</h1>
+      <p class="page-hero-sub" data-tr="Ameliyathaneler ve anestezi üniteleri için CE işaretli, OEM kaynaklı anestezi sarf malzemeleri. Her ürün yetkili dağıtım kanallarına kadar izlenebilir.">CE-marked, OEM-sourced anesthesia consumables for operating rooms and anesthesia units. Every product traceable to authorized distribution channels.</p>
+      <a href="index.html#contact" class="btn-prim">
+        <span data-tr="Fiyat Talep Edin">Request Pricing</span>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+    <div class="page-hero-img">
+      <img src="https://placehold.co/640x480/0f0f1c/1a0f2a?text=+" alt="Anesthesia products" />
+    </div>
+  </div>
+</section>
+
+<!-- BREADCRUMB -->
+<div class="breadcrumb-bar">
+  <div class="breadcrumb-inner">
+    <a href="index.html" data-tr="Ana Sayfa">Home</a>
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4 2l4 4-4 4" stroke="#c2c2d0" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span data-tr="Anestezi">Anesthesia</span>
+  </div>
+</div>
+
+<!-- CATEGORY QUICK-NAV -->
+<div class="cat-nav">
+  <div class="cat-nav-inner">
+    <a href="#masks"      class="cat-nav-link active" data-tr="Yüz Maskeleri">Face Masks</a>
+    <a href="#circuits"   class="cat-nav-link" data-tr="Hasta Devreleri">Patient Circuits</a>
+    <a href="#sensors"    class="cat-nav-link" data-tr="Sensörler">Sensors</a>
+    <a href="#filtration" class="cat-nav-link" data-tr="Filtrasyon">Filtration</a>
+    <a href="#sampling"   class="cat-nav-link" data-tr="Gaz Örnekleme">Gas Sampling</a>
+    <a href="#canisters"  class="cat-nav-link" data-tr="Kanisterler ve Tutucular">Canisters &amp; Traps</a>
+  </div>
+</div>
+
+<!-- ── FACE MASKS ── -->
+<div id="masks" style="background:#fff;">
+  <div class="prod-section">
+    <div class="prod-section-header">
+      <div>
+        <span class="label prod-section-label" data-tr="01 — Yüz Maskeleri">01 — Face Masks</span>
+        <h2 class="title prod-section-h2" data-tr="Anestezi Yüz Maskeleri">Anesthesia Face Masks</h2>
+      </div>
+      <p class="prod-section-desc" data-tr="Esnek ve yarı sert yapılandırmalarda mevcuttur. Pediatrikten yetişkine kadar geniş bir hasta boyu aralığında güvenilir sızdırmazlık için anatomik olarak şekillendirilmiştir.">Available in flexible and semi-rigid configurations. Anatomically shaped for a reliable seal across a range of patient sizes — pediatric through adult.</p>
+    </div>
+    <div class="prod-grid">
+      <div class="prod-card">
+        <div class="prod-card-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 11c0-3.86 3.14-7 7-7s7 3.14 7 7" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round"/><path d="M2 15h18M6 15v2M11 15v4M16 15v2" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </div>
+        <div class="prod-card-name" data-tr="Esnek Yüz Maskesi">Flexible Face Mask</div>
+        <div class="prod-card-desc" data-tr="Yüz konturlarına uyum sağlayan yumuşak, esnek maske gövdesi. Minimal basınçla mükemmel bir sızdırmazlık sağlar — zor hava yolu yönetimi için idealdir.">Soft, pliable mask body that conforms to facial contours. Provides an excellent seal with minimal pressure — ideal for difficult airway management.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="Boylar: 0 (Prematüre) – 5 (Büyük Yetişkin)">Sizes: 0 (Premature) to 5 (Large Adult)</li>
+          <li data-tr="Oral değerlendirme için şeffaf gövde">Transparent body for oral assessment</li>
+          <li data-tr="Standart 22mm konektör">Standard 22mm connector</li>
+          <li data-tr="Tek kullanımlık, steril">Single-use, sterile</li>
+        </ul>
+        <div class="prod-card-footer">
+          <span class="prod-card-tag" data-tr="Tek Kullanımlık">Single-Use</span>
+          <a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-card-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 11c0-3.86 3.14-7 7-7s7 3.14 7 7" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round"/><path d="M2 15h18M6 15v2M11 15v4M16 15v2" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round"/><rect x="5" y="13" width="12" height="2" rx="1" fill="rgba(200,0,109,0.15)" stroke="#c8006d" stroke-width="0.8"/></svg>
+        </div>
+        <div class="prod-card-name" data-tr="Yarı Sert Yüz Maskesi">Semi-Rigid Face Mask</div>
+        <div class="prod-card-desc" data-tr="Yumuşak yastıklı kenarlı yapılandırılmış gövde. Basınç altında şeklini korur, klinisyenler için tek elle maske ventilasyonunu daha tutarlı hale getirir.">Structured body with a soft cushioned rim. Maintains shape under pressure, making one-handed mask ventilation more consistent for clinicians.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="Boylar: 1 (Bebek) – 5 (Büyük Yetişkin)">Sizes: 1 (Infant) to 5 (Large Adult)</li>
+          <li data-tr="Yastıklı sızdırmazlık halkası">Cushioned sealing ring</li>
+          <li data-tr="Baş bandı bağlantısı için kanca halkası">Hook ring for head strap attachment</li>
+          <li data-tr="Tek kullanımlık, steril">Single-use, sterile</li>
+        </ul>
+        <div class="prod-card-footer">
+          <span class="prod-card-tag" data-tr="Tek Kullanımlık">Single-Use</span>
+          <a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── PATIENT CIRCUITS ── -->
+<div id="circuits" class="section-alt">
+  <div class="prod-section">
+    <div class="prod-section-header">
+      <div>
+        <span class="label prod-section-label" data-tr="02 — Hasta Devreleri">02 — Patient Circuits</span>
+        <h2 class="title prod-section-h2" data-tr="Solunum Devreleri">Breathing Circuits</h2>
+      </div>
+      <p class="prod-section-desc" data-tr="Anestezi cihazlarıyla kullanım için tasarlanmış tek kullanımlık hasta solunum devreleri. Yetişkin, pediatrik ve yenidoğan yapılandırmalarında mevcuttur.">Disposable patient breathing circuits designed for use with anesthesia machines. Available in adult, pediatric, and neonatal configurations.</p>
+    </div>
+    <div class="prod-grid">
+      <div class="prod-card">
+        <div class="prod-card-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 11h16M11 3v16" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round"/><circle cx="11" cy="11" r="7" stroke="#c8006d" stroke-width="1.3"/></svg>
+        </div>
+        <div class="prod-card-name" data-tr="Yetişkin Solunum Devresi">Adult Breathing Circuit</div>
+        <div class="prod-card-desc" data-tr="Yetişkin hastalar için standart koaksiyel ve paralel kol yapılandırmaları. Tüm büyük anestezi cihazı markalarıyla uyumludur.">Standard co-axial and parallel limb configurations for adult patients. Compatible with all major anesthesia machine brands.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="Koaksiyel (Bain) ve paralel kol varyantları">Co-axial (Bain) and parallel limb variants</li>
+          <li data-tr="1,5m ve 2,0m uzunluklar">1.5m and 2.0m lengths</li>
+          <li data-tr="22mm / 15mm konektörler">22mm / 15mm connectors</li>
+          <li data-tr="Entegre bakteri/virüs filtre portu">Integrated bacterial/viral filter port</li>
+        </ul>
+        <div class="prod-card-footer">
+          <span class="prod-card-tag" data-tr="Yetişkin">Adult</span>
+          <a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-card-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 11h16M11 3v16" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round"/><circle cx="11" cy="11" r="5" stroke="#c8006d" stroke-width="1.3"/></svg>
+        </div>
+        <div class="prod-card-name" data-tr="Pediatrik Solunum Devresi">Pediatric Breathing Circuit</div>
+        <div class="prod-card-desc" data-tr="Pediatrik hastalar için mühendislik ürünü düşük ölü hacimli, düşük dirençli devreler. Hafif hortum, hava yolu üzerindeki sürtünmeyi en aza indirir.">Low dead-space, low-resistance circuits engineered for pediatric patients. Lightweight tubing minimizes drag on the airway.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="T-parça ve paralel kol seçenekleri">T-piece and parallel limb options</li>
+          <li data-tr="1,0m ve 1,5m uzunluklar">1.0m and 1.5m lengths</li>
+          <li data-tr="15mm bağlantılar">15mm connections</li>
+          <li data-tr="Renk kodlu (standart pediatrik mavi)">Color-coded (standard pediatric blue)</li>
+        </ul>
+        <div class="prod-card-footer">
+          <span class="prod-card-tag" data-tr="Pediatrik">Pediatric</span>
+          <a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-card-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="3" stroke="#c8006d" stroke-width="1.4"/><circle cx="11" cy="11" r="7" stroke="#c8006d" stroke-width="1.1" stroke-dasharray="2 2"/></svg>
+        </div>
+        <div class="prod-card-name" data-tr="Yenidoğan Solunum Devresi">Neonatal Breathing Circuit</div>
+        <div class="prod-card-desc" data-tr="Yenidoğanlar için ultra düşük ölü hacim ve uyumluluk. Küvöz ve transport ventilatör kurulumlarıyla uyumludur.">Ultra-low dead space and compliance for neonates. Compatible with incubator and transport ventilator setups.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="Minimal direnç için 8mm iç çaplı hortum">8mm ID tubing for minimal resistance</li>
+          <li data-tr="Giraffe ve Lullaby kurulumlarıyla uyumlu">Compatible with Giraffe &amp; Lullaby setups</li>
+          <li data-tr="Döner 15mm konektörler">Swivel 15mm connectors</li>
+          <li data-tr="Tek kullanımlık, steril">Single-use, sterile</li>
+        </ul>
+        <div class="prod-card-footer">
+          <span class="prod-card-tag" data-tr="Yenidoğan">Neonatal</span>
+          <a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SENSORS ── -->
+<div id="sensors" style="background:#fff;">
+  <div class="prod-section">
+    <div class="prod-section-header">
+      <div>
+        <span class="label prod-section-label" data-tr="03 — Sensörler">03 — Sensors</span>
+        <h2 class="title prod-section-h2" data-tr="Entropi ve Akış Sensörleri">Entropy &amp; Flow Sensors</h2>
+      </div>
+      <p class="prod-section-desc" data-tr="Anestezi derinliği ve solunum akışı için takip sensörleri — GE Healthcare ve diğer büyük platform markalarıyla uyumludur.">Monitoring sensors for depth of anesthesia and respiratory flow — compatible with GE Healthcare and other major platform brands.</p>
+    </div>
+    <div class="prod-grid">
+      <div class="prod-card">
+        <div class="prod-card-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 11h4l2-5 3 10 3-7 2 2h4" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="prod-card-name" data-tr="Entropi Sensörü (Yetişkin)">Entropy Sensor (Adult)</div>
+        <div class="prod-card-desc" data-tr="GE Entropi modülü için EEG tabanlı anestezi derinliği sensörü. Anestezik dozajını yönlendirmek için State Entropy (SE) ve Response Entropy (RE) ölçer.">EEG-based depth-of-anesthesia sensor for GE Entropy module. Measures State Entropy (SE) and Response Entropy (RE) to guide anesthetic dosing.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="GE Healthcare Entropi modülüyle uyumlu">Compatible with GE Healthcare Entropy module</li>
+          <li data-tr="3 elektrotlu kendinden yapışkanlı ped">3-electrode self-adhesive pad</li>
+          <li data-tr="Empedans kontrolü dahildir">Impedance check included</li>
+          <li data-tr="Tek kullanımlık, steril">Single-use, sterile</li>
+        </ul>
+        <div class="prod-card-footer">
+          <span class="prod-card-tag" data-tr="GE Uyumlu">GE Compatible</span>
+          <a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-card-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 11h4l2-4 3 8 2-6 2 2h4" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="11" cy="5" r="1.5" fill="#c8006d" opacity="0.5"/></svg>
+        </div>
+        <div class="prod-card-name" data-tr="Entropi Sensörü (Pediatrik)">Entropy Sensor (Pediatric)</div>
+        <div class="prod-card-desc" data-tr="Pediatrik kraniyal geometriye uyarlanmış daha küçük elektrot alanı. Yetişkin versiyonuyla aynı entropi algoritması, optimize edilmiş sinyal alımı.">Smaller electrode footprint adapted for pediatric cranial geometry. Same entropy algorithm as adult version, optimized signal acquisition.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="GE Healthcare Entropi modülüyle uyumlu">Compatible with GE Healthcare Entropy module</li>
+          <li data-tr="Çocuklar için küçültülmüş elektrot boyutu">Reduced electrode size for children</li>
+          <li data-tr="Hassas ciltler için yumuşak yapışkan">Gentle adhesive for sensitive skin</li>
+          <li data-tr="Tek kullanımlık, steril">Single-use, sterile</li>
+        </ul>
+        <div class="prod-card-footer">
+          <span class="prod-card-tag" data-tr="Pediatrik">Pediatric</span>
+          <a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-card-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 7h14M4 11h14M4 15h10" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round"/><path d="M16 13l2 2-2 2" stroke="#c8006d" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="prod-card-name" data-tr="Spirometri Akış Sensörü">Spirometry Flow Sensor</div>
+        <div class="prod-card-desc" data-tr="Solunum devresi içinde spirometri ölçümü için diferansiyel basınç akış sensörü. Büyük anestezi iş istasyonlarıyla uyumludur.">Differential pressure flow sensor for spirometry measurement within the breathing circuit. Compatible with major anesthesia workstations.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="Yetişkin ve pediatrik boylar">Adult and pediatric sizes</li>
+          <li data-tr="Düşük ölü hacim tasarımı">Low dead space design</li>
+          <li data-tr="GE, Dräger, Mindray ile uyumlu">Compatible with GE, Dräger, Mindray</li>
+          <li data-tr="Tek kullanımlık">Single-use</li>
+        </ul>
+        <div class="prod-card-footer">
+          <span class="prod-card-tag" data-tr="Çoklu Marka">Multi-Brand</span>
+          <a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── FILTRATION ── -->
+<div id="filtration" class="section-alt">
+  <div class="prod-section">
+    <div class="prod-section-header">
+      <div>
+        <span class="label prod-section-label" data-tr="04 — Filtrasyon">04 — Filtration</span>
+        <h2 class="title prod-section-h2" data-tr="Solunum Filtreleri">Breathing Filters</h2>
+      </div>
+      <p class="prod-section-desc" data-tr="Devre koruması ve nemlendirme için yüksek verimli HME (Isı ve Nem Değişimi) ve bakteri/virüs filtreleri.">High-efficiency HME (Heat &amp; Moisture Exchanging) and bacterial/viral filters for circuit protection and humidification.</p>
+    </div>
+    <div class="prod-grid">
+      <div class="prod-card">
+        <div class="prod-card-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="3" y="7" width="16" height="8" rx="2" stroke="#c8006d" stroke-width="1.4"/><path d="M7 7V5M11 7V4M15 7V5" stroke="#c8006d" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <div class="prod-card-name" data-tr="HME Filtre — Anestezi">HME Filter — Anesthesia</div>
+        <div class="prod-card-desc" data-tr="Anestezi sırasında kullanım için kombine HME ve bakteri/virüs filtresi. Devreyi kontaminasyondan korurken hava yolu nemini ve sıcaklığını korur.">Combined HME and bacterial/viral filter for use during anesthesia. Maintains airway humidity and temperature while protecting the circuit from contamination.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="&gt;%99,999 bakteriyel filtrasyon verimliliği">&gt;99.999% bacterial filtration efficiency</li>
+          <li data-tr="Düşük direnç, düşük ölü hacim">Low resistance, low dead space</li>
+          <li data-tr="Yetişkin ve pediatrik varyantlar">Adult and pediatric variants</li>
+          <li data-tr="SpO₂ / EtCO₂ için döner dirsek portu">Swivel elbow port for SpO₂ / EtCO₂</li>
+        </ul>
+        <div class="prod-card-footer">
+          <span class="prod-card-tag">HME + BVF</span>
+          <a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-card-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="5" y="5" width="12" height="12" rx="2" stroke="#c8006d" stroke-width="1.4"/><path d="M8 11h6M11 8v6" stroke="#c8006d" stroke-width="1.3" stroke-linecap="round"/></svg>
+        </div>
+        <div class="prod-card-name" data-tr="Viral / Bakteriyel Filtre (Kompakt)">Viral / Bacterial Filter (Compact)</div>
+        <div class="prod-card-desc" data-tr="Devre ve hasta arayüzü arasına yerleştirme için ince profilli filtre. Önemli bir ölü hacim eklemeden mikrobiyal koruma sağlar.">Slim-profile filter for placement between circuit and patient interface. Provides microbial protection without significant added dead space.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="BFE / VFE &gt;%99,99">BFE / VFE &gt;99.99%</li>
+          <li data-tr="22E–22D ve 15E–22D konektörler">22M–22F and 15M–22F connectors</li>
+          <li data-tr="Ultra düşük ölü hacim (8mL altı)">Ultra-low dead space (under 8mL)</li>
+          <li data-tr="Tek kullanımlık">Single-use</li>
+        </ul>
+        <div class="prod-card-footer">
+          <span class="prod-card-tag" data-tr="Kompakt">Compact</span>
+          <a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── GAS SAMPLING ── -->
+<div id="sampling" style="background:#fff;">
+  <div class="prod-section">
+    <div class="prod-section-header">
+      <div>
+        <span class="label prod-section-label" data-tr="05 — Gaz Örnekleme">05 — Gas Sampling</span>
+        <h2 class="title prod-section-h2" data-tr="Gaz Örnekleme Hatları">Gas Sampling Lines</h2>
+      </div>
+      <p class="prod-section-desc" data-tr="Anestezi iş istasyonu gaz analizörleri aracılığıyla sürekli EtCO₂, ajan ve O₂ takibi için yan akış gaz örnekleme hatları.">Sidestream gas sampling lines for continuous EtCO₂, agent, and O₂ monitoring via anesthesia workstation gas analyzers.</p>
+    </div>
+    <div class="prod-grid">
+      <div class="prod-card">
+        <div class="prod-card-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 18c0-3 3-5 7-5s7 2 7 5" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round"/><path d="M11 13V6M8 9l3-3 3 3" stroke="#c8006d" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="prod-card-name" data-tr="Yetişkin Gaz Örnekleme Hattı">Adult Gas Sampling Line</div>
+        <div class="prod-card-desc" data-tr="GE, Dräger ve Mindray gaz analizörleriyle uyumlu 3m yan akış örnekleme hattı. Platforma bağlı olarak Luer-lock veya özel konektör.">3m sidestream sampling line compatible with GE, Dräger, and Mindray gas analyzers. Luer-lock or proprietary connector depending on platform.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="GE, Dräger, Mindray ile uyumlu">Compatible with GE, Dräger, Mindray</li>
+          <li data-tr="3,0m standart uzunluk">3.0m standard length</li>
+          <li data-tr="Kıvrılmaya dayanıklı hortum">Kink-resistant tubing</li>
+          <li data-tr="Bazı varyantlarda önceden takılı su tutucu">Water trap pre-installed on some variants</li>
+        </ul>
+        <div class="prod-card-footer">
+          <span class="prod-card-tag" data-tr="Yan Akış">Sidestream</span>
+          <a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-card-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M6 18c0-2.5 2-4 5-4s5 1.5 5 4" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round"/><path d="M11 14V8M9 10l2-2 2 2" stroke="#c8006d" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="prod-card-name" data-tr="Pediatrik Gaz Örnekleme Hattı">Pediatric Gas Sampling Line</div>
+        <div class="prod-card-desc" data-tr="Devre akış dinamiklerini etkilememek için örnekleme hacminin minimize edilmesi gereken pediatrik ortamlar için daha dar çaplı hortum.">Smaller bore tubing for use in pediatric settings where sampling volume must be minimized to avoid impacting circuit flow dynamics.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="Daha dar iç çap (0,5mm)">Narrower internal bore (0.5mm)</li>
+          <li data-tr="2,0m uzunluk">2.0m length</li>
+          <li data-tr="Nazal kanül adaptörü mevcuttur">Nasal cannula adapter available</li>
+          <li data-tr="Tek kullanımlık, steril">Single-use, sterile</li>
+        </ul>
+        <div class="prod-card-footer">
+          <span class="prod-card-tag" data-tr="Pediatrik">Pediatric</span>
+          <a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── CANISTERS & WATER TRAPS ── -->
+<div id="canisters" class="section-alt">
+  <div class="prod-section">
+    <div class="prod-section-header">
+      <div>
+        <span class="label prod-section-label" data-tr="06 — Kanisterler ve Tutucular">06 — Canisters &amp; Traps</span>
+        <h2 class="title prod-section-h2" data-tr="Kanisterler, Su Tutucular ve Spirometri Setleri">Canisters, Water Traps &amp; Spirometry Sets</h2>
+      </div>
+      <p class="prod-section-desc" data-tr="Anestezi cihazlarınızın doğru ve güvenli çalışmasını sağlamak için CO₂ absorban kanisterleri, hat üzeri su tutucular ve komple spirometri setleri.">CO₂ absorbent canisters, inline water traps, and complete spirometry sets to keep your anesthesia machines running accurately and safely.</p>
+    </div>
+    <div class="prod-grid">
+      <div class="prod-card">
+        <div class="prod-card-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="6" y="3" width="10" height="16" rx="2" stroke="#c8006d" stroke-width="1.4"/><path d="M9 7h4M9 11h4M9 15h2" stroke="#c8006d" stroke-width="1.2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="prod-card-name" data-tr="CO₂ Absorban Kanister">CO₂ Absorbent Canister</div>
+        <div class="prod-card-desc" data-tr="Büyük anestezi iş istasyonlarıyla uyumlu, önceden dolu veya doldurulabilir CO₂ absorban kanisterleri. Tükenmeyi renk değişimiyle gösterir.">Pre-filled or refillable CO₂ absorber canisters compatible with major anesthesia workstations. Indicates exhaustion by color change.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="GE Aisys, Dräger Fabius, Apollo ile uyumlu">Compatible with GE Aisys, Dräger Fabius, Apollo</li>
+          <li data-tr="Renk değişim göstergesi (beyaz → mor)">Color-change indicator (white → purple)</li>
+          <li data-tr="Sodyum/Kalsiyum/Potasyum kireç varyantları">Sodium/Calcium/Potassium lime variants</li>
+          <li data-tr="Tek kullanımlık önceden dolu kanister mevcuttur">Single-use pre-filled canister available</li>
+        </ul>
+        <div class="prod-card-footer">
+          <span class="prod-card-tag" data-tr="Tekrar Kullanılabilir / Tek Kullanımlık">Reusable / Single-Use</span>
+          <a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-card-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 3v5M7 8h8v9a2 2 0 01-2 2H9a2 2 0 01-2-2V8z" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 12h6" stroke="#c8006d" stroke-width="1.2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="prod-card-name" data-tr="Hat Üzeri Su Tutucu">Inline Water Trap</div>
+        <div class="prod-card-desc" data-tr="Yan akış gaz analizörleri için tek kullanımlık hat üzeri su tutucu. Nemin analizör modülüne girip ölçüm hatalarına yol açmasını önler.">Disposable inline water trap for sidestream gas analyzers. Prevents moisture from entering the analyzer module and causing measurement errors.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="2mL ve 4mL toplama haznesi">2mL and 4mL collection chamber</li>
+          <li data-tr="Otomatik tahliye valfi (bazı modellerde)">Automatic drainage valve (some models)</li>
+          <li data-tr="GE, Dräger, Spacelabs ile uyumlu">Compatible with GE, Dräger, Spacelabs</li>
+          <li data-tr="Tek kullanımlık, steril">Single-use, sterile</li>
+        </ul>
+        <div class="prod-card-footer">
+          <span class="prod-card-tag" data-tr="Tek Kullanımlık">Single-Use</span>
+          <a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a>
+        </div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-card-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 11h4l2-5 3 10 2-5h3" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="3" width="16" height="16" rx="3" stroke="#c8006d" stroke-width="1.2" opacity="0.4"/></svg>
+        </div>
+        <div class="prod-card-name" data-tr="Spirometri Seti">Spirometry Set</div>
+        <div class="prod-card-desc" data-tr="Anestezi sırasında entegre solunum takibi için akış sensörü, hortum ve örnekleme bileşenlerini içeren komple spirometri ölçüm seti.">Complete spirometry measurement set including flow sensor, tubing, and sampling components for integrated respiratory monitoring during anesthesia.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="Yetişkin ve pediatrik yapılandırmalar">Adult and pediatric configurations</li>
+          <li data-tr="Akış sensörü + örnekleme hattı + filtre dahildir">Flow sensor + sampling line + filter included</li>
+          <li data-tr="GE ve Dräger platformlarıyla uyumlu">Compatible with GE and Dräger platforms</li>
+          <li data-tr="Tek kullanımlık">Single-use</li>
+        </ul>
+        <div class="prod-card-footer">
+          <span class="prod-card-tag" data-tr="Komple Set">Complete Set</span>
+          <a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <div class="cta-inner">
+    <span class="label cta-label" data-tr="Sipariş Vermeye Hazır mısınız?">Ready to Order?</span>
+    <h2 class="display cta-h2" data-tr="Anestezi sarf malzemeleriniz için fiyat teklifi alın">Get pricing for your anesthesia consumables</h2>
+    <p class="cta-sub" data-tr="Ekibimiz genellikle bir iş günü içinde ürün stok durumu, özellikler ve fiyatlandırma ile size dönüş yapacaktır.">Our team will respond with product availability, specifications, and pricing — typically within one business day.</p>
+    <div class="cta-actions">
+      <a href="tel:+903124413436" class="btn-prim">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M11.6 10l-1.6 1.6A9.1 9.1 0 014.4 6l1.6-1.6L4 2 2 4c0 5.75 4.67 10.41 10.42 10.42L14.42 12 11.6 10z" stroke="#fff" stroke-width="1.3" stroke-linejoin="round"/></svg>
+        +90 312 441 34 36
+      </a>
+      <a href="index.html#contact" class="btn-ghost" data-tr="Talep Gönderin">Send an Enquiry</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <img src="brand_assets/AlplerMedicalLogoPink-300x88.png" alt="Alpler Hospital Supplies" style="height:34px;width:auto;" />
+        <p class="footer-brand-desc" data-tr="Ankara merkezli tıbbi sarf malzeme dağıtımcısı. Türkiye genelinde anestezi, yoğun bakım, monitörizasyon ve yenidoğan alanlarına hizmet veriyoruz.">Ankara-based medical consumables distributor. Serving anesthesia, intensive care, monitoring, and neonatology across Turkey.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Twitter"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M14 2l-4.5 5.2L14.5 14h-3L9 10.4 5.5 14H2l4.7-5.5L1.5 2h3L7.8 5.4 11 2h3z" fill="#6a6a7a"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M12 1H10a3 3 0 00-3 3v2H5v3h2v6h3V9h2l1-3H10V4a1 1 0 011-1h1V1z" fill="#6a6a7a"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title" data-tr="Ürünler">Products</div>
+        <ul class="footer-links">
+          <li><a href="anesthesia.html" data-tr="Anestezi">Anesthesia</a></li>
+          <li><a href="intensive-care.html" data-tr="Yoğun Bakım">Intensive Care</a></li>
+          <li><a href="monitoring.html" data-tr="Monitörizasyon ve Pompalar">Monitoring &amp; Pumps</a></li>
+          <li><a href="neonatal.html" data-tr="Yenidoğan ve Küvöz">Neonatal &amp; Incubator</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title" data-tr="Şirket">Company</div>
+        <ul class="footer-links">
+          <li><a href="index.html#about" data-tr="Hakkımızda">About Us</a></li>
+          <li><a href="index.html#quality" data-tr="Kalite ve Sertifikalar">Quality &amp; Certifications</a></li>
+          <li><a href="index.html#services" data-tr="Kime Hizmet Veriyoruz">Who We Serve</a></li>
+          <li><a href="index.html#contact" data-tr="İletişim">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title" data-tr="İletişim">Contact</div>
+        <ul class="footer-links">
+          <li><a href="tel:+903124413436">+90 312 441 34 36</a></li>
+          <li><a href="#" data-tr="Faks: +90 312 441 34 31">Fax: +90 312 441 34 31</a></li>
+          <li><a href="#">Etimesgut / Ankara</a></li>
+          <li><a href="#" data-tr="Pzt–Cum 08:00–17:30">Mon–Fri 08:00–17:30</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy" data-tr="© 2024 Alpler Hastane Malzemeleri. Tüm hakları saklıdır.">© 2024 Alpler Hastane Malzemeleri. All rights reserved.</div>
+      <div class="footer-legal"><a href="#" data-tr="Gizlilik Politikası">Privacy Policy</a><a href="#" data-tr="Kullanım Koşulları">Terms of Use</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── TR/EN language toggle ──
+  (function() {
+    var LANG_KEY = 'alpler_lang';
+    var els = document.querySelectorAll('[data-tr]');
+    els.forEach(function(el) {
+      if (el.dataset.en === undefined) el.dataset.en = el.innerHTML;
+    });
+    function applyLang(lang) {
+      els.forEach(function(el) {
+        el.innerHTML = lang === 'tr' ? el.dataset.tr : el.dataset.en;
+      });
+      document.querySelectorAll('.lang-btn').forEach(function(b) {
+        b.classList.toggle('active', b.dataset.lang === lang);
+      });
+      document.documentElement.lang = lang;
+      localStorage.setItem(LANG_KEY, lang);
+    }
+    var saved = localStorage.getItem(LANG_KEY) || 'en';
+    applyLang(saved);
+    document.querySelectorAll('.lang-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() { applyLang(btn.dataset.lang); });
+    });
+  })();
+
+  document.getElementById('hamburger').addEventListener('click', function() { document.getElementById('mobile-nav').classList.toggle('open'); });
+  document.querySelectorAll('#mobile-nav a').forEach(function(a) { a.addEventListener('click', function() { document.getElementById('mobile-nav').classList.remove('open'); }); });
+
+  // Sticky category nav active state on scroll
+  var sections = document.querySelectorAll('[id]');
+  var catLinks = document.querySelectorAll('.cat-nav-link');
+  window.addEventListener('scroll', function() {
+    var scrollY = window.scrollY + 140;
+    sections.forEach(function(s) {
+      if (s.offsetTop <= scrollY && s.offsetTop + s.offsetHeight > scrollY) {
+        catLinks.forEach(function(l) { l.classList.remove('active'); });
+        var active = document.querySelector('.cat-nav-link[href="#' + s.id + '"]');
+        if (active) active.classList.add('active');
+      }
+    });
+  });
+</script>
+</body>
+</html>

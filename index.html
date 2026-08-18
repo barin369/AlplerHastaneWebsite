@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Alpler Hospital Supplies — Medical Equipment Distribution</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; overscroll-behavior-y: none; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #fff; color: #1a1a2a; overflow-x: hidden; overscroll-behavior-y: none; }
+
+    .display { font-weight: 800; letter-spacing: -0.045em; line-height: 1.05; }
+    .title    { font-weight: 700; letter-spacing: -0.03em;  line-height: 1.15; }
+    .label    { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+
+    /* Nav */
+    #nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(200,0,109,0.94);
+      backdrop-filter: blur(20px) saturate(160%);
+      border-bottom: 1px solid rgba(255,255,255,0.14);
+    }
+    .nav-inner {
+      max-width: 1280px; margin: 0 auto; padding: 0 32px;
+      height: 76px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-link { font-size: 13px; font-weight: 500; color: #fff; text-decoration: none; transition: color 0.2s; }
+    .nav-link:hover { color: #fff; }
+    .nav-cta {
+      font-size: 13px; font-weight: 600; color: #c8006d; text-decoration: none;
+      background: #fff; padding: 9px 20px; border-radius: 8px;
+      transition: opacity 0.2s, transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .nav-cta:hover { opacity: 0.85; transform: translateY(-1px); }
+    .lang-switch { display: flex; align-items: center; gap: 2px; background: rgba(255,255,255,0.16); border-radius: 100px; padding: 3px; }
+    .lang-btn { font-size: 11px; font-weight: 700; letter-spacing: 0.03em; color: rgba(255,255,255,0.7); background: none; border: none; padding: 5px 11px; border-radius: 100px; cursor: pointer; transition: background 0.2s, color 0.2s; }
+    .lang-btn.active { background: #fff; color: #c8006d; }
+    .lang-btn:hover:not(.active) { color: #fff; }
+    .mobile-lang-switch { display: flex; align-items: center; gap: 2px; background: rgba(255,255,255,0.14); border-radius: 100px; padding: 3px; margin-top: 10px; width: fit-content; }
+    .mobile-lang-switch .lang-btn { padding: 6px 14px; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { width: 22px; height: 1.5px; background: rgba(255,255,255,0.7); border-radius: 2px; display: block; }
+
+    /* Hero */
+    /* transform establishes a containing block so the fixed slideshow below is
+       scoped to this section only, instead of stacking above unrelated content
+       further down the page (a CSS position:fixed quirk). */
+    .hero { min-height: 100vh; display: flex; align-items: center; padding: 120px 0 80px; position: relative; overflow: hidden; transform: translateZ(0); }
+    .hero-bg-slideshow { position: fixed; inset: 0; z-index: 0; overflow: hidden; background: #1a000f; }
+    .hero-bg-slide {
+      position: absolute; inset: 0;
+      background-size: cover; background-position: center; background-repeat: no-repeat;
+      opacity: 0; transition: opacity 1.8s ease;
+    }
+    .hero-bg-slide.active { opacity: 1; }
+    .hero-bg-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(180deg, rgba(8,0,5,0.72) 0%, rgba(8,0,5,0.52) 45%, rgba(8,0,5,0.8) 100%);
+      pointer-events: none;
+    }
+    .hero-grid { max-width: 1280px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
+    .hero-content { max-width: 640px; }
+    .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; border: 1px solid rgba(200,0,109,0.4); background: rgba(200,0,109,0.14); border-radius: 100px; padding: 6px 14px; margin-bottom: 28px; }
+    .hero-eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: #ec5fa4; }
+    .hero-eyebrow .label { text-shadow: 0 1px 4px rgba(0,0,0,0.5); }
+    .hero-h1 { font-size: clamp(42px, 5vw, 68px); color: #fff !important; margin-bottom: 24px; text-shadow: 0 2px 12px rgba(0,0,0,0.45); }
+    .hero-h1 em { font-style: normal; color: #ec5fa4 !important; }
+    .hero-sub { font-size: 17px; color: rgba(255,255,255,0.88) !important; line-height: 1.7; margin-bottom: 40px; max-width: 480px; text-shadow: 0 1px 8px rgba(0,0,0,0.4); }
+    .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+    .btn-prim { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: #fff; text-decoration: none; background: linear-gradient(135deg, #c8006d, #a8005b); padding: 14px 28px; border-radius: 10px; transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s; }
+    .btn-prim:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(200,0,109,0.4); }
+    .btn-prim:active { transform: translateY(0); }
+    .btn-ghost { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: #fff !important; text-decoration: none; border: 1px solid rgba(255,255,255,0.55); background: rgba(0,0,0,0.15); padding: 14px 28px; border-radius: 10px; text-shadow: 0 1px 4px rgba(0,0,0,0.4); transition: background 0.2s, border-color 0.2s, transform 0.2s; }
+    .btn-ghost:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.75); transform: translateY(-1px); }
+
+    /* Feature rows */
+    #about { background: linear-gradient(160deg, #2a0018 0%, #4a0028 45%, #1a000f 100%); position: relative; overflow: hidden; }
+    /* Section-local background slideshow (same photos/cycle as the hero, contained to this section — see
+       .hero-bg-slideshow comment above re: the position:fixed containment quirk. These use position:absolute
+       instead so they're always scoped to their own section and never bleed into other content. */
+    .section-bg-slideshow { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+    .section-bg-slide { position: absolute; inset: 0; background-size: cover; background-position: center; background-repeat: no-repeat; opacity: 0; transition: opacity 1.8s ease; }
+    .section-bg-slide.active { opacity: 1; }
+    /* Same neutral dark scrim family as .hero-bg-overlay, just a touch lighter so more of the photo shows through. */
+    .section-bg-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(8,0,5,0.58) 0%, rgba(8,0,5,0.4) 45%, rgba(8,0,5,0.66) 100%); pointer-events: none; }
+    .feature-row { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 80px 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .feature-row.reverse { direction: rtl; }
+    .feature-row.reverse > * { direction: ltr; }
+    .feature-img { border-radius: 20px; overflow: hidden; position: relative; aspect-ratio: 4/3; border: 1px solid rgba(255,255,255,0.1); }
+    .feature-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .feature-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(20,0,12,0.5) 0%, transparent 55%); }
+    .feature-label { color: #ec5fa4; margin-bottom: 16px; display: block; text-shadow: 0 1px 4px rgba(0,0,0,0.5); }
+    .feature-h2 { font-size: clamp(28px, 3vw, 40px); color: #fff !important; margin-bottom: 18px; text-shadow: 0 2px 12px rgba(0,0,0,0.45); }
+    .feature-body { font-size: 16px; color: rgba(255,255,255,0.88) !important; line-height: 1.75; margin-bottom: 28px; text-shadow: 0 1px 8px rgba(0,0,0,0.4); }
+    .feature-list { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; }
+    .feature-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; color: rgba(255,255,255,0.88); text-shadow: 0 1px 8px rgba(0,0,0,0.4); }
+    .feature-list li::before { content: ''; flex-shrink: 0; width: 16px; height: 16px; border-radius: 50%; background: rgba(42,0,24,0.65) url("data:image/svg+xml,%3Csvg width='8' height='8' viewBox='0 0 8 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1.5 4l2 2 3-3' stroke='%23ec5fa4' stroke-width='1.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center; border: 1px solid rgba(236,95,164,0.5); margin-top: 1px; box-shadow: 0 1px 4px rgba(0,0,0,0.35); }
+    .feature-link { display: inline-flex; align-items: center; font-size: 14px; font-weight: 600; color: #ec5fa4; text-decoration: none; gap: 6px; transition: gap 0.2s; text-shadow: 0 1px 4px rgba(0,0,0,0.5); }
+    .feature-link:hover { gap: 10px; }
+    .section-divider { height: 1px; background: linear-gradient(90deg, transparent, rgba(0,0,0,0.06), transparent); margin: 0 32px; }
+
+    /* Glow / certs */
+    .glow-section { background: #fff; padding: 120px 0; position: relative; overflow: hidden; text-align: center; border-top: 1px solid rgba(0,0,0,0.06); }
+    .glow-orb { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 700px; height: 700px; background: radial-gradient(ellipse, rgba(200,0,109,0.1) 0%, rgba(200,0,109,0.02) 40%, transparent 70%); border-radius: 50%; pointer-events: none; }
+    .glow-ring { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; border: 1px solid rgba(200,0,109,0.1); pointer-events: none; }
+    .glow-content { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+    .glow-label { color: #c8006d; display: block; margin-bottom: 16px; }
+    .glow-h2 { font-size: clamp(36px, 4.5vw, 60px); color: #0f0f1a; margin-bottom: 20px; max-width: 700px; margin-left: auto; margin-right: auto; }
+    .glow-sub { font-size: 17px; color: #5a5a72; max-width: 500px; margin: 0 auto 60px; line-height: 1.7; }
+    .cert-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; max-width: 900px; margin: 0 auto; }
+    .cert-card { background: #fafafa; border: 1px solid rgba(0,0,0,0.07); border-radius: 16px; padding: 32px 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); transition: background 0.2s, border-color 0.2s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s; }
+    .cert-card:hover { background: rgba(200,0,109,0.05); border-color: rgba(200,0,109,0.2); transform: translateY(-4px); box-shadow: 0 8px 24px rgba(200,0,109,0.08); }
+    .cert-card-value { font-size: 28px; font-weight: 800; color: #0f0f1a; letter-spacing: -0.04em; margin-bottom: 8px; }
+    .cert-card-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #8a8a9a; }
+
+    /* Stats */
+    .stats-section { padding: 100px 0; background: linear-gradient(160deg, #2a0018 0%, #4a0028 45%, #1a000f 100%); border-top: 1px solid rgba(255,255,255,0.08); position: relative; overflow: hidden; }
+    .stats-inner { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+    .stats-header { text-align: center; margin-bottom: 72px; }
+    .stats-label { color: #ec5fa4; display: block; margin-bottom: 14px; text-shadow: 0 1px 4px rgba(0,0,0,0.5); }
+    .stats-h2 { font-size: clamp(32px, 4vw, 48px); color: #fff !important; margin-bottom: 16px; text-shadow: 0 2px 12px rgba(0,0,0,0.45); }
+    .stats-sub { font-size: 16px; color: rgba(255,255,255,0.88) !important; max-width: 480px; margin: 0 auto; line-height: 1.7; text-shadow: 0 1px 8px rgba(0,0,0,0.4); }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; }
+    .stat-item { padding: 40px 32px; text-align: center; border-right: 1px solid rgba(255,255,255,0.15); }
+    .stat-item:last-child { border-right: none; }
+    .stat-number { font-size: clamp(40px, 4vw, 56px); font-weight: 800; color: #ec5fa4; letter-spacing: -0.05em; line-height: 1; margin-bottom: 10px; text-shadow: 0 2px 12px rgba(0,0,0,0.45); }
+    .stat-label { font-size: 13px; color: rgba(255,255,255,0.88) !important; font-weight: 500; text-shadow: 0 1px 8px rgba(0,0,0,0.4); }
+
+    /* Who we serve */
+    .serve-section { background: #fafafa; padding: 100px 0; border-top: 1px solid rgba(0,0,0,0.06); }
+    .serve-inner { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+    .serve-header { margin-bottom: 60px; }
+    .serve-label { color: #c8006d; margin-bottom: 14px; display: block; }
+    .serve-h2 { font-size: clamp(32px, 4vw, 48px); color: #0f0f1a; max-width: 540px; }
+    .serve-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .serve-card { background: #fff; border: 1px solid rgba(0,0,0,0.08); border-radius: 18px; padding: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); transition: border-color 0.25s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s; }
+    .serve-card:hover { border-color: rgba(200,0,109,0.25); transform: translateY(-4px); box-shadow: 0 10px 28px rgba(200,0,109,0.08); }
+    .serve-icon { width: 48px; height: 48px; border-radius: 12px; background: rgba(200,0,109,0.1); border: 1px solid rgba(200,0,109,0.15); display: flex; align-items: center; justify-content: center; margin-bottom: 20px; }
+    .serve-card-title { font-size: 18px; font-weight: 700; color: #0f0f1a; margin-bottom: 10px; letter-spacing: -0.02em; }
+    .serve-card-body { font-size: 14px; color: #5a5a72; line-height: 1.7; }
+
+    /* CTA */
+    .cta-section { background: linear-gradient(160deg, #2a0018 0%, #4a0028 45%, #1a000f 100%); padding: 120px 0; position: relative; overflow: hidden; text-align: center; border-top: 1px solid rgba(255,255,255,0.08); }
+    .cta-glow { position: absolute; bottom: -200px; left: 50%; transform: translateX(-50%); width: 900px; height: 500px; background: radial-gradient(ellipse, rgba(200,0,109,0.12) 0%, transparent 65%); pointer-events: none; }
+    .cta-inner { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; padding: 0 32px; }
+    .cta-label { color: #ec5fa4; margin-bottom: 18px; display: block; text-shadow: 0 1px 4px rgba(0,0,0,0.5); }
+    .cta-h2 { font-size: clamp(36px, 5vw, 62px); color: #fff !important; margin-bottom: 20px; text-shadow: 0 2px 12px rgba(0,0,0,0.45); }
+    .cta-sub { font-size: 17px; color: rgba(255,255,255,0.88) !important; max-width: 480px; margin: 0 auto 48px; line-height: 1.7; text-shadow: 0 1px 8px rgba(0,0,0,0.4); }
+    .cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .cta-info { display: flex; align-items: center; justify-content: center; gap: 32px; margin-top: 48px; flex-wrap: wrap; }
+    .cta-info-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: rgba(255,255,255,0.88) !important; text-shadow: 0 1px 8px rgba(0,0,0,0.4); }
+    .cta-info-item svg { filter: drop-shadow(0 1px 3px rgba(0,0,0,0.4)); }
+    .contact-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; max-width: 1280px; margin: 0 auto 80px; padding: 0 32px; position: relative; z-index: 1; }
+    .contact-card { background: #2e0019; border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 32px; box-shadow: 0 4px 16px rgba(0,0,0,0.25); }
+    .contact-card-icon { width: 44px; height: 44px; border-radius: 10px; background: rgba(236,95,164,0.15); border: 1px solid rgba(236,95,164,0.25); display: flex; align-items: center; justify-content: center; margin-bottom: 18px; }
+    .contact-card-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: rgba(255,255,255,0.55) !important; margin-bottom: 8px; }
+    .contact-card-value { font-size: 15px; font-weight: 600; color: #fff !important; line-height: 1.5; }
+    .contact-card-value a { color: #fff !important; text-decoration: none; }
+    .contact-card-value a:hover { color: #ec5fa4 !important; }
+    .contact-card-sub { font-size: 12px; color: rgba(255,255,255,0.5) !important; margin-top: 4px; }
+
+    /* Footer */
+    footer { background: #fafafa; border-top: 1px solid rgba(0,0,0,0.06); padding: 64px 0 40px; }
+    .footer-inner { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+    .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+    .footer-brand-desc { font-size: 14px; color: #8a8a9a; line-height: 1.7; margin: 16px 0 24px; max-width: 300px; }
+    .footer-col-title { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #1a1a2a; margin-bottom: 18px; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { font-size: 14px; color: #6a6a7a; text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: #c8006d; }
+    .footer-social { display: flex; gap: 10px; }
+    .footer-social a { width: 36px; height: 36px; border-radius: 8px; background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: center; transition: background 0.2s, border-color 0.2s; }
+    .footer-social a:hover { background: rgba(200,0,109,0.08); border-color: rgba(200,0,109,0.2); }
+    .footer-bottom { border-top: 1px solid rgba(0,0,0,0.06); padding-top: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .footer-copy { font-size: 13px; color: #9a9aaa; }
+    .footer-legal { display: flex; gap: 20px; }
+    .footer-legal a { font-size: 13px; color: #9a9aaa; text-decoration: none; transition: color 0.2s; }
+    .footer-legal a:hover { color: #c8006d; }
+
+    /* Mobile nav */
+    #mobile-nav { display: none; flex-direction: column; gap: 4px; padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.14); background: rgba(200,0,109,0.97); }
+    #mobile-nav.open { display: flex; }
+    #mobile-nav a { font-size: 15px; font-weight: 500; color: #fff; text-decoration: none; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    #mobile-nav a:last-child { border-bottom: none; color: #fff; font-weight: 700; }
+
+    /* ── FLAGSHIP PRODUCTS ── */
+    .flagship {
+      background: #fafafa; padding: 120px 0;
+      position: relative; overflow: hidden;
+      border-top: 1px solid rgba(0,0,0,0.06); border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .flagship-bg-orb {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 1000px; height: 640px;
+      background: radial-gradient(ellipse, rgba(200,0,109,0.08) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .flagship-inner { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+    .flagship-header { text-align: center; margin-bottom: 72px; }
+    .flagship-h2 { font-size: clamp(32px, 4vw, 52px); color: #0f0f1a; margin-bottom: 16px; font-weight: 800; letter-spacing: -0.045em; line-height: 1.05; }
+    .flagship-h2 em { font-style: normal; color: #c8006d; }
+    .flagship-sub { font-size: 16px; color: #5a5a72; max-width: 480px; margin: 0 auto; line-height: 1.7; }
+
+    .flagship-grid { display: grid; grid-template-columns: 320px 1fr; gap: 56px; align-items: start; }
+
+    /* Tabs */
+    .fp-tabs { display: flex; flex-direction: column; gap: 8px; position: sticky; top: 96px; }
+    .fp-tab {
+      display: flex; align-items: center; gap: 16px;
+      width: 100%; text-align: left;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.08);
+      border-left: 3px solid transparent;
+      border-radius: 14px; padding: 20px 18px;
+      cursor: pointer;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+      transition: background 0.2s, border-color 0.2s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .fp-tab:hover { background: rgba(200,0,109,0.04); border-color: rgba(200,0,109,0.18); transform: translateX(2px); }
+    .fp-tab.active { background: rgba(200,0,109,0.06); border-color: rgba(200,0,109,0.25); border-left-color: #c8006d; transform: translateX(3px); }
+    .fp-tab-num { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: rgba(0,0,0,0.25); flex-shrink: 0; }
+    .fp-tab.active .fp-tab-num { color: #c8006d; }
+    .fp-tab-content { flex: 1; }
+    .fp-tab-name { font-size: 15px; font-weight: 700; color: #7a7a8a; letter-spacing: -0.02em; margin-bottom: 3px; transition: color 0.2s; }
+    .fp-tab.active .fp-tab-name { color: #0f0f1a; }
+    .fp-tab-desc { font-size: 12px; color: rgba(0,0,0,0.32); }
+    .fp-tab.active .fp-tab-desc { color: #6a6a7a; }
+    .fp-tab-arr { flex-shrink: 0; color: rgba(0,0,0,0.2); transition: color 0.2s, transform 0.2s; }
+    .fp-tab.active .fp-tab-arr { color: #c8006d; transform: translateX(3px); }
+
+    /* Progress bar inside tab */
+    .fp-tab-progress { height: 2px; background: rgba(200,0,109,0.12); border-radius: 2px; margin-top: 10px; overflow: hidden; display: none; }
+    .fp-tab.active .fp-tab-progress { display: block; }
+    .fp-tab-bar { height: 100%; width: 0%; background: #c8006d; border-radius: 2px; transition: width linear; }
+
+    /* Dots */
+    .fp-dots { display: flex; gap: 6px; margin-top: 24px; padding-left: 4px; }
+    .fp-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(0,0,0,0.15); transition: background 0.3s, transform 0.3s cubic-bezier(0.34,1.56,0.64,1); }
+    .fp-dot.active { background: #c8006d; transform: scale(1.5); }
+
+    /* Showcase */
+    .fp-showcase { position: relative; }
+    .fp-panel { display: none; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+    .fp-panel.active { display: grid; animation: fpIn 0.45s cubic-bezier(0.4,0,0.2,1) forwards; }
+    @keyframes fpIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* Visual frame */
+    .fp-visual { position: relative; display: flex; align-items: center; justify-content: center; min-height: 420px; }
+    .fp-ring {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 50%; border: 1px solid rgba(200,0,109,0.1);
+      pointer-events: none;
+    }
+    .fp-ring.r1 { width: 300px; height: 300px; animation: fpRing 3.5s ease-in-out infinite; }
+    .fp-ring.r2 { width: 400px; height: 400px; animation: fpRing 3.5s ease-in-out 1.2s infinite; }
+    .fp-ring.r3 { width: 500px; height: 500px; animation: fpRing 3.5s ease-in-out 2.4s infinite; }
+    @keyframes fpRing {
+      0%, 100% { opacity: 0.7; transform: translate(-50%,-50%) scale(1); }
+      50% { opacity: 0.12; transform: translate(-50%,-50%) scale(1.05); }
+    }
+
+    .fp-frame {
+      width: 260px; height: 340px;
+      background: linear-gradient(145deg, #4a0028 0%, #2e0019 60%, #14000a 100%);
+      border: 1px solid rgba(200,0,109,0.2);
+      border-radius: 24px;
+      display: flex; align-items: center; justify-content: center;
+      position: relative; z-index: 2;
+      box-shadow: 0 32px 80px rgba(0,0,0,0.55), 0 0 60px rgba(200,0,109,0.05);
+      animation: fpFloat 5s ease-in-out infinite;
+      overflow: hidden;
+    }
+    .fp-frame::before {
+      content: ''; position: absolute; top: 0; left: 10%; right: 10%; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(200,0,109,0.5), transparent);
+    }
+    .fp-frame img { width: 100%; height: 100%; object-fit: contain; padding: 8px; }
+    @keyframes fpFloat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .fp-placeholder-inner { display: flex; flex-direction: column; align-items: center; gap: 14px; padding: 32px; }
+    .fp-placeholder-inner span { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(200,0,109,0.4); }
+
+    .fp-chip {
+      position: absolute; z-index: 4;
+      background: rgba(26,0,15,0.85); backdrop-filter: blur(12px);
+      border: 1px solid rgba(200,0,109,0.28); border-radius: 100px;
+      padding: 7px 16px;
+      font-size: 11px; font-weight: 700; letter-spacing: 0.07em; text-transform: uppercase;
+      color: #ec5fa4;
+    }
+    .fp-chip-tl { top: 30px; left: 0; }
+    .fp-chip-br { bottom: 50px; right: 0; }
+
+    /* Info */
+    .fp-info { padding: 8px 0; }
+    .fp-prod-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #c8006d; display: block; margin-bottom: 12px; }
+    .fp-prod-title { font-size: clamp(26px, 3vw, 38px); font-weight: 800; color: #0f0f1a; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 8px; }
+    .fp-prod-sub { font-size: 14px; color: #8a8a9a; margin-bottom: 28px; line-height: 1.5; }
+    .fp-feat-list { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 36px; }
+    .fp-feat-list li {
+      display: flex; align-items: flex-start; gap: 12px;
+      font-size: 14px; color: #4a4a5c; line-height: 1.55;
+    }
+    .fp-feat-list li::before {
+      content: ''; flex-shrink: 0; width: 18px; height: 18px; border-radius: 50%; margin-top: 1px;
+      background: rgba(200,0,109,0.1) url("data:image/svg+xml,%3Csvg width='10' height='10' viewBox='0 0 10 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2 5l2.5 2.5 3.5-4' stroke='%23c8006d' stroke-width='1.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") no-repeat center;
+      border: 1px solid rgba(200,0,109,0.22);
+    }
+    .fp-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 14px; font-weight: 600; color: #fff; text-decoration: none;
+      background: linear-gradient(135deg, #c8006d, #a8005b);
+      padding: 13px 26px; border-radius: 10px;
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s;
+    }
+    .fp-cta:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(200,0,109,0.35); }
+    .fp-cta:active { transform: translateY(0); }
+
+    /* In-frame gallery (pain pump) */
+    .fp-gallery { display: flex; flex-direction: column; width: 100%; height: 100%; }
+    .fp-gallery-main { flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden; min-height: 0; }
+    .fp-gallery-main img { width: 100%; height: 100%; object-fit: contain; padding: 8px; transition: opacity 0.2s ease; }
+    .fp-gallery-thumbs { display: flex; gap: 6px; padding: 8px 10px; background: rgba(0,0,0,0.35); flex-shrink: 0; }
+    .fp-gallery-thumb { width: 54px; height: 44px; border-radius: 7px; overflow: hidden; border: 1.5px solid transparent; cursor: pointer; background: rgba(255,255,255,0.06); flex-shrink: 0; transition: border-color 0.15s; }
+    .fp-gallery-thumb img { width: 100%; height: 100%; object-fit: contain; padding: 3px; }
+    .fp-gallery-thumb.active { border-color: #c8006d; }
+    .fp-gallery-thumb:hover:not(.active) { border-color: rgba(200,0,109,0.35); }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .feature-row { grid-template-columns: 1fr; gap: 40px; }
+      .feature-row.reverse { direction: ltr; }
+      .cert-grid { grid-template-columns: repeat(2, 1fr); }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .stat-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); }
+      .serve-grid { grid-template-columns: 1fr 1fr; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+      .flagship-grid { grid-template-columns: 1fr; gap: 40px; }
+      .fp-tabs { position: static; flex-direction: row; }
+      .fp-tab { flex: 1; }
+      .fp-panel { grid-template-columns: 1fr; }
+      .fp-ring.r2 { width: 300px; height: 300px; }
+      .fp-ring.r3 { display: none; }
+    }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .cert-grid { grid-template-columns: repeat(2, 1fr); }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .serve-grid { grid-template-columns: 1fr; }
+      .contact-cards { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+      .fp-tabs { flex-direction: column; }
+      .fp-tab-desc { display: none; }
+      .fp-chip { display: none; }
+    }
+
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .anim { opacity: 0; }
+    .anim.visible { animation: fadeUp 0.6s cubic-bezier(0.4,0,0.2,1) forwards; }
+    .anim-1 { animation-delay: 0.05s; }
+    .anim-2 { animation-delay: 0.15s; }
+    .anim-3 { animation-delay: 0.25s; }
+    .anim-4 { animation-delay: 0.35s; }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="index.html" style="flex-shrink:0;">
+      <img src="brand_assets/AlplerMedicalLogoPink-300x88.png" alt="Alpler Hospital Supplies" style="height:50px;width:auto;filter:brightness(0) invert(1);" />
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link active" data-tr="Ana Sayfa">Home</a>
+      <a href="about.html" class="nav-link" data-tr="Hakkımızda">About</a>
+      <a href="products.html" class="nav-link" data-tr="Ürünler">Products</a>
+      <a href="#quality"  class="nav-link" data-tr="Kalite">Quality</a>
+      <a href="#services" class="nav-link" data-tr="Hizmetler">Services</a>
+      <a href="#contact"  class="nav-link" data-tr="İletişim">Contact</a>
+      <a href="#contact"  class="nav-cta" data-tr="Teklif Alın">Get a Quote</a>
+      <div class="lang-switch">
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="tr">TR</button>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div id="mobile-nav">
+    <a href="index.html" data-tr="Ana Sayfa">Home</a>
+    <a href="about.html" data-tr="Hakkımızda">About</a>
+    <a href="products.html" data-tr="Ürünler">Products</a>
+    <a href="#quality" data-tr="Kalite">Quality</a>
+    <a href="#services" data-tr="Hizmetler">Services</a>
+    <a href="#contact" data-tr="İletişim">Contact</a>
+    <a href="#contact" data-tr="Teklif Alın →">Get a Quote →</a>
+    <div class="mobile-lang-switch">
+      <button class="lang-btn active" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="tr">TR</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-slideshow" id="hero-bg-slideshow" aria-hidden="true">
+    <div class="hero-bg-slide active" style="background-image:url('main page pics/ameliyathane-kaplama-uygulamalari.jpg');"></div>
+    <div class="hero-bg-slide" style="background-image:url('main page pics/istockphoto-2104492029-612x612.jpg');"></div>
+    <div class="hero-bg-slide" style="background-image:url('main page pics/interior-view-operating-room.jpg');"></div>
+    <div class="hero-bg-overlay"></div>
+  </div>
+  <div class="hero-grid">
+    <div class="hero-content">
+      <div class="hero-eyebrow anim anim-1">
+        <span class="dot"></span>
+        <span class="label" style="color:#ec5fa4;" data-tr="Ankara Merkezli Tıbbi Cihaz Dağıtımcısı">Ankara-Based Medical Equipment Distributor</span>
+      </div>
+      <h1 class="display hero-h1 anim anim-2" data-tr="Türkiye'nin En<br /><em>Güvenilir Tıbbi</em><br />Tedarikçisi">
+        Turkey's Most<br /><em>Trusted Medical</em><br />Supplier
+      </h1>
+      <p class="hero-sub anim anim-3" data-tr="Anestezi, yoğun bakım, monitörizasyon ve yenidoğan alanlarında dünya lideri markaların orijinal sarf malzemelerini Türkiye genelindeki hastane ve kliniklere ulaştırıyoruz.">
+        We deliver original consumables from world-leading brands across anesthesia, intensive care, monitoring, and neonatology to hospitals and clinics throughout Turkey.
+      </p>
+      <div class="hero-actions anim anim-4">
+        <a href="products.html" class="btn-prim">
+          <span data-tr="Ürünlere Göz At">Browse Products</span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#contact" class="btn-ghost" data-tr="Teklif Alın">Get a Quote</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FLAGSHIP PRODUCTS ═══ -->
+<section class="flagship" id="flagship">
+  <div class="flagship-bg-orb"></div>
+  <div class="flagship-inner">
+
+    <div class="flagship-header">
+      <span class="label" style="color:#c8006d;display:block;margin-bottom:14px;" data-tr="Öne Çıkan Ürünler">Flagship Products</span>
+      <h2 class="flagship-h2" data-tr="Klinik ekiplerinizin<br />en çok <em>güvendiği hassas cihazlar</em>">Precision devices your<br /><em>clinical teams trust most</em></h2>
+      <p class="flagship-sub" data-tr="En çok talep gören tıbbi cihazlarımız — Türkiye genelinde kritik bakım ortamlarında kesintisiz kullanım için tasarlandı.">Our highest-demand medical devices — engineered for uninterrupted delivery in critical care environments across Turkey.</p>
+    </div>
+
+    <div class="flagship-grid">
+
+      <!-- LEFT: Tab selector -->
+      <div>
+        <div class="fp-tabs">
+
+          <button class="fp-tab active" data-fp="infusion">
+            <div class="fp-tab-num">01</div>
+            <div class="fp-tab-content">
+              <div class="fp-tab-name" data-tr="İnfüzyon Pompası">Infusion Pump</div>
+              <div class="fp-tab-desc" data-tr="Hacimsel IV sıvı dağıtımı">Volumetric IV fluid delivery</div>
+              <div class="fp-tab-progress"><div class="fp-tab-bar" id="fp-bar-infusion"></div></div>
+            </div>
+            <svg class="fp-tab-arr" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 8h8M9 5l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+
+          <button class="fp-tab" data-fp="syringe">
+            <div class="fp-tab-num">02</div>
+            <div class="fp-tab-content">
+              <div class="fp-tab-name" data-tr="Şırınga Pompası">Syringe Pump</div>
+              <div class="fp-tab-desc" data-tr="Mikro doz hassas ilaç dağıtımı">Micro-dose precision drug delivery</div>
+              <div class="fp-tab-progress"><div class="fp-tab-bar" id="fp-bar-syringe"></div></div>
+            </div>
+            <svg class="fp-tab-arr" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 8h8M9 5l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+
+          <button class="fp-tab" data-fp="pain">
+            <div class="fp-tab-num">03</div>
+            <div class="fp-tab-content">
+              <div class="fp-tab-name" data-tr="Ağrı Pompası">Pain Pump</div>
+              <div class="fp-tab-desc" data-tr="Hasta kontrollü analjezi (PCA)">Patient-controlled analgesia (PCA)</div>
+              <div class="fp-tab-progress"><div class="fp-tab-bar" id="fp-bar-pain"></div></div>
+            </div>
+            <svg class="fp-tab-arr" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 8h8M9 5l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+
+        </div>
+        <div class="fp-dots">
+          <div class="fp-dot active" data-fp="infusion"></div>
+          <div class="fp-dot" data-fp="syringe"></div>
+          <div class="fp-dot" data-fp="pain"></div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Showcase panels -->
+      <div class="fp-showcase">
+
+        <!-- ── Infusion Pump ── -->
+        <div class="fp-panel active" id="fp-infusion">
+          <div class="fp-visual">
+            <div class="fp-ring r1"></div>
+            <div class="fp-ring r2"></div>
+            <div class="fp-ring r3"></div>
+            <div class="fp-frame">
+              <img src="product pictures/Pumps/infüzyon pump BD.jpg" alt="Infusion Pump" />
+            </div>
+            <div class="fp-chip fp-chip-tl" data-tr="Hacimsel">Volumetric</div>
+            <div class="fp-chip fp-chip-br">CE · FDA</div>
+          </div>
+          <div class="fp-info">
+            <span class="fp-prod-tag" data-tr="Tıbbi Cihaz">Medical Device</span>
+            <h3 class="fp-prod-title" data-tr="İnfüzyon Pompası">Infusion Pump</h3>
+            <p class="fp-prod-sub" data-tr="Hacimsel sıvı dağıtım sistemi">İnfüzyon Pompası — Volumetric delivery system</p>
+            <ul class="fp-feat-list">
+              <li data-tr="Sürekli, aralıklı ve KVO dağıtım modları">Continuous, intermittent &amp; KVO delivery modes</li>
+              <li data-tr="Doz hatasını azaltan entegre ilaç kütüphanesi">Integrated drug library with dose-error reduction</li>
+              <li data-tr="Serbest akış önleyici ve tıkanıklık koruması">Anti-free-flow &amp; occlusion protection</li>
+              <li data-tr="CE ve FDA sertifikalı, Sağlık Bakanlığı uyumlu">CE &amp; FDA certified, MoH compliant</li>
+            </ul>
+            <a href="products.html#single" class="fp-cta">
+              <span data-tr="Ürünü İncele">View Product</span>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- ── Syringe Pump ── -->
+        <div class="fp-panel" id="fp-syringe">
+          <div class="fp-visual">
+            <div class="fp-ring r1"></div>
+            <div class="fp-ring r2"></div>
+            <div class="fp-ring r3"></div>
+            <div class="fp-frame">
+              <img src="product pictures/Pumps/Syring pump BD.jpg" alt="Syringe Pump" />
+            </div>
+            <div class="fp-chip fp-chip-tl" data-tr="Hassasiyet">Precision</div>
+            <div class="fp-chip fp-chip-br" data-tr="0,1 ml/sa">0.1 ml/h</div>
+          </div>
+          <div class="fp-info">
+            <span class="fp-prod-tag" data-tr="Tıbbi Cihaz">Medical Device</span>
+            <h3 class="fp-prod-title" data-tr="Şırınga Pompası">Syringe Pump</h3>
+            <p class="fp-prod-sub" data-tr="Mikro doz ilaç dağıtımı">Şırınga Pompası — Micro-dose drug delivery</p>
+            <ul class="fp-feat-list">
+              <li data-tr="0,1 ml/sa'ya kadar hassas akış hızı">Flow rate precision down to 0.1 ml/h</li>
+              <li data-tr="Tüm standart şırınga boyutlarıyla uyumlu">Compatible with all standard syringe sizes</li>
+              <li data-tr="Tıkanıklık, hava ve boş şırınga algılama">Occlusion, air &amp; empty-syringe detection</li>
+              <li data-tr="Yoğun bakım ve ameliyathane onaylı yapılandırmalar">ICU &amp; OR approved configurations</li>
+            </ul>
+            <a href="products.html#single" class="fp-cta">
+              <span data-tr="Ürünü İncele">View Product</span>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+
+        <!-- ── Pain Pump ── -->
+        <div class="fp-panel" id="fp-pain">
+          <div class="fp-visual">
+            <div class="fp-ring r1"></div>
+            <div class="fp-ring r2"></div>
+            <div class="fp-ring r3"></div>
+            <div class="fp-frame">
+              <div class="fp-gallery">
+                <div class="fp-gallery-main">
+                  <img src="product pictures/Pumps/ağrı pumo bd 595.jpg" alt="Pain Pump" id="fp-pain-main-img" />
+                </div>
+                <div class="fp-gallery-thumbs">
+                  <div class="fp-gallery-thumb active" data-src="product pictures/Pumps/ağrı pumo bd 595.jpg" data-main="fp-pain-main-img">
+                    <img src="product pictures/Pumps/ağrı pumo bd 595.jpg" alt="" />
+                  </div>
+                  <div class="fp-gallery-thumb" data-src="product pictures/Pumps/BD-BodyguardT-Family-Pumps_2.jpg" data-main="fp-pain-main-img">
+                    <img src="product pictures/Pumps/BD-BodyguardT-Family-Pumps_2.jpg" alt="" />
+                  </div>
+                  <div class="fp-gallery-thumb" data-src="product pictures/Pumps/BD-BodyguardT-Pain-Manager-and-PCA-Set.jpg" data-main="fp-pain-main-img">
+                    <img src="product pictures/Pumps/BD-BodyguardT-Pain-Manager-and-PCA-Set.jpg" alt="" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="fp-chip fp-chip-tl">PCA</div>
+            <div class="fp-chip fp-chip-br">BD Bodyguard</div>
+          </div>
+          <div class="fp-info">
+            <span class="fp-prod-tag" data-tr="Tıbbi Cihaz">Medical Device</span>
+            <h3 class="fp-prod-title" data-tr="Ağrı Pompası">Pain Pump</h3>
+            <p class="fp-prod-sub" data-tr="Hasta kontrollü analjezi">Ağrı Pompası — Patient-controlled analgesia</p>
+            <ul class="fp-feat-list">
+              <li data-tr="PCA, sürekli ve kombine dağıtım modları">PCA, continuous &amp; combined delivery modes</li>
+              <li data-tr="Kilitleme aralığı ve maksimum doz programlama">Lockout interval &amp; max-dose programming</li>
+              <li data-tr="Tam doz geçmişi ve kurcalamaya karşı izlenebilir kayıt">Full dose history &amp; tamper-evident audit trail</li>
+              <li data-tr="Epidural ve IV uyumlu yapılandırmalar">Epidural &amp; IV compatible configurations</li>
+            </ul>
+            <a href="products.html#single" class="fp-cta">
+              <span data-tr="Ürünü İncele">View Product</span>
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </div>
+
+      </div><!-- /fp-showcase -->
+    </div><!-- /flagship-grid -->
+  </div><!-- /flagship-inner -->
+</section>
+
+<!-- ABOUT / FEATURES -->
+<div id="about">
+  <div class="section-bg-slideshow" aria-hidden="true">
+    <div class="section-bg-slide active" style="background-image:url('main page pics/ameliyathane-kaplama-uygulamalari.jpg');"></div>
+    <div class="section-bg-slide" style="background-image:url('main page pics/istockphoto-2104492029-612x612.jpg');"></div>
+    <div class="section-bg-slide" style="background-image:url('main page pics/interior-view-operating-room.jpg');"></div>
+    <div class="section-bg-overlay"></div>
+  </div>
+
+  <div class="feature-row">
+    <div class="feature-img">
+      <img src="product pictures/Pumps/enFlow-controllerkan ısıtıcı1.jpg" alt="enFlow Fluid & Blood Warming" />
+    </div>
+    <div>
+      <span class="label feature-label" data-tr="Sıvı ve Kan Isıtma">Fluid &amp; Blood Warming</span>
+      <h2 class="title feature-h2">enFlow™ Fluid &amp; Blood Warming</h2>
+      <p class="feature-body" data-tr="Tüm klinik alanlarda ısıtılmış kan veya IV sıvısının doğru zamanda uygulanmasını sağlar. Hastanenize hem klinik hem de ekonomik faydalar sunar. Normotermiyi korumak komplikasyonları azaltmaya ve iyileşme süresini hızlandırmaya yardımcı olabilir.">Enables warmed blood or IV fluid delivery at the right time across all clinical areas. Helps provide both clinical and economic benefits for your hospital. Maintaining normothermia can help lessen complications and speed up recovery time.</p>
+      <ul class="feature-list">
+        <li data-tr="Kolay okunur, kendi kendine yönelen ekran">Easy to read, self-orienting display</li>
+        <li data-tr="KVO'dan 200 mL/dk'ya kadar etkili ısıtma">Effective warming from KVO to 200 mL/min</li>
+        <li data-tr="Kartuş, transport sırasında hat üzerinde kalabilir">Cartridge can remain in-line during transport</li>
+        <li data-tr="Bakım sürecinin her aşamasında hastaya eşlik eder">Accompanies patients throughout the care continuum</li>
+      </ul>
+      <a href="products.html#single" class="feature-link">
+        <span data-tr="enFlow Ürününü İncele">View enFlow Product</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="#c8006d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<!-- QUALITY / CERTS -->
+<section id="quality" class="glow-section">
+  <div class="glow-orb"></div>
+  <div class="glow-ring" style="width:400px;height:400px;"></div>
+  <div class="glow-ring" style="width:650px;height:650px;"></div>
+  <div class="glow-ring" style="width:900px;height:900px;"></div>
+  <div class="glow-content">
+    <span class="label glow-label" data-tr="Kalite ve Sertifikalar">Quality &amp; Certifications</span>
+    <h2 class="display glow-h2" data-tr="Uluslararası standartlar.<br />Her aşamada sertifikalı.">International standards.<br />Certified at every step.</h2>
+    <p class="glow-sub" data-tr="Dağıttığımız her ürün Türkiye Sağlık Bakanlığı düzenlemelerine uygun, CE işaretli ve kanıtlanmış kalite yönetim sistemlerine sahip üreticilerden temin edilmektedir.">Every product we distribute is compliant with Turkish Ministry of Health regulations, CE-marked, and sourced from manufacturers with proven quality management systems.</p>
+    <div class="cert-grid">
+      <div class="cert-card">
+        <div class="cert-card-value">CE</div>
+        <div class="cert-card-label" data-tr="Avrupa Uygunluğu">European Conformity</div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-card-value">FDA</div>
+        <div class="cert-card-label" data-tr="ABD FDA Onaylı">US FDA Approved</div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-card-value" style="font-size:22px;line-height:1.2;">ISO<br/>13485</div>
+        <div class="cert-card-label" data-tr="Tıbbi Cihaz Kalite Yönetim Sistemi">Medical Device QMS</div>
+      </div>
+      <div class="cert-card">
+        <div class="cert-card-value" style="font-size:20px;line-height:1.2;">MOH<br/>TR</div>
+        <div class="cert-card-label" data-tr="Sağlık Bakanlığı">Ministry of Health</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats-section">
+  <div class="section-bg-slideshow" aria-hidden="true">
+    <div class="section-bg-slide active" style="background-image:url('main page pics/ameliyathane-kaplama-uygulamalari.jpg');"></div>
+    <div class="section-bg-slide" style="background-image:url('main page pics/istockphoto-2104492029-612x612.jpg');"></div>
+    <div class="section-bg-slide" style="background-image:url('main page pics/interior-view-operating-room.jpg');"></div>
+    <div class="section-bg-overlay"></div>
+  </div>
+  <div class="stats-inner">
+    <div class="stats-header">
+      <span class="label stats-label" data-tr="Rakamlarla Biz">By the Numbers</span>
+      <h2 class="title stats-h2" data-tr="Güvenilirlik, hız ve uzmanlık">Reliability, speed, and expertise</h2>
+      <p class="stats-sub" data-tr="Türkiye genelindeki hastane ve kliniklere kesintisiz tıbbi sarf malzeme tedariki sağlıyoruz.">Serving hospitals and clinics across Turkey with uninterrupted medical consumable supply.</p>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-number display">4+</div>
+        <div class="stat-label" data-tr="Klinik Uzmanlık Alanı">Clinical Specialties</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number display">30+</div>
+        <div class="stat-label" data-tr="Ürün Grubu">Product Lines</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number display">5</div>
+        <div class="stat-label" data-tr="Gün Hizmet">Days a Week Service</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number display">1</div>
+        <div class="stat-label" data-tr="Merkez Üs — Ankara">Central Hub — Ankara</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHO WE SERVE -->
+<section id="services" class="serve-section">
+  <div class="serve-inner">
+    <div class="serve-header">
+      <span class="label serve-label" data-tr="Kime Hizmet Veriyoruz">Who We Serve</span>
+      <h2 class="display serve-h2" data-tr="Her tür sağlık kurumu için tasarlandı">Built for every type of healthcare institution</h2>
+    </div>
+    <div class="serve-grid">
+      <div class="serve-card">
+        <div class="serve-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="4" width="18" height="16" rx="3" stroke="#c8006d" stroke-width="1.4"/><path d="M11 8v8M7 12h8" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </div>
+        <div class="serve-card-title" data-tr="Kamu Hastaneleri">Public Hospitals</div>
+        <div class="serve-card-body" data-tr="Büyük ölçekli kamu satın alma süreçlerini rekabetçi toptan fiyatlandırma ve ihale sunumları için eksiksiz teknik dokümantasyon ile destekliyoruz.">We support large-scale public procurement processes with competitive bulk pricing and full technical documentation for tender submissions.</div>
+      </div>
+      <div class="serve-card">
+        <div class="serve-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="8" r="4" stroke="#c8006d" stroke-width="1.4"/><path d="M3 19c0-4.42 3.58-8 8-8s8 3.58 8 8" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round"/></svg>
+        </div>
+        <div class="serve-card-title" data-tr="Özel Hastaneler ve Klinikler">Private Hospitals &amp; Clinics</div>
+        <div class="serve-card-body" data-tr="Özel sağlık sektöründe hız ve kalite en önemli unsurlardır. Özel gruplar için rekabetçi fiyatlandırma, hızlı teslimat ve güvenilir stok erişilebilirliği sunuyoruz.">Speed and quality matter most in private healthcare. We offer competitive pricing, fast turnaround, and reliable stock availability for private groups.</div>
+      </div>
+      <div class="serve-card">
+        <div class="serve-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 2l2 6h6l-5 3.6 1.9 5.9L11 14l-4.9 3.5 1.9-5.9L3 8h6l2-6z" stroke="#c8006d" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="serve-card-title" data-tr="Üniversite Hastaneleri">University Hospitals</div>
+        <div class="serve-card-body" data-tr="Akademik tıp merkezleri hassasiyet ve çeşitlilik gerektirir. Klinik ekipler için uzman talepleri, araştırma düzeyinde spesifikasyonlar ve özel tedarik çözümleri sağlıyoruz.">Academic medical centers require precision and variety. We accommodate specialist requests, research-grade specifications, and custom sourcing for clinical teams.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT / CTA -->
+<section id="contact" class="cta-section">
+  <div class="section-bg-slideshow" aria-hidden="true">
+    <div class="section-bg-slide active" style="background-image:url('main page pics/ameliyathane-kaplama-uygulamalari.jpg');"></div>
+    <div class="section-bg-slide" style="background-image:url('main page pics/istockphoto-2104492029-612x612.jpg');"></div>
+    <div class="section-bg-slide" style="background-image:url('main page pics/interior-view-operating-room.jpg');"></div>
+    <div class="section-bg-overlay"></div>
+  </div>
+  <div class="cta-glow"></div>
+  <div class="contact-cards">
+    <div class="contact-card">
+      <div class="contact-card-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2C7.24 2 5 4.24 5 7c0 4.08 5 11 5 11s5-6.92 5-11c0-2.76-2.24-5-5-5zm0 6.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" stroke="#c8006d" stroke-width="1.3" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="contact-card-label" data-tr="Adres">Address</div>
+      <div class="contact-card-value" data-tr="Bahçekapı Mah. 2500 Cadde No:15/10<br />Şaşmaz, 06797 Etimesgut / Ankara, Türkiye">Bahçekapı Mah. 2500 Cadde No:15/10<br />Şaşmaz, 06797 Etimesgut / Ankara, Turkey</div>
+    </div>
+    <div class="contact-card">
+      <div class="contact-card-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M14.5 12.5l-2 2a11.36 11.36 0 01-7-7l2-2L5 2 2 5c0 7.18 5.82 13 13 13l3-3-3.5-2.5z" stroke="#c8006d" stroke-width="1.3" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="contact-card-label" data-tr="Telefon ve Faks">Phone &amp; Fax</div>
+      <div class="contact-card-value"><a href="tel:+903124413436">+90 312 441 34 36</a></div>
+      <div class="contact-card-sub" data-tr="Faks: +90 312 441 34 31">Fax: +90 312 441 34 31</div>
+    </div>
+    <div class="contact-card">
+      <div class="contact-card-icon">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8" stroke="#c8006d" stroke-width="1.3"/><path d="M10 6v4l3 2" stroke="#c8006d" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <div class="contact-card-label" data-tr="Çalışma Saatleri">Office Hours</div>
+      <div class="contact-card-value" data-tr="Pazartesi – Cuma<br />08:00 – 17:30">Monday – Friday<br />08:00 – 17:30</div>
+      <div class="contact-card-sub" data-tr="Cumartesi ve Pazar kapalı">Saturday &amp; Sunday closed</div>
+    </div>
+  </div>
+  <div class="cta-inner">
+    <span class="label cta-label" data-tr="Birlikte Çalışalım">Let's Work Together</span>
+    <h2 class="display cta-h2" data-tr="Tıbbi sarf malzemelerinizi tedarik etmeye hazır mısınız?">Ready to source your medical consumables?</h2>
+    <p class="cta-sub" data-tr="Ürün soruları, fiyat talepleri ve iş birliği görüşmeleri için ekibimiz mesai saatleri içinde hizmetinizdedir.">Product queries, pricing requests, and partnership inquiries — our team is available during business hours.</p>
+    <div class="cta-actions">
+      <a href="tel:+903124413436" class="btn-prim">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M11.6 10l-1.6 1.6A9.1 9.1 0 014.4 6l1.6-1.6L4 2 2 4c0 5.75 4.67 10.41 10.42 10.42L14.42 12 11.6 10z" stroke="#fff" stroke-width="1.3" stroke-linejoin="round"/></svg>
+        <span data-tr="Hemen Arayın">Call Us Now</span>
+      </a>
+      <a href="mailto:info@alplerhastane.com" class="btn-ghost" data-tr="E-posta Gönderin">Send an Email</a>
+    </div>
+    <div class="cta-info">
+      <div class="cta-info-item">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="rgba(255,255,255,0.65)" stroke-width="1.2"/><path d="M8 5v3l2 1.5" stroke="rgba(255,255,255,0.65)" stroke-width="1.2" stroke-linecap="round"/></svg>
+        <span data-tr="Pzt–Cum 08:00–17:30">Mon–Fri 08:00–17:30</span>
+      </div>
+      <div class="cta-info-item">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2C5.79 2 4 3.79 4 6c0 3.25 4 8 4 8s4-4.75 4-8c0-2.21-1.79-4-4-4zm0 5.5a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" stroke="rgba(255,255,255,0.65)" stroke-width="1.2" stroke-linejoin="round"/></svg>
+        Etimesgut, Ankara
+      </div>
+      <div class="cta-info-item">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 1l1.4 4.2H14l-3.7 2.7 1.4 4.1L8 9.4l-3.7 2.6 1.4-4.1L2 5.2h4.6L8 1z" stroke="rgba(255,255,255,0.65)" stroke-width="1.2" stroke-linejoin="round"/></svg>
+        <span data-tr="CE ve FDA Sertifikalı Ürünler">CE &amp; FDA Certified Products</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <img src="brand_assets/AlplerMedicalLogoPink-300x88.png" alt="Alpler Hospital Supplies" style="height:34px;width:auto;" />
+        <p class="footer-brand-desc" data-tr="Ankara merkezli, sertifikalı tıbbi sarf malzemeleri distribütörü — anestezi, yoğun bakım, monitörizasyon ve yenidoğan. 2008'de kuruldu.">Ankara-based distributor of certified medical consumables — anesthesia, intensive care, monitoring, and neonatology. Founded 2008.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Twitter">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M14 2l-4.5 5.2L14.5 14h-3L9 10.4 5.5 14H2l4.7-5.5L1.5 2h3L7.8 5.4 11 2h3z" fill="#6a6a7a"/></svg>
+          </a>
+          <a href="#" aria-label="Facebook">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M12 1H10a3 3 0 00-3 3v2H5v3h2v6h3V9h2l1-3H10V4a1 1 0 011-1h1V1z" fill="#6a6a7a"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title" data-tr="Şirket">Company</div>
+        <ul class="footer-links">
+          <li><a href="about.html" data-tr="Hakkımızda">About Us</a></li>
+          <li><a href="index.html#quality" data-tr="Kalite ve Sertifikalar">Quality &amp; Certifications</a></li>
+          <li><a href="index.html#export" data-tr="İhracat">Export</a></li>
+          <li><a href="index.html#partners" data-tr="İş Ortakları">Business Partners</a></li>
+          <li><a href="index.html#contact" data-tr="İletişim">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title" data-tr="Ürünler">Products</div>
+        <ul class="footer-links">
+          <li><a href="products.html#anestezi" data-tr="Anestezi">Anesthesia</a></li>
+          <li><a href="products.html#yogun-bakim" data-tr="Yoğun Bakım">Intensive Care</a></li>
+          <li><a href="products.html#monitor" data-tr="Monitörizasyon">Monitoring</a></li>
+          <li><a href="products.html#kuvoz" data-tr="Küvöz Sarf Malzemeleri">Incubator Supplies</a></li>
+          <li><a href="products.html#single" data-tr="Tıbbi Cihazlar">Medical Devices</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title" data-tr="İletişim">Contact</div>
+        <ul class="footer-links" style="gap:8px;">
+          <li style="font-size:13px;color:#8a8a9a;line-height:1.6;">Bahçekapı Mah. 2500 Cadde No:15/10<br />Şaşmaz, 06797 Etimesgut / Ankara</li>
+          <li><a href="tel:+903124413436" style="font-size:13px;">+90 312 441 34 36</a></li>
+          <li style="font-size:13px;color:#8a8a9a;" data-tr="Faks: +90 312 441 34 31">Fax: +90 312 441 34 31</li>
+          <li style="font-size:13px;color:#9a9aaa;" data-tr="Pzt–Cum: 08:00 – 17:30">Mon–Fri: 08:00 – 17:30</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy" data-tr="© 2024 Alpler Hastane Malzemeleri. Tüm hakları saklıdır.">© 2024 Alpler Hastane Malzemeleri. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="#" data-tr="Gizlilik Politikası">Privacy Policy</a>
+        <a href="#" data-tr="Kullanım Koşulları">Terms of Service</a>
+        <a href="#" data-tr="Yasal Uyarı">Legal Notice</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── TR/EN language toggle ──
+  (function() {
+    var LANG_KEY = 'alpler_lang';
+    var els = document.querySelectorAll('[data-tr]');
+    els.forEach(function(el) {
+      if (el.dataset.en === undefined) el.dataset.en = el.innerHTML;
+    });
+    function applyLang(lang) {
+      els.forEach(function(el) {
+        el.innerHTML = lang === 'tr' ? el.dataset.tr : el.dataset.en;
+      });
+      document.querySelectorAll('.lang-btn').forEach(function(b) {
+        b.classList.toggle('active', b.dataset.lang === lang);
+      });
+      document.documentElement.lang = lang;
+      localStorage.setItem(LANG_KEY, lang);
+    }
+    var saved = localStorage.getItem(LANG_KEY) || 'en';
+    applyLang(saved);
+    document.querySelectorAll('.lang-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() { applyLang(btn.dataset.lang); });
+    });
+  })();
+
+  // ── In-frame gallery thumbnails ──
+  document.querySelectorAll('.fp-gallery-thumb').forEach(function(thumb) {
+    thumb.addEventListener('click', function() {
+      var mainImg = document.getElementById(thumb.dataset.main);
+      mainImg.style.opacity = '0';
+      setTimeout(function() {
+        mainImg.src = thumb.dataset.src;
+        mainImg.style.opacity = '1';
+      }, 150);
+      thumb.closest('.fp-gallery-thumbs').querySelectorAll('.fp-gallery-thumb').forEach(function(t) { t.classList.remove('active'); });
+      thumb.classList.add('active');
+    });
+  });
+
+  // ── Full-screen/section background slideshow — hero + the enFlow row, Stats, and CTA
+  // sections all share the same 3 photos and crossfade in lockstep on one shared index,
+  // so the sections read as one continuous slideshow rather than separate/repeated ones. ──
+  const bgSlideContainers = document.querySelectorAll('.hero-bg-slideshow, .section-bg-slideshow');
+  let bgSlideIdx = 0;
+  if (bgSlideContainers.length) {
+    setInterval(() => {
+      bgSlideIdx = (bgSlideIdx + 1) % 3;
+      bgSlideContainers.forEach(container => {
+        container.querySelectorAll('.hero-bg-slide, .section-bg-slide').forEach((s, idx) => {
+          s.classList.toggle('active', idx === bgSlideIdx);
+        });
+      });
+    }, 5000);
+  }
+
+  // ── Flagship product switcher ──
+  const fpOrder = ['infusion', 'syringe', 'pain'];
+  let fpIdx = 0;
+  let fpTimer = null;
+  let fpBarTimer = null;
+  const CYCLE_MS = 5000;
+
+  function switchFlagship(id, restartCycle) {
+    document.querySelectorAll('.fp-tab').forEach(t => t.classList.toggle('active', t.dataset.fp === id));
+    document.querySelectorAll('.fp-panel').forEach(p => p.classList.toggle('active', p.id === 'fp-' + id));
+    document.querySelectorAll('.fp-dot').forEach(d => d.classList.toggle('active', d.dataset.fp === id));
+    // Reset all bars
+    document.querySelectorAll('.fp-tab-bar').forEach(b => { b.style.transition = 'none'; b.style.width = '0%'; });
+    // Animate active bar
+    const activeBar = document.getElementById('fp-bar-' + id);
+    if (activeBar) {
+      setTimeout(() => {
+        activeBar.style.transition = 'width ' + CYCLE_MS + 'ms linear';
+        activeBar.style.width = '100%';
+      }, 30);
+    }
+    if (restartCycle) startCycle();
+  }
+
+  function startCycle() {
+    clearInterval(fpTimer);
+    fpTimer = setInterval(() => {
+      fpIdx = (fpIdx + 1) % fpOrder.length;
+      switchFlagship(fpOrder[fpIdx], false);
+    }, CYCLE_MS);
+  }
+
+  document.querySelectorAll('.fp-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      fpIdx = fpOrder.indexOf(tab.dataset.fp);
+      switchFlagship(tab.dataset.fp, true);
+    });
+  });
+
+  // Start
+  switchFlagship('infusion', false);
+  startCycle();
+
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.getElementById('mobile-nav').classList.toggle('open');
+  });
+  document.querySelectorAll('#mobile-nav a').forEach(function(a) {
+    a.addEventListener('click', function() { document.getElementById('mobile-nav').classList.remove('open'); });
+  });
+  var anims = document.querySelectorAll('.anim');
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  anims.forEach(function(el) { obs.observe(el); });
+</script>
+</body>
+</html>

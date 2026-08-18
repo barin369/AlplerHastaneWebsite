@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Monitoring &amp; Pumps — Alpler Hospital Supplies</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #fff; color: #1a1a2a; overflow-x: hidden; }
+    .display { font-weight: 800; letter-spacing: -0.045em; line-height: 1.05; }
+    .title    { font-weight: 700; letter-spacing: -0.03em; line-height: 1.15; }
+    .label    { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+    #nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(200,0,109,0.94); backdrop-filter: blur(20px) saturate(160%); border-bottom: 1px solid rgba(255,255,255,0.14); }
+    .nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 32px; height: 76px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-link { font-size: 13px; font-weight: 500; color: #fff; text-decoration: none; transition: color 0.2s; }
+    .nav-link:hover, .nav-link.active { color: #fff; }
+    .nav-cta { font-size: 13px; font-weight: 600; color: #c8006d; text-decoration: none; background: #fff; padding: 9px 20px; border-radius: 8px; transition: opacity 0.2s, transform 0.2s; }
+    .nav-cta:hover { opacity: 0.85; transform: translateY(-1px); }
+    .lang-switch { display: flex; align-items: center; gap: 2px; background: rgba(255,255,255,0.16); border-radius: 100px; padding: 3px; }
+    .lang-btn { font-size: 11px; font-weight: 700; letter-spacing: 0.03em; color: rgba(255,255,255,0.7); background: none; border: none; padding: 5px 11px; border-radius: 100px; cursor: pointer; transition: background 0.2s, color 0.2s; }
+    .lang-btn.active { background: #fff; color: #c8006d; }
+    .lang-btn:hover:not(.active) { color: #fff; }
+    .mobile-lang-switch { display: flex; align-items: center; gap: 2px; background: rgba(255,255,255,0.14); border-radius: 100px; padding: 3px; margin-top: 10px; width: fit-content; }
+    .mobile-lang-switch .lang-btn { padding: 6px 14px; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { width: 22px; height: 1.5px; background: rgba(255,255,255,0.7); border-radius: 2px; display: block; }
+    #mobile-nav { display: none; flex-direction: column; gap: 4px; padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.14); background: rgba(200,0,109,0.97); }
+    #mobile-nav.open { display: flex; }
+    #mobile-nav a { font-size: 15px; font-weight: 500; color: #fff; text-decoration: none; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    #mobile-nav a:last-child { border-bottom: none; color: #fff; font-weight: 700; }
+    .page-hero { background: linear-gradient(160deg, #2a0018 0%, #4a0028 45%, #1a000f 100%); padding: 140px 32px 80px; position: relative; overflow: hidden; }
+    .page-hero-glow { position: absolute; top: -100px; right: -100px; width: 600px; height: 600px; background: radial-gradient(ellipse, rgba(200,0,109,0.2) 0%, transparent 65%); pointer-events: none; }
+    .page-hero-inner { max-width: 1280px; margin: 0 auto; position: relative; z-index: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+    .page-hero-back { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: rgba(255,255,255,0.4); text-decoration: none; margin-bottom: 24px; transition: color 0.2s; }
+    .page-hero-back:hover { color: rgba(255,255,255,0.7); }
+    .page-hero-eyebrow { color: #c8006d; margin-bottom: 16px; display: block; }
+    .page-hero-h1 { font-size: clamp(40px, 5vw, 64px); color: #fff; margin-bottom: 20px; }
+    .page-hero-sub { font-size: 17px; color: rgba(255,255,255,0.5); line-height: 1.7; margin-bottom: 36px; }
+    .btn-prim { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: #fff; text-decoration: none; background: linear-gradient(135deg, #c8006d, #a8005b); padding: 14px 28px; border-radius: 10px; transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s; }
+    .btn-prim:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(200,0,109,0.4); }
+    .page-hero-img { border-radius: 20px; overflow: hidden; border: 1px solid rgba(255,255,255,0.08); aspect-ratio: 4/3; position: relative; }
+    .page-hero-img img { width: 100%; height: 100%; object-fit: cover; }
+    .page-hero-img::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(42,0,24,0.6) 0%, transparent 55%); }
+    .breadcrumb-bar { background: #f8f7fc; border-bottom: 1px solid rgba(0,0,0,0.06); padding: 14px 32px; }
+    .breadcrumb-inner { max-width: 1280px; margin: 0 auto; display: flex; align-items: center; gap: 8px; font-size: 13px; color: #8a8a9a; }
+    .breadcrumb-inner a { color: #8a8a9a; text-decoration: none; }
+    .breadcrumb-inner a:hover { color: #c8006d; }
+    .breadcrumb-inner span { color: #1a1a2a; font-weight: 500; }
+    .cat-nav { background: #fff; border-bottom: 1px solid rgba(0,0,0,0.06); position: sticky; top: 76px; z-index: 50; }
+    .cat-nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 32px; display: flex; overflow-x: auto; }
+    .cat-nav-link { font-size: 13px; font-weight: 600; color: #8a8a9a; text-decoration: none; padding: 16px 20px; border-bottom: 2px solid transparent; white-space: nowrap; transition: color 0.2s, border-color 0.2s; }
+    .cat-nav-link:hover { color: #1a1a2a; }
+    .cat-nav-link.active { color: #c8006d; border-bottom-color: #c8006d; }
+    .prod-section { padding: 80px 32px; max-width: 1280px; margin: 0 auto; }
+    .prod-section-header { margin-bottom: 40px; padding-bottom: 24px; border-bottom: 1px solid rgba(0,0,0,0.06); display: flex; align-items: flex-start; justify-content: space-between; gap: 32px; flex-wrap: wrap; }
+    .prod-section-label { color: #c8006d; display: block; margin-bottom: 8px; }
+    .prod-section-h2 { font-size: clamp(24px, 2.5vw, 36px); color: #0f0f1a; }
+    .prod-section-desc { font-size: 15px; color: #6a6a7a; line-height: 1.7; max-width: 600px; }
+    .prod-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .prod-card { background: #fff; border: 1px solid rgba(0,0,0,0.08); border-radius: 16px; padding: 28px; transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1); }
+    .prod-card:hover { border-color: rgba(200,0,109,0.2); box-shadow: 0 4px 20px rgba(200,0,109,0.08), 0 12px 40px rgba(0,0,0,0.06); transform: translateY(-4px); }
+    .prod-card-icon { width: 44px; height: 44px; border-radius: 12px; background: rgba(200,0,109,0.08); border: 1px solid rgba(200,0,109,0.12); display: flex; align-items: center; justify-content: center; margin-bottom: 18px; }
+    .prod-card-name { font-size: 16px; font-weight: 700; color: #0f0f1a; margin-bottom: 8px; letter-spacing: -0.02em; }
+    .prod-card-desc { font-size: 14px; color: #6a6a7a; line-height: 1.65; margin-bottom: 16px; }
+    .prod-card-variants { list-style: none; display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 1px solid rgba(0,0,0,0.05); }
+    .prod-card-variants li { font-size: 12.5px; color: #5a5a72; display: flex; align-items: center; gap: 8px; }
+    .prod-card-variants li::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: #c8006d; flex-shrink: 0; }
+    .prod-card-footer { display: flex; align-items: center; justify-content: space-between; }
+    .prod-card-tag { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #a8a8b8; background: #f4f3f8; padding: 4px 10px; border-radius: 20px; }
+    .prod-card-cta { font-size: 13px; font-weight: 600; color: #c8006d; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; transition: gap 0.2s; }
+    .prod-card:hover .prod-card-cta { gap: 8px; }
+    .section-alt { background: #f8f7fc; }
+    .cta-section { background: #1a000f; padding: 100px 32px; position: relative; overflow: hidden; text-align: center; }
+    .cta-glow { position: absolute; bottom: -200px; left: 50%; transform: translateX(-50%); width: 900px; height: 500px; background: radial-gradient(ellipse, rgba(200,0,109,0.18) 0%, transparent 65%); pointer-events: none; }
+    .cta-inner { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
+    .cta-label { color: #c8006d; margin-bottom: 16px; display: block; }
+    .cta-h2 { font-size: clamp(32px, 4vw, 52px); color: #fff; margin-bottom: 16px; }
+    .cta-sub { font-size: 16px; color: rgba(255,255,255,0.45); margin-bottom: 40px; line-height: 1.7; }
+    .cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-ghost { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.7); text-decoration: none; border: 1px solid rgba(255,255,255,0.15); padding: 14px 28px; border-radius: 10px; transition: background 0.2s, border-color 0.2s, transform 0.2s; }
+    .btn-ghost:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.3); transform: translateY(-1px); }
+    footer { background: #fafafa; border-top: 1px solid rgba(0,0,0,0.06); padding: 64px 0 40px; }
+    .footer-inner { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+    .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+    .footer-brand-desc { font-size: 14px; color: #8a8a9a; line-height: 1.7; margin: 16px 0 24px; max-width: 300px; }
+    .footer-col-title { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #1a1a2a; margin-bottom: 18px; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { font-size: 14px; color: #6a6a7a; text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: #c8006d; }
+    .footer-social { display: flex; gap: 10px; }
+    .footer-social a { width: 36px; height: 36px; border-radius: 8px; background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: center; transition: background 0.2s; }
+    .footer-social a:hover { background: rgba(200,0,109,0.08); border-color: rgba(200,0,109,0.2); }
+    .footer-bottom { border-top: 1px solid rgba(0,0,0,0.06); padding-top: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .footer-copy { font-size: 13px; color: #9a9aaa; }
+    .footer-legal { display: flex; gap: 20px; }
+    .footer-legal a { font-size: 13px; color: #9a9aaa; text-decoration: none; }
+    .footer-legal a:hover { color: #c8006d; }
+    @media (max-width: 1024px) {
+      .page-hero-inner { grid-template-columns: 1fr; }
+      .prod-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .prod-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="nav-inner">
+    <a href="index.html" style="flex-shrink:0;"><img src="brand_assets/AlplerMedicalLogoPink-300x88.png" alt="Alpler Hospital Supplies" style="height:50px;width:auto;filter:brightness(0) invert(1);" /></a>
+    <div class="nav-links">
+      <a href="index.html"         class="nav-link" data-tr="Ana Sayfa">Home</a>
+      <a href="index.html#about"    class="nav-link" data-tr="Hakkımızda">About</a>
+      <a href="products.html" class="nav-link active" data-tr="Ürünler">Products</a>
+      <a href="index.html#quality"  class="nav-link" data-tr="Kalite">Quality</a>
+      <a href="index.html#services" class="nav-link" data-tr="Hizmetler">Services</a>
+      <a href="index.html#contact"  class="nav-link" data-tr="İletişim">Contact</a>
+      <a href="index.html#contact"  class="nav-cta" data-tr="Teklif Alın">Get a Quote</a>
+      <div class="lang-switch">
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="tr">TR</button>
+      </div>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+  </div>
+  <div id="mobile-nav">
+    <a href="index.html" data-tr="Ana Sayfa">Home</a>
+    <a href="index.html#about" data-tr="Hakkımızda">About</a>
+    <a href="products.html" data-tr="Ürünler">Products</a>
+    <a href="index.html#contact" data-tr="İletişim">Contact</a>
+    <a href="index.html#contact" data-tr="Teklif Alın →">Get a Quote →</a>
+    <div class="mobile-lang-switch">
+      <button class="lang-btn active" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="tr">TR</button>
+    </div>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <div class="page-hero-glow"></div>
+  <div class="page-hero-inner">
+    <div>
+      <a href="index.html" class="page-hero-back"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M11 7H3M6 4L3 7l3 3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-tr="Ana Sayfaya Dön">Back to Home</span></a>
+      <span class="label page-hero-eyebrow" data-tr="Hasta Monitörizasyonu ve İnfüzyon">Patient Monitoring &amp; Infusion</span>
+      <h1 class="display page-hero-h1" data-tr="Monitörizasyon<br />ve Pompalar">Monitoring<br />&amp; Pumps</h1>
+      <p class="page-hero-sub" data-tr="SpO₂, EKG, NIBP, IBP, sıcaklık — ve kesintisiz klinik iş akışları için tam kapsamlı infüzyon, şırınga ve ağrı pompası sarf malzemeleri.">SpO₂, ECG, NIBP, IBP, temperature — and the full range of infusion, syringe, and pain pump consumables for uninterrupted clinical workflows.</p>
+      <a href="index.html#contact" class="btn-prim"><span data-tr="Fiyat Talep Edin">Request Pricing</span> <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+    <div class="page-hero-img"><img src="https://placehold.co/640x480/0f0f1c/1a0f2a?text=+" alt="Monitoring products" /></div>
+  </div>
+</section>
+
+<div class="breadcrumb-bar">
+  <div class="breadcrumb-inner">
+    <a href="index.html" data-tr="Ana Sayfa">Home</a>
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M4 2l4 4-4 4" stroke="#c2c2d0" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span data-tr="Monitörizasyon ve Pompalar">Monitoring &amp; Pumps</span>
+  </div>
+</div>
+
+<div class="cat-nav">
+  <div class="cat-nav-inner">
+    <a href="#spo2"        class="cat-nav-link active">SpO₂</a>
+    <a href="#ecg"         class="cat-nav-link">ECG</a>
+    <a href="#nibp"        class="cat-nav-link">NIBP</a>
+    <a href="#ibp"         class="cat-nav-link">IBP</a>
+    <a href="#temperature" class="cat-nav-link" data-tr="Sıcaklık">Temperature</a>
+    <a href="#infusion"    class="cat-nav-link" data-tr="İnfüzyon Pompaları">Infusion Pumps</a>
+    <a href="#syringe"     class="cat-nav-link" data-tr="Şırınga Pompaları">Syringe Pumps</a>
+    <a href="#pain"        class="cat-nav-link" data-tr="Ağrı Pompaları">Pain Pumps</a>
+  </div>
+</div>
+
+<!-- SpO2 -->
+<div id="spo2" style="background:#fff;">
+  <div class="prod-section">
+    <div class="prod-section-header">
+      <div><span class="label prod-section-label" data-tr="01 — Nabız Oksimetresi">01 — Pulse Oximetry</span><h2 class="title prod-section-h2">SpO₂ Sensors &amp; Probes</h2></div>
+      <p class="prod-section-desc" data-tr="Yenidoğan, pediatrik ve yetişkin hastalar için tekrar kullanılabilir ve tek kullanımlık SpO₂ sensörleri. Tüm büyük hasta monitörü markalarıyla uyumludur.">Reusable and single-use SpO₂ sensors for neonatal, pediatric, and adult patients. Compatible with all major patient monitor brands.</p>
+    </div>
+    <div class="prod-grid">
+      <div class="prod-card">
+        <div class="prod-card-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 6v10M7 10l4-4 4 4" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><rect x="4" y="4" width="14" height="14" rx="3" stroke="#c8006d" stroke-width="1.2" opacity="0.4"/></svg></div>
+        <div class="prod-card-name" data-tr="Yetişkin Parmak Klipsi SpO₂ Sensörü">Adult Finger Clip SpO₂ Sensor</div>
+        <div class="prod-card-desc" data-tr="Yetişkin parmak ölçümü için tekrar kullanılabilir klips tarzı prob. Kauçuk yaylı klips tasarımı doğru ölçümler için stabil temas sağlar.">Reusable clip-style probe for adult digit measurement. Rubberized spring-clip design maintains stable contact for accurate readings.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="GE, Philips, Mindray, Nihon Kohden ile uyumlu">Compatible with GE, Philips, Mindray, Nihon Kohden</li>
+          <li data-tr="DB9 veya özel konektörlü 1m kablo">1m cable with DB9 or proprietary connector</li>
+          <li data-tr="Doğruluk: ±%2 SpO₂">Accuracy: ±2% SpO₂</li>
+          <li data-tr="Tekrar kullanılabilir — silinerek temizlenir">Reusable — wipe-clean</li>
+        </ul>
+        <div class="prod-card-footer"><span class="prod-card-tag" data-tr="Tekrar Kullanılabilir">Reusable</span><a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a></div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-card-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M7 11h8M11 7v8" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round"/><rect x="4" y="4" width="14" height="14" rx="3" stroke="#c8006d" stroke-width="1.2" opacity="0.4"/></svg></div>
+        <div class="prod-card-name" data-tr="Pediatrik / Yenidoğan Sarma Sensör">Pediatric / Neonatal Wrap Sensor</div>
+        <div class="prod-card-desc" data-tr="Pediatrik el ve ayaklar ile yenidoğan uzuvları için yumuşak yapışkanlı sarma sensör. Hassas ciltler için uygun nazik yapışkan.">Soft adhesive wrap-around sensor for pediatric hands and feet, and neonatal extremities. Gentle adhesive suitable for fragile skin.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="Pediatrik (3–20 kg) ve Yenidoğan varyantları">Pediatric (3–20 kg) and Neonatal variants</li>
+          <li data-tr="Tek kullanımlık yapışkan sarma">Single-use adhesive wrap</li>
+          <li data-tr="Büyük monitör markalarıyla uyumlu">Compatible with major monitor brands</li>
+          <li data-tr="Steril, lateks içermez">Sterile, latex-free</li>
+        </ul>
+        <div class="prod-card-footer"><span class="prod-card-tag" data-tr="Tek Kullanımlık">Single-Use</span><a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a></div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-card-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M5 17l6-12 6 12M8 13h6" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="prod-card-name" data-tr="SpO₂ Uzatma Kablosu">SpO₂ Extension Cable</div>
+        <div class="prod-card-desc" data-tr="Monitör ve hasta SpO₂ probu arasında ara uzatma kablosu. Monitör ucunda kablo aşınması olduğunda prob değişim maliyetini azaltır.">Intermediate extension cable between monitor and patient SpO₂ probe. Reduces probe replacement cost when cable wear occurs at the monitor end.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="1m ve 3m uzunluklar">1m and 3m lengths</li>
+          <li data-tr="Çoklu konektör seçenekleri (GE, Philips, Masimo)">Multi-site connector options (GE, Philips, Masimo)</li>
+          <li data-tr="Altın kaplamalı kontaklar">Gold-plated contacts</li>
+          <li data-tr="Tekrar kullanılabilir, silinerek temizlenir">Reusable, wipe-clean</li>
+        </ul>
+        <div class="prod-card-footer"><span class="prod-card-tag" data-tr="Uzatma">Extension</span><a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ECG -->
+<div id="ecg" class="section-alt">
+  <div class="prod-section">
+    <div class="prod-section-header">
+      <div><span class="label prod-section-label" data-tr="02 — Elektrokardiyografi">02 — Electrocardiography</span><h2 class="title prod-section-h2" data-tr="EKG Elektrotları ve Kablo Setleri">ECG Electrodes &amp; Lead Cables</h2></div>
+      <p class="prod-section-desc" data-tr="Sürekli başucu takibi için basma ve tab elektrotlar, ayrıca tüm büyük hasta monitörü platformları için çok kanallı EKG kabloları.">Snap and tab electrodes for continuous bedside monitoring, plus multi-lead ECG cables for all major patient monitor platforms.</p>
+    </div>
+    <div class="prod-grid">
+      <div class="prod-card">
+        <div class="prod-card-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 11h4l2-5 3 10 3-7 2 2h4" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="prod-card-name" data-tr="Monitörizasyon EKG Elektrotu (Basma)">Monitoring ECG Electrode (Snap)</div>
+        <div class="prod-card-desc" data-tr="Sürekli başucu EKG takibi için Ag/AgCl katı jel elektrot. Önceden jelli, cilt dostu yapışkan. Yetişkin ve pediatrik boylarda mevcuttur.">Ag/AgCl solid-gel electrode for continuous bedside ECG monitoring. Pre-gelled, skin-friendly adhesive. Available in adult and pediatric sizes.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="Ag/AgCl katı jel">Ag/AgCl solid gel</li>
+          <li data-tr="Yetişkin (55mm) ve pediatrik (35mm)">Adult (55mm) and pediatric (35mm)</li>
+          <li data-tr="Köpük veya kumaş destekli varyantlar">Foam or cloth backing variants</li>
+          <li data-tr="50'li veya 100'lü kutu">Box of 50 or 100 electrodes</li>
+          <li data-tr="Raf ömrü: mühürlü halde 2 yıl">Shelf life: 2 years sealed</li>
+        </ul>
+        <div class="prod-card-footer"><span class="prod-card-tag" data-tr="Monitörizasyon">Monitoring</span><a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a></div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-card-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 11h4l2-5 3 10 3-7 2 2h4" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="18" cy="11" r="2" stroke="#c8006d" stroke-width="1.1" opacity="0.5"/></svg></div>
+        <div class="prod-card-name" data-tr="Tanısal EKG Elektrotu (Tab)">Diagnostic ECG Electrode (Tab)</div>
+        <div class="prod-card-desc" data-tr="12 kanallı tanısal EKG kaydı için yüksek doğruluklu tab elektrot. Düşük gürültülü jel formülasyonu, detaylı ST-segment analizi için sinyal netliği sağlar.">High-fidelity tab electrode for 12-lead diagnostic ECG acquisition. Low-noise gel formulation ensures signal clarity for detailed ST-segment analysis.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="Düşük gürültülü tanısal jel">Low-noise diagnostic gel</li>
+          <li data-tr="Uzuv ve göğüs yerleşimi için tab tarzı">Tab-style for limb and precordial placement</li>
+          <li data-tr="Konfor için dokusuz kumaş destek">Non-woven backing for comfort</li>
+          <li data-tr="Tek kullanımlık, lateks içermez">Single-use, latex-free</li>
+        </ul>
+        <div class="prod-card-footer"><span class="prod-card-tag" data-tr="Tanısal">Diagnostic</span><a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a></div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-card-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 6h14M4 11h14M4 16h10" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round"/></svg></div>
+        <div class="prod-card-name" data-tr="3 / 5 Kanallı EKG Kablo Seti">3 / 5-Lead ECG Cable Set</div>
+        <div class="prod-card-desc" data-tr="Başucu takibi için komple kanal kablo seti. Ana gövde kablosu ve AHA veya IEC renk kodlu bireysel kanal kablolarını içerir. Birden fazla konektör türü mevcuttur.">Complete lead cable set for bedside monitoring. Includes trunk cable and individual lead wires with AHA or IEC color coding. Multiple connector types available.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="3 kanallı ve 5 kanallı yapılandırmalar">3-lead and 5-lead configurations</li>
+          <li data-tr="AHA (ABD) ve IEC (Avrupa) renk kodlaması">AHA (US) and IEC (European) color coding</li>
+          <li data-tr="Uyumlu: GE, Philips, Mindray, Nihon Kohden">Compatible: GE, Philips, Mindray, Nihon Kohden</li>
+          <li data-tr="1,5m kablo uzunluğu, basma veya klips kanallar">1.5m cable length, snap or clip leads</li>
+          <li data-tr="Tekrar kullanılabilir, TPE kılıf">Reusable, TPE jacket</li>
+        </ul>
+        <div class="prod-card-footer"><span class="prod-card-tag" data-tr="Tekrar Kullanılabilir">Reusable</span><a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NIBP -->
+<div id="nibp" style="background:#fff;">
+  <div class="prod-section">
+    <div class="prod-section-header">
+      <div><span class="label prod-section-label" data-tr="03 — Non-İnvaziv Kan Basıncı">03 — Non-Invasive BP</span><h2 class="title prod-section-h2" data-tr="NIBP Manşetleri ve Hortumları">NIBP Cuffs &amp; Hoses</h2></div>
+      <p class="prod-section-desc" data-tr="Tüm hasta boyları için tekrar kullanılabilir ve tek kullanımlık non-invaziv kan basıncı manşetleri, büyük monitör markalarıyla uyumlu şişirme hortumlarıyla birlikte.">Reusable and single-use non-invasive blood pressure cuffs for all patient sizes, with compatible inflation hoses for major monitor brands.</p>
+    </div>
+    <div class="prod-grid">
+      <div class="prod-card">
+        <div class="prod-card-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="3" y="7" width="16" height="8" rx="2" stroke="#c8006d" stroke-width="1.4"/><path d="M7 7V5M15 7V5M7 15v2M15 15v2" stroke="#c8006d" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+        <div class="prod-card-name" data-tr="Yetişkin Tekrar Kullanılabilir NIBP Manşeti">Adult Reusable NIBP Cuff</div>
+        <div class="prod-card-desc" data-tr="Rutin non-invaziv kan basıncı takibi için yetişkin boylarında naylon/cırt cırt manşet. Makinede yıkanabilir. Standart tek hortumlu veya çift hortumlu konektörlere uyar.">Nylon/velcro cuff in adult sizes for routine non-invasive BP monitoring. Machine washable. Fits standard single-tube or dual-tube hose connectors.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="Boylar: Küçük Yetişkin, Yetişkin, Büyük Yetişkin">Sizes: Small Adult, Adult, Large Adult</li>
+          <li data-tr="Tek ve çift hortum port seçenekleri">Single and dual-tube port options</li>
+          <li data-tr="Makinede yıkanabilir naylon iç kese">Machine washable nylon bladder</li>
+          <li data-tr="Tüm büyük monitörlerle uyumlu">Compatible with all major monitors</li>
+        </ul>
+        <div class="prod-card-footer"><span class="prod-card-tag" data-tr="Tekrar Kullanılabilir">Reusable</span><a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a></div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-card-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="5" y="8" width="12" height="6" rx="2" stroke="#c8006d" stroke-width="1.4"/><path d="M9 8V6M13 8V6M9 14v2M13 14v2" stroke="#c8006d" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+        <div class="prod-card-name" data-tr="Tek Kullanımlık NIBP Manşeti (Tam Aralık)">Single-Use NIBP Cuff (Full Range)</div>
+        <div class="prod-card-desc" data-tr="Enfeksiyon kontrollü ortamlar için tek kullanımlık NIBP manşeti. Yenidoğandan büyük yetişkine kadar tam hasta boyu aralığında mevcuttur.">Disposable NIBP cuff for infection-controlled environments. Available in full patient size range from neonatal through large adult.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="Boylar: Yenidoğan 1–4, Pediatrik, Yetişkin, Büyük Yetişkin">Sizes: Neonatal 1–4, Pediatric, Adult, Large Adult</li>
+          <li data-tr="Dokusuz kumaş iç kese">Non-woven fabric bladder</li>
+          <li data-tr="Tek kullanımlık, steril ambalaj">Single-use, sterile packaging</li>
+          <li data-tr="Evrensel konektör (OEM adaptör mevcuttur)">Universal connector (OEM adapter available)</li>
+        </ul>
+        <div class="prod-card-footer"><span class="prod-card-tag" data-tr="Tek Kullanımlık">Single-Use</span><a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a></div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-card-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 11h14M4 11c0 3 3 5 7 5s7-2 7-5" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round"/></svg></div>
+        <div class="prod-card-name" data-tr="NIBP Şişirme Hortumu">NIBP Inflation Hose</div>
+        <div class="prod-card-desc" data-tr="NIBP manşetini monitöre bağlayan yedek şişirme hortumu. Manşet ve monitör kombinasyonunuza uyacak birden fazla konektör türüyle mevcuttur.">Replacement inflation hose connecting NIBP cuff to monitor. Available with multiple connector types to match your cuff and monitor combination.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="Tek hortum (1 lümen) ve çift hortum varyantları">Single-tube (1-lumen) and dual-tube variants</li>
+          <li data-tr="1m ve 3m uzunluklar">1m and 3m lengths</li>
+          <li data-tr="Erkek luer, Basma ve özel konektörler">Male luer, Snap, and proprietary connectors</li>
+          <li data-tr="GE, Philips, Mindray, Spacelabs ile uyumlu">Compatible with GE, Philips, Mindray, Spacelabs</li>
+        </ul>
+        <div class="prod-card-footer"><span class="prod-card-tag" data-tr="Hortum">Hose</span><a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- IBP -->
+<div id="ibp" class="section-alt">
+  <div class="prod-section">
+    <div class="prod-section-header">
+      <div><span class="label prod-section-label" data-tr="04 — İnvaziv Kan Basıncı">04 — Invasive BP</span><h2 class="title prod-section-h2" data-tr="IBP Transdüserleri">IBP Transducers</h2></div>
+      <p class="prod-section-desc" data-tr="Arteriyel, CVP ve PA takibi için tek kullanımlık basınç transdüserleri. Tek ve çok kanallı yapılandırmalar mevcuttur.">Disposable pressure transducers for arterial, CVP, and PA monitoring. Single and multi-channel configurations available.</p>
+    </div>
+    <div class="prod-grid">
+      <div class="prod-card">
+        <div class="prod-card-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="4" stroke="#c8006d" stroke-width="1.4"/><path d="M11 3v4M11 15v4M3 11h4M15 11h4" stroke="#c8006d" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+        <div class="prod-card-name" data-tr="Tek Kanallı IBP Transdüseri">Single-Channel IBP Transducer</div>
+        <div class="prod-card-desc" data-tr="Tek hatlı arteriyel veya CVP basınç takibi için tek kullanımlık piezorezistif transdüser. Yıkama cihazı, musluklar ve basınç hattı hortumunu içerir.">Disposable piezoresistive transducer for single-line arterial or CVP pressure monitoring. Includes flush device, stopcocks, and pressure line tubing.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="Hassasiyet: 5 µV/V/mmHg">Sensitivity: 5 µV/V/mmHg</li>
+          <li data-tr="Aralık: −30 ila +300 mmHg">Range: −30 to +300 mmHg</li>
+          <li data-tr="Kablo: 6 pinli konektörlü 1,5m">Cable: 1.5m with 6-pin connector</li>
+          <li data-tr="GE, Philips, Mindray, Spacelabs ile uyumlu">Compatible with GE, Philips, Mindray, Spacelabs</li>
+          <li data-tr="Tek kullanımlık, steril">Single-use, sterile</li>
+        </ul>
+        <div class="prod-card-footer"><span class="prod-card-tag" data-tr="Arteriyel / CVP">Arterial / CVP</span><a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a></div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-card-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><circle cx="8" cy="11" r="3" stroke="#c8006d" stroke-width="1.4"/><circle cx="16" cy="11" r="3" stroke="#c8006d" stroke-width="1.4"/><path d="M11 11h2" stroke="#c8006d" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+        <div class="prod-card-name" data-tr="Çift Kanallı IBP Transdüseri">Dual-Channel IBP Transducer</div>
+        <div class="prod-card-desc" data-tr="Tek bir cihazdan eş zamanlı arteriyel ve CVP (veya PA) takibi için iki kanallı tek kullanımlık transdüser. Başucundaki kablo karmaşasını azaltır.">Two-channel disposable transducer for simultaneous arterial and CVP (or PA) monitoring from a single device. Reduces cable clutter at the bedside.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="İki bağımsız algılama elemanı">Two independent sensing elements</li>
+          <li data-tr="Eş zamanlı arteriyel + CVP / PA ölçümü">Simultaneous arterial + CVP / PA measurement</li>
+          <li data-tr="Hasta monitörüne 8 pinli konektör">8-pin connector to patient monitor</li>
+          <li data-tr="GE, Philips, Mindray ile uyumlu">Compatible with GE, Philips, Mindray</li>
+          <li data-tr="Tek kullanımlık, steril">Single-use, sterile</li>
+        </ul>
+        <div class="prod-card-footer"><span class="prod-card-tag" data-tr="Çift Kanal">Dual Channel</span><a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TEMPERATURE -->
+<div id="temperature" style="background:#fff;">
+  <div class="prod-section">
+    <div class="prod-section-header">
+      <div><span class="label prod-section-label" data-tr="05 — Sıcaklık">05 — Temperature</span><h2 class="title prod-section-h2" data-tr="Sıcaklık Sensörleri">Temperature Sensors</h2></div>
+      <p class="prod-section-desc" data-tr="Sürekli vücut içi ve periferik sıcaklık takibi için özofageal, rektal, cilt ve timpanik sıcaklık problar.">Esophageal, rectal, skin, and tympanic temperature probes for continuous core and peripheral temperature monitoring.</p>
+    </div>
+    <div class="prod-grid">
+      <div class="prod-card">
+        <div class="prod-card-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 4v9" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round"/><circle cx="11" cy="16" r="3" stroke="#c8006d" stroke-width="1.4"/><path d="M13.5 9h1M13.5 7h2M13.5 5h1" stroke="#c8006d" stroke-width="1" stroke-linecap="round"/></svg></div>
+        <div class="prod-card-name" data-tr="Özofageal / Rektal Sıcaklık Probu">Esophageal / Rectal Temperature Probe</div>
+        <div class="prod-card-desc" data-tr="Özofageal veya rektal yerleşim yoluyla sürekli vücut içi sıcaklık takibi için NTC termistör prob. Klinik aralıkta ±0,1°C doğruluk.">NTC thermistor probe for continuous core temperature monitoring via esophageal or rectal placement. Accurate to ±0.1°C over the clinical range.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="Yetişkin ve pediatrik uzunluklar">Adult and pediatric lengths</li>
+          <li data-tr="Doğruluk: ±0,1°C (35–42°C)">Accuracy: ±0.1°C (35–42°C)</li>
+          <li data-tr="YSI 400 serisi veya Philips konektör">YSI 400-series or Philips connector</li>
+          <li data-tr="Tek kullanımlık, steril">Single-use, sterile</li>
+        </ul>
+        <div class="prod-card-footer"><span class="prod-card-tag" data-tr="Vücut İçi Sıcaklık">Core Temp</span><a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a></div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-card-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M11 6v6" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round"/><circle cx="11" cy="15" r="2.5" stroke="#c8006d" stroke-width="1.4"/><rect x="7" y="4" width="8" height="13" rx="4" stroke="#c8006d" stroke-width="1.1" opacity="0.4"/></svg></div>
+        <div class="prod-card-name" data-tr="Cilt / Yüzey Sıcaklık Probu">Skin / Surface Temperature Probe</div>
+        <div class="prod-card-desc" data-tr="Periferik sıcaklık takibi için yapışkanlı cilt probu. Hemodinamik değerlendirmede vücut içi-periferik sıcaklık gradyanını hesaplamak için genellikle bir vücut içi problarıyla birlikte kullanılır.">Adhesive skin probe for peripheral temperature monitoring. Often paired with a core probe to compute core-to-peripheral temperature gradient in hemodynamic assessment.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="Yapışkanlı cilt temaslı sensör">Adhesive skin-contact sensor</li>
+          <li data-tr="Yetişkin ve pediatrik varyantlar">Adult and pediatric variants</li>
+          <li data-tr="Büyük hasta monitörleriyle uyumlu">Compatible with major patient monitors</li>
+          <li data-tr="Tek kullanımlık">Single-use</li>
+        </ul>
+        <div class="prod-card-footer"><span class="prod-card-tag" data-tr="Periferik">Peripheral</span><a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- INFUSION PUMPS -->
+<div id="infusion" class="section-alt">
+  <div class="prod-section">
+    <div class="prod-section-header">
+      <div><span class="label prod-section-label" data-tr="06 — İnfüzyon">06 — Infusion</span><h2 class="title prod-section-h2" data-tr="İnfüzyon Pompa Sistemleri">Infusion Pump Systems</h2></div>
+      <p class="prod-section-desc" data-tr="Yoğun bakım ve servis ortamlarında doğru IV sıvı ve ilaç uygulaması için hacimsel infüzyon pompaları ve ilgili tek kullanımlık uygulama setleri.">Volumetric infusion pumps and associated disposable administration sets for accurate IV fluid and drug delivery across ICU and ward environments.</p>
+    </div>
+    <div class="prod-grid">
+      <div class="prod-card">
+        <div class="prod-card-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="4" y="3" width="14" height="16" rx="3" stroke="#c8006d" stroke-width="1.4"/><path d="M8 8h6M8 12h6M8 16h4" stroke="#c8006d" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+        <div class="prod-card-name" data-tr="Hacimsel İnfüzyon Pompası">Volumetric Infusion Pump</div>
+        <div class="prod-card-desc" data-tr="IV sıvıları ve ilaçların kontrollü uygulaması için büyük hacimli infüzyon pompası. Tıkanıklık algılama, hat içi hava alarmı ve KVO hız kapasitesi.">Large-volume infusion pump for controlled delivery of IV fluids and medications. Occlusion detection, air-in-line alarm, and KVO rate capability.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="Hız aralığı: 0,1 – 1200 mL/sa">Rate range: 0.1 – 1200 mL/hr</li>
+          <li data-tr="Tıkanıklık, hat içi hava ve boşalma alarmları">Occlusion, air-in-line, and empty alarms</li>
+          <li data-tr="İlaç kütüphanesi / doz hızı hesaplayıcı">Drug library / dose rate calculator</li>
+          <li data-tr="Standart PVC uygulama setleriyle uyumlu">Compatible with standard PVC administration sets</li>
+        </ul>
+        <div class="prod-card-footer"><span class="prod-card-tag" data-tr="Hacimsel">Volumetric</span><a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a></div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-card-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="5" y="4" width="12" height="14" rx="2" stroke="#c8006d" stroke-width="1.4"/><path d="M9 9h4M9 13h2" stroke="#c8006d" stroke-width="1.2" stroke-linecap="round"/><path d="M11 18v2" stroke="#c8006d" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+        <div class="prod-card-name" data-tr="İnfüzyon Uygulama Seti">Infusion Administration Set</div>
+        <div class="prod-card-desc" data-tr="Damla haznesi, silindir kelepçe, Luer-lock konektör ve enjeksiyon portlu standart PVC IV setleri. Makro ve mikro damla yapılandırmalarında mevcuttur.">Standard PVC IV giving set with drip chamber, roller clamp, Luer-lock connector, and injection port. Available in macro and micro-drip configurations.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="Makro damla (20 damla/mL) ve mikro damla (60 damla/mL)">Macro drip (20 drops/mL) and micro drip (60 drops/mL)</li>
+          <li data-tr="150 cm hortum uzunluğu">150 cm tubing length</li>
+          <li data-tr="Luer-lock iğnesiz konektör">Luer-lock needle-free connector</li>
+          <li data-tr="Steril, tek kullanımlık, lateks içermez">Sterile, single-use, latex-free</li>
+        </ul>
+        <div class="prod-card-footer"><span class="prod-card-tag" data-tr="Uygulama Seti">Administration Set</span><a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a></div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-card-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="4" y="3" width="14" height="16" rx="3" stroke="#c8006d" stroke-width="1.4"/><path d="M8 7h6M8 11h6M8 15h2" stroke="#c8006d" stroke-width="1.2" stroke-linecap="round"/><circle cx="16" cy="15" r="2" stroke="#c8006d" stroke-width="1.1"/></svg></div>
+        <div class="prod-card-name" data-tr="Pompaya Özel İnfüzyon Seti">Pump-Specific Infusion Set</div>
+        <div class="prod-card-desc" data-tr="Doğrulanmış, hassas hacimsel uygulama için kasetli veya peristaltik pompaya özel hortum setleri. Özel set gerektiren pompa markalarıyla kullanım için gereklidir.">Cassette or peristaltic pump-specific tubing sets for validated, accurate volumetric delivery. Required for use with pump brands that mandate proprietary sets.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="B. Braun, Fresenius, Baxter ile uyumlu">Compatible with B. Braun, Fresenius, Baxter</li>
+          <li data-tr="Kaset ve lineer peristaltik varyantlar">Cassette and linear peristaltic variants</li>
+          <li data-tr="İkincil hatlı veya hatsız">With or without secondary line</li>
+          <li data-tr="Steril, tek kullanımlık">Sterile, single-use</li>
+        </ul>
+        <div class="prod-card-footer"><span class="prod-card-tag" data-tr="Pompaya Özel">Pump-Specific</span><a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SYRINGE PUMPS -->
+<div id="syringe" style="background:#fff;">
+  <div class="prod-section">
+    <div class="prod-section-header">
+      <div><span class="label prod-section-label" data-tr="07 — Şırınga Uygulaması">07 — Syringe Delivery</span><h2 class="title prod-section-h2" data-tr="Şırınga Pompaları">Syringe Pumps</h2></div>
+      <p class="prod-section-desc" data-tr="Hassas mikro hız kontrolünün kritik olduğu yoğun bakım, anestezi ve yenidoğan ortamlarında yüksek konsantrasyonlu ilaç uygulaması için hassas şırınga pompaları.">Precision syringe pumps for high-concentration drug delivery in ICU, anesthesia, and neonatal settings where exact micro-rate control is critical.</p>
+    </div>
+    <div class="prod-grid">
+      <div class="prod-card">
+        <div class="prod-card-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="3" y="9" width="12" height="4" rx="1" stroke="#c8006d" stroke-width="1.4"/><path d="M15 11h4M3 11H1" stroke="#c8006d" stroke-width="1.3" stroke-linecap="round"/><rect x="8" y="7" width="2" height="2" rx="0.5" fill="#c8006d" opacity="0.5"/><rect x="8" y="13" width="2" height="2" rx="0.5" fill="#c8006d" opacity="0.5"/></svg></div>
+        <div class="prod-card-name" data-tr="Şırınga Pompası (Tek Kanal)">Syringe Pump (Single Channel)</div>
+        <div class="prod-card-desc" data-tr="Hassas düşük hızlı ilaç infüzyonu için tek kanallı şırınga sürücü. 5–60mL şırıngaları kabul eder. Vazopresörler, sedasyon ve elektrolit infüzyonları için idealdir.">Single-channel syringe driver for precise low-rate drug infusion. Accepts 5–60mL syringes. Ideal for vasopressors, sedation, and electrolyte infusions.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="Şırınga aralığı: 5–60 mL">Syringe range: 5–60 mL</li>
+          <li data-tr="Hız aralığı: 0,1–999 mL/sa">Rate range: 0.1–999 mL/hr</li>
+          <li data-tr="Bolus, bekleme ve KVO modları">Bolus, standby, and KVO modes</li>
+          <li data-tr="Tıkanıklık basıncı alarmı (ayarlanabilir)">Occlusion pressure alarm (configurable)</li>
+          <li data-tr="Pil yedeği: 4 saate kadar">Battery backup: up to 4 hours</li>
+        </ul>
+        <div class="prod-card-footer"><span class="prod-card-tag" data-tr="Tek Kanal">Single Channel</span><a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a></div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-card-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="3" y="7" width="12" height="3" rx="1" stroke="#c8006d" stroke-width="1.3"/><rect x="3" y="12" width="12" height="3" rx="1" stroke="#c8006d" stroke-width="1.3"/><path d="M15 8.5h4M15 13.5h4" stroke="#c8006d" stroke-width="1.2" stroke-linecap="round"/></svg></div>
+        <div class="prod-card-name" data-tr="Şırınga Pompası (Çift / Çoklu Kanal)">Syringe Pump (Dual / Multi-Channel)</div>
+        <div class="prod-card-desc" data-tr="Tek bir cihazda iki veya daha fazla bağımsız kanal — her ilaç hattının tam bağımsız kontrolünü korurken yoğun bakımda direk karmaşasını azaltır.">Two or more independent channels in one unit — reduces pole clutter in the ICU while maintaining full independent control of each drug line.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="2 veya 4 kanallı yapılandırmalar">2 or 4 channel configurations</li>
+          <li data-tr="Kanal başına bağımsız hız ve alarm ayarları">Independent rate and alarm settings per channel</li>
+          <li data-tr="Hemşire istasyonuna merkezi alarm iletimi">Centralized alarm relay to nurse station</li>
+          <li data-tr="Kanal başına 10–60 mL şırınga kabul eder">Accepts 10–60 mL syringes per channel</li>
+        </ul>
+        <div class="prod-card-footer"><span class="prod-card-tag" data-tr="Çoklu Kanal">Multi-Channel</span><a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a></div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-card-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="6" y="8" width="10" height="6" rx="1" stroke="#c8006d" stroke-width="1.4"/><path d="M16 11h3M3 11h3M11 5v3M11 14v3" stroke="#c8006d" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+        <div class="prod-card-name" data-tr="Şırınga Pompası Uzatma Seti">Syringe Pump Extension Set</div>
+        <div class="prod-card-desc" data-tr="Şırınga pompaları için düşük ölü hacimli uzatma hortumu. Anti-sifon valf, şırınga takıldığında veya pompa konumu değiştiğinde istenmeyen bolus uygulamasını önler.">Low dead-volume extension tubing for syringe pumps. Anti-siphon valve prevents unintended bolus delivery when the syringe is loaded or the pump position changes.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="Ölü hacim: &lt;0,5mL">Dead volume: &lt;0.5mL</li>
+          <li data-tr="Anti-sifon valf dahildir">Anti-siphon valve included</li>
+          <li data-tr="50cm ve 100cm uzunluklar">50cm and 100cm lengths</li>
+          <li data-tr="Luer-lock bağlantılar, steril">Luer-lock connections, sterile</li>
+        </ul>
+        <div class="prod-card-footer"><span class="prod-card-tag" data-tr="Uzatma Seti">Extension Set</span><a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PAIN PUMPS -->
+<div id="pain" class="section-alt">
+  <div class="prod-section">
+    <div class="prod-section-header">
+      <div><span class="label prod-section-label" data-tr="08 — Ağrı Yönetimi">08 — Pain Management</span><h2 class="title prod-section-h2" data-tr="PCA / Ağrı Pompaları">PCA / Pain Pumps</h2></div>
+      <p class="prod-section-desc" data-tr="Ameliyat sonrası ve kronik ağrı yönetimi için Hasta Kontrollü Analjezi (PCA) pompa sistemleri. Özel PCA kasetleri ve hortum setlerini içerir.">Patient-Controlled Analgesia (PCA) pump systems for post-operative and chronic pain management. Includes dedicated PCA cassettes and tubing sets.</p>
+    </div>
+    <div class="prod-grid">
+      <div class="prod-card">
+        <div class="prod-card-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="4" y="3" width="14" height="16" rx="3" stroke="#c8006d" stroke-width="1.4"/><circle cx="11" cy="13" r="3" stroke="#c8006d" stroke-width="1.3"/><path d="M11 7h0.01" stroke="#c8006d" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <div class="prod-card-name" data-tr="PCA Pompası">PCA Pump</div>
+        <div class="prod-card-desc" data-tr="Hastaların önceden ayarlanmış bolus analjezik dozlarını kendi kendilerine uygulamasına olanak tanıyan elektronik PCA pompası. Kilitleme aralığı ve maksimum doz limitleri aşırı dozu önler.">Electronic PCA pump allowing patients to self-administer pre-set bolus doses of analgesic. Lockout interval and maximum dose limits prevent overdose.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="Sürekli arka plan infüzyonu + PCA bolus">Continuous background infusion + PCA bolus</li>
+          <li data-tr="Kilitleme aralığı: 5–60 dakika (ayarlanabilir)">Lockout interval: 5–60 minutes (configurable)</li>
+          <li data-tr="4 saatlik doz limiti tavanı">4-hour dose limit ceiling</li>
+          <li data-tr="20mL ve 60mL şırınga kabul eder">Accepts 20mL and 60mL syringes</li>
+          <li data-tr="Talep düğmeli hasta el cihazı">Patient handset with demand button</li>
+        </ul>
+        <div class="prod-card-footer"><span class="prod-card-tag">PCA</span><a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a></div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-card-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="6" y="4" width="10" height="14" rx="2" stroke="#c8006d" stroke-width="1.4"/><path d="M9 9h4M9 13h2" stroke="#c8006d" stroke-width="1.2" stroke-linecap="round"/><path d="M11 18v2" stroke="#c8006d" stroke-width="1.3" stroke-linecap="round"/></svg></div>
+        <div class="prod-card-name" data-tr="Elastomerik Ağrı Pompası (Tek Kullanımlık)">Elastomeric Pain Pump (Disposable)</div>
+        <div class="prod-card-desc" data-tr="Ayakta tedavi gören hastalarda ameliyat sonrası ağrı yönetimi için mekanik elastomerik pompa. Pil veya programlama gerektirmez — sabit hız kısıtlayıcı akış tarafından belirlenir.">Mechanical elastomeric pump for ambulatory post-operative pain management. No batteries or programming required — constant rate determined by restrictor flow.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="100mL, 250mL, 500mL kapasiteler">100mL, 250mL, 500mL capacities</li>
+          <li data-tr="Sabit hız: 2, 4, 5, 8, 10 mL/sa seçenekleri">Fixed-rate: 2, 4, 5, 8, 10 mL/hr options</li>
+          <li data-tr="Görsel doluluk kontrolü için şeffaf rezervuar">Transparent reservoir for visual fill check</li>
+          <li data-tr="PCA bolus portlu veya portsuz">With or without PCA bolus port</li>
+          <li data-tr="Tek kullanımlık, lateks içermez">Single-use, latex-free</li>
+        </ul>
+        <div class="prod-card-footer"><span class="prod-card-tag" data-tr="Elastomerik">Elastomeric</span><a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a></div>
+      </div>
+      <div class="prod-card">
+        <div class="prod-card-icon"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 11h14M11 4v14" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round"/><circle cx="11" cy="11" r="7" stroke="#c8006d" stroke-width="1.1" opacity="0.3"/></svg></div>
+        <div class="prod-card-name" data-tr="PCA Kaset ve Hortum Seti">PCA Cassette &amp; Tubing Set</div>
+        <div class="prod-card-desc" data-tr="Elektronik PCA pompalarıyla kullanım için özel tek kullanımlık kaset ve uygulama hortumu. Anti-reflü valf, ana IV hattına geri akışı önler.">Dedicated single-use cassette and administration tubing for use with electronic PCA pumps. Anti-reflux valve prevents backflow into main IV line.</div>
+        <ul class="prod-card-variants">
+          <li data-tr="Kaset kapasitesi: 30mL / 60mL">Cassette capacity: 30mL / 60mL</li>
+          <li data-tr="Anti-reflü tek yönlü valf">Anti-reflux one-way valve</li>
+          <li data-tr="Baştan sona Luer-lock bağlantılar">Luer-lock connections throughout</li>
+          <li data-tr="Büyük PCA pompa markalarıyla uyumlu">Compatible with major PCA pump brands</li>
+          <li data-tr="Tek kullanımlık, steril">Single-use, sterile</li>
+        </ul>
+        <div class="prod-card-footer"><span class="prod-card-tag" data-tr="Kaset Seti">Cassette Set</span><a href="index.html#contact" class="prod-card-cta" data-tr="Bilgi Al →">Enquire →</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <div class="cta-inner">
+    <span class="label cta-label" data-tr="Sipariş Vermeye Hazır mısınız?">Ready to Order?</span>
+    <h2 class="display cta-h2" data-tr="Monitörizasyon sarf malzemeleriniz için fiyat teklifi alın">Get pricing for your monitoring consumables</h2>
+    <p class="cta-sub" data-tr="Monitör markalarınızı ve hasta hacimlerinizi bize bildirin. Doğru ürünleri eşleştirip rekabetçi toplu alım fiyatlandırması sunalım.">Tell us your monitor brands and patient volumes. We'll match the right products and provide competitive bulk pricing.</p>
+    <div class="cta-actions">
+      <a href="tel:+903124413436" class="btn-prim"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M11.6 10l-1.6 1.6A9.1 9.1 0 014.4 6l1.6-1.6L4 2 2 4c0 5.75 4.67 10.41 10.42 10.42L14.42 12 11.6 10z" stroke="#fff" stroke-width="1.3" stroke-linejoin="round"/></svg>+90 312 441 34 36</a>
+      <a href="index.html#contact" class="btn-ghost" data-tr="Talep Gönderin">Send an Enquiry</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <img src="brand_assets/AlplerMedicalLogoPink-300x88.png" alt="Alpler Hospital Supplies" style="height:34px;width:auto;" />
+        <p class="footer-brand-desc" data-tr="Ankara merkezli tıbbi sarf malzeme dağıtımcısı. Türkiye genelinde anestezi, yoğun bakım, monitörizasyon ve yenidoğan alanlarına hizmet veriyoruz.">Ankara-based medical consumables distributor. Serving anesthesia, intensive care, monitoring, and neonatology across Turkey.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Twitter"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M14 2l-4.5 5.2L14.5 14h-3L9 10.4 5.5 14H2l4.7-5.5L1.5 2h3L7.8 5.4 11 2h3z" fill="#6a6a7a"/></svg></a>
+          <a href="#" aria-label="Facebook"><svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M12 1H10a3 3 0 00-3 3v2H5v3h2v6h3V9h2l1-3H10V4a1 1 0 011-1h1V1z" fill="#6a6a7a"/></svg></a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title" data-tr="Ürünler">Products</div>
+        <ul class="footer-links">
+          <li><a href="anesthesia.html" data-tr="Anestezi">Anesthesia</a></li>
+          <li><a href="intensive-care.html" data-tr="Yoğun Bakım">Intensive Care</a></li>
+          <li><a href="monitoring.html" data-tr="Monitörizasyon ve Pompalar">Monitoring &amp; Pumps</a></li>
+          <li><a href="neonatal.html" data-tr="Yenidoğan ve Küvöz">Neonatal &amp; Incubator</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title" data-tr="Şirket">Company</div>
+        <ul class="footer-links">
+          <li><a href="index.html#about" data-tr="Hakkımızda">About Us</a></li>
+          <li><a href="index.html#quality" data-tr="Kalite">Quality</a></li>
+          <li><a href="index.html#contact" data-tr="İletişim">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title" data-tr="İletişim">Contact</div>
+        <ul class="footer-links">
+          <li><a href="tel:+903124413436">+90 312 441 34 36</a></li>
+          <li><a href="#">Etimesgut / Ankara</a></li>
+          <li><a href="#" data-tr="Pzt–Cum 08:00–17:30">Mon–Fri 08:00–17:30</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-copy" data-tr="© 2024 Alpler Hastane Malzemeleri. Tüm hakları saklıdır.">© 2024 Alpler Hastane Malzemeleri. All rights reserved.</div>
+      <div class="footer-legal"><a href="#" data-tr="Gizlilik Politikası">Privacy Policy</a><a href="#" data-tr="Kullanım Koşulları">Terms of Use</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── TR/EN language toggle ──
+  (function() {
+    var LANG_KEY = 'alpler_lang';
+    var els = document.querySelectorAll('[data-tr]');
+    els.forEach(function(el) {
+      if (el.dataset.en === undefined) el.dataset.en = el.innerHTML;
+    });
+    function applyLang(lang) {
+      els.forEach(function(el) {
+        el.innerHTML = lang === 'tr' ? el.dataset.tr : el.dataset.en;
+      });
+      document.querySelectorAll('.lang-btn').forEach(function(b) {
+        b.classList.toggle('active', b.dataset.lang === lang);
+      });
+      document.documentElement.lang = lang;
+      localStorage.setItem(LANG_KEY, lang);
+    }
+    var saved = localStorage.getItem(LANG_KEY) || 'en';
+    applyLang(saved);
+    document.querySelectorAll('.lang-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() { applyLang(btn.dataset.lang); });
+    });
+  })();
+
+  document.getElementById('hamburger').addEventListener('click', function() { document.getElementById('mobile-nav').classList.toggle('open'); });
+  document.querySelectorAll('#mobile-nav a').forEach(function(a) { a.addEventListener('click', function() { document.getElementById('mobile-nav').classList.remove('open'); }); });
+  var sections = document.querySelectorAll('[id]');
+  var catLinks = document.querySelectorAll('.cat-nav-link');
+  window.addEventListener('scroll', function() {
+    var scrollY = window.scrollY + 140;
+    sections.forEach(function(s) {
+      if (s.offsetTop <= scrollY && s.offsetTop + s.offsetHeight > scrollY) {
+        catLinks.forEach(function(l) { l.classList.remove('active'); });
+        var active = document.querySelector('.cat-nav-link[href="#' + s.id + '"]');
+        if (active) active.classList.add('active');
+      }
+    });
+  });
+</script>
+</body>
+</html>

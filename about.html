@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us — Alpler Hospital Supplies</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #fff; color: #1a1a2a; overflow-x: hidden; }
+
+    .display { font-weight: 800; letter-spacing: -0.045em; line-height: 1.05; }
+    .title    { font-weight: 700; letter-spacing: -0.03em;  line-height: 1.15; }
+    .label    { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+
+    /* ── NAV ── */
+    #nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(200,0,109,0.94);
+      backdrop-filter: blur(20px) saturate(160%);
+      border-bottom: 1px solid rgba(255,255,255,0.14);
+    }
+    .nav-inner {
+      max-width: 1280px; margin: 0 auto; padding: 0 32px;
+      height: 76px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-link { font-size: 13px; font-weight: 500; color: #fff; text-decoration: none; transition: color 0.2s; }
+    .nav-link:hover { color: #fff; }
+    .nav-link.active { color: #fff; }
+    .nav-cta {
+      font-size: 13px; font-weight: 600; color: #c8006d; text-decoration: none;
+      background: #fff; padding: 9px 20px; border-radius: 8px;
+      transition: opacity 0.2s, transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .nav-cta:hover { opacity: 0.85; transform: translateY(-1px); }
+    .lang-switch { display: flex; align-items: center; gap: 2px; background: rgba(255,255,255,0.16); border-radius: 100px; padding: 3px; }
+    .lang-btn { font-size: 11px; font-weight: 700; letter-spacing: 0.03em; color: rgba(255,255,255,0.7); background: none; border: none; padding: 5px 11px; border-radius: 100px; cursor: pointer; transition: background 0.2s, color 0.2s; }
+    .lang-btn.active { background: #fff; color: #c8006d; }
+    .lang-btn:hover:not(.active) { color: #fff; }
+    .mobile-lang-switch { display: flex; align-items: center; gap: 2px; background: rgba(255,255,255,0.14); border-radius: 100px; padding: 3px; margin-top: 10px; width: fit-content; }
+    .mobile-lang-switch .lang-btn { padding: 6px 14px; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { width: 22px; height: 1.5px; background: rgba(255,255,255,0.7); border-radius: 2px; display: block; }
+    #mobile-nav { display: none; flex-direction: column; gap: 4px; padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.14); background: rgba(200,0,109,0.97); }
+    #mobile-nav.open { display: flex; }
+    #mobile-nav a { font-size: 15px; font-weight: 500; color: #fff; text-decoration: none; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    #mobile-nav a:last-child { border-bottom: none; color: #fff; font-weight: 700; }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      background: linear-gradient(180deg, rgba(8,0,5,0.62) 0%, rgba(8,0,5,0.42) 45%, rgba(8,0,5,0.75) 100%), url('main page pics/1623610471940.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      padding: 128px 0 80px;
+      position: relative; overflow: hidden;
+    }
+    .hero-glow-1 {
+      position: absolute; top: -160px; right: -80px;
+      width: 600px; height: 600px;
+      background: radial-gradient(ellipse, rgba(200,0,109,0.22) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .hero-glow-2 {
+      position: absolute; bottom: -200px; left: -100px;
+      width: 500px; height: 500px;
+      background: radial-gradient(ellipse, rgba(200,0,109,0.08) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .page-hero-inner { max-width: 1280px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 28px; }
+    .breadcrumb a { font-size: 13px; color: rgba(255,255,255,0.35); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #c8006d; }
+    .breadcrumb-sep { color: rgba(255,255,255,0.18); font-size: 13px; }
+    .breadcrumb-cur { font-size: 13px; color: rgba(255,255,255,0.6); }
+
+    .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: end; }
+    .hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; border: 1px solid rgba(200,0,109,0.3); background: rgba(200,0,109,0.08); border-radius: 100px; padding: 6px 14px; margin-bottom: 24px; }
+    .hero-eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: #c8006d; flex-shrink: 0; }
+    .hero-h1 { font-size: clamp(40px, 5vw, 64px); font-weight: 800; letter-spacing: -0.045em; line-height: 1.05; color: #fff; margin-bottom: 20px; }
+    .hero-h1 em { font-style: normal; color: #c8006d; }
+    .hero-sub { font-size: 17px; color: rgba(255,255,255,0.62); line-height: 1.72; max-width: 480px; }
+
+    /* Founded stat block */
+    .hero-stats { display: flex; flex-direction: column; gap: 24px; align-items: flex-end; padding-bottom: 8px; }
+    .hero-stat-card { background: rgba(20,0,12,0.45); backdrop-filter: blur(14px); border: 1px solid rgba(255,255,255,0.12); border-radius: 18px; padding: 24px 28px; text-align: right; min-width: 180px; }
+    .hero-stat-num { font-size: 44px; font-weight: 800; letter-spacing: -0.055em; color: #fff; line-height: 1; margin-bottom: 6px; }
+    .hero-stat-num span { color: #c8006d; }
+    .hero-stat-label { font-size: 12px; font-weight: 500; color: rgba(255,255,255,0.4); }
+
+    /* ── STORY SECTION ── */
+    .story-section { padding: 100px 0; background: #fff; }
+    .story-inner { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+    .story-grid { max-width: 780px; margin: 0 auto; }
+
+    .section-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #c8006d; margin-bottom: 16px; display: block; }
+    .section-title { font-size: clamp(28px, 3vw, 40px); font-weight: 800; letter-spacing: -0.035em; line-height: 1.1; color: #0f0f1a; margin-bottom: 24px; }
+    .section-body { font-size: 16px; color: #5a5a72; line-height: 1.78; }
+    .section-body + .section-body { margin-top: 18px; }
+
+    /* Pull quote */
+    .pull-quote {
+      margin-top: 40px; padding: 28px 32px;
+      border-left: 3px solid #c8006d;
+      background: rgba(200,0,109,0.04);
+      border-radius: 0 12px 12px 0;
+    }
+    .pull-quote p { font-size: 17px; font-weight: 600; color: #0f0f1a; line-height: 1.6; letter-spacing: -0.015em; }
+
+    /* ── MISSION / VISION ── */
+    .mv-section { background: #2a0018; padding: 100px 0; position: relative; overflow: hidden; }
+    .mv-glow { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 700px; height: 400px; background: radial-gradient(ellipse, rgba(200,0,109,0.12) 0%, transparent 65%); pointer-events: none; }
+    .mv-inner { max-width: 1280px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
+    .mv-header { text-align: center; margin-bottom: 64px; }
+    .mv-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #c8006d; margin-bottom: 16px; display: block; }
+    .mv-title { font-size: clamp(30px, 3.5vw, 46px); font-weight: 800; letter-spacing: -0.04em; color: #fff; }
+    .mv-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    .mv-card { background: #2e0019; border: 1px solid rgba(255,255,255,0.07); border-radius: 20px; padding: 44px 40px; transition: border-color 0.25s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1); }
+    .mv-card:hover { border-color: rgba(200,0,109,0.25); transform: translateY(-4px); }
+    .mv-card-icon { width: 52px; height: 52px; border-radius: 14px; background: rgba(200,0,109,0.1); border: 1px solid rgba(200,0,109,0.15); display: flex; align-items: center; justify-content: center; margin-bottom: 28px; }
+    .mv-card-tag { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #c8006d; margin-bottom: 12px; display: block; }
+    .mv-card-title { font-size: 24px; font-weight: 800; letter-spacing: -0.03em; color: #fff; margin-bottom: 16px; }
+    .mv-card-body { font-size: 15px; color: rgba(255,255,255,0.5); line-height: 1.78; }
+
+    /* ── VALUES ── */
+    .values-section { background: #f7f7f9; padding: 100px 0; }
+    .values-inner { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+    .values-header { text-align: center; margin-bottom: 64px; }
+    .values-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    .value-card { background: #fff; border: 1px solid rgba(0,0,0,0.07); border-radius: 20px; padding: 36px 30px; transition: border-color 0.25s, transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s; }
+    .value-card:hover { border-color: rgba(200,0,109,0.2); transform: translateY(-4px); box-shadow: 0 12px 36px rgba(200,0,109,0.07); }
+    .value-icon { width: 48px; height: 48px; border-radius: 12px; background: rgba(200,0,109,0.07); border: 1px solid rgba(200,0,109,0.12); display: flex; align-items: center; justify-content: center; margin-bottom: 22px; }
+    .value-title { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; color: #0f0f1a; margin-bottom: 10px; }
+    .value-body { font-size: 14px; color: #6a6a7a; line-height: 1.72; }
+
+    /* ── CTA ── */
+    .cta-section { background: #1a000f; padding: 100px 0; position: relative; overflow: hidden; text-align: center; }
+    .cta-glow { position: absolute; bottom: -200px; left: 50%; transform: translateX(-50%); width: 900px; height: 500px; background: radial-gradient(ellipse, rgba(200,0,109,0.2) 0%, transparent 65%); pointer-events: none; }
+    .cta-inner { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; padding: 0 32px; }
+    .cta-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #c8006d; margin-bottom: 18px; display: block; }
+    .cta-title { font-size: clamp(32px, 4vw, 52px); font-weight: 800; letter-spacing: -0.04em; color: #fff; margin-bottom: 18px; line-height: 1.1; }
+    .cta-sub { font-size: 16px; color: rgba(255,255,255,0.42); max-width: 420px; margin: 0 auto 44px; line-height: 1.72; }
+    .cta-actions { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+    .btn-prim { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: #fff; text-decoration: none; background: linear-gradient(135deg, #c8006d, #a8005b); padding: 14px 28px; border-radius: 10px; transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s; }
+    .btn-prim:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(200,0,109,0.4); }
+    .btn-prim:active { transform: translateY(0); }
+    .btn-ghost { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.7); text-decoration: none; border: 1px solid rgba(255,255,255,0.15); padding: 14px 28px; border-radius: 10px; transition: background 0.2s, border-color 0.2s, transform 0.2s; }
+    .btn-ghost:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.3); transform: translateY(-1px); }
+
+    /* ── FOOTER ── */
+    footer { background: #fafafa; border-top: 1px solid rgba(0,0,0,0.06); padding: 64px 0 40px; }
+    .footer-inner { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+    .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+    .footer-brand-desc { font-size: 14px; color: #8a8a9a; line-height: 1.7; margin: 16px 0 24px; max-width: 300px; }
+    .footer-col-title { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #1a1a2a; margin-bottom: 18px; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { font-size: 14px; color: #6a6a7a; text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: #c8006d; }
+    .footer-social { display: flex; gap: 10px; }
+    .footer-social a { width: 36px; height: 36px; border-radius: 8px; background: rgba(0,0,0,0.05); border: 1px solid rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: center; transition: background 0.2s, border-color 0.2s; }
+    .footer-social a:hover { background: rgba(200,0,109,0.08); border-color: rgba(200,0,109,0.2); }
+    .footer-bottom { border-top: 1px solid rgba(0,0,0,0.06); padding-top: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .footer-copy { font-size: 13px; color: #9a9aaa; }
+    .footer-legal { display: flex; gap: 20px; }
+    .footer-legal a { font-size: 13px; color: #9a9aaa; text-decoration: none; transition: color 0.2s; }
+    .footer-legal a:hover { color: #c8006d; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 1024px) {
+      .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+      .hero-stats { flex-direction: row; align-items: flex-start; justify-content: flex-start; }
+      .mv-cards { grid-template-columns: 1fr; }
+      .values-grid { grid-template-columns: 1fr 1fr; }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .page-hero { padding: 104px 0 56px; }
+      .story-section, .mv-section, .values-section, .cta-section { padding: 64px 0; }
+      .values-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .hero-stats { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<header id="nav">
+  <div class="nav-inner">
+    <a href="index.html">
+      <img src="brand_assets/AlplerMedicalLogoPink-300x88.png" alt="Alpler Hospital Supplies" style="height:50px;width:auto;filter:brightness(0) invert(1);" />
+    </a>
+    <nav class="nav-links">
+      <a href="index.html"         class="nav-link" data-tr="Ana Sayfa">Home</a>
+      <a href="about.html"         class="nav-link active" data-tr="Hakkımızda">About</a>
+      <a href="products.html"      class="nav-link" data-tr="Ürünler">Products</a>
+      <a href="index.html#quality" class="nav-link" data-tr="Kalite">Quality</a>
+      <a href="index.html#services" class="nav-link" data-tr="Hizmetler">Services</a>
+      <a href="index.html#contact" class="nav-link" data-tr="İletişim">Contact</a>
+      <a href="index.html#contact" class="nav-cta" data-tr="Teklif Alın">Get a Quote</a>
+      <div class="lang-switch">
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="tr">TR</button>
+      </div>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <nav id="mobile-nav">
+    <a href="index.html" data-tr="Ana Sayfa">Home</a>
+    <a href="about.html" data-tr="Hakkımızda">About</a>
+    <a href="products.html" data-tr="Ürünler">Products</a>
+    <a href="index.html#quality" data-tr="Kalite">Quality</a>
+    <a href="index.html#services" data-tr="Hizmetler">Services</a>
+    <a href="index.html#contact" data-tr="İletişim">Contact</a>
+    <a href="index.html#contact" data-tr="Teklif Alın →">Get a Quote →</a>
+    <div class="mobile-lang-switch">
+      <button class="lang-btn active" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="tr">TR</button>
+    </div>
+  </nav>
+</header>
+
+<!-- ═══ PAGE HERO ═══ -->
+<section class="page-hero">
+  <div class="hero-glow-1"></div>
+  <div class="hero-glow-2"></div>
+  <div class="page-hero-inner">
+    <div class="breadcrumb">
+      <a href="index.html" data-tr="Ana Sayfa">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="breadcrumb-cur" data-tr="Hakkımızda">About Us</span>
+    </div>
+    <div class="hero-grid">
+      <div>
+        <div class="hero-eyebrow">
+          <span class="dot"></span>
+          <span class="label" style="color:rgba(255,255,255,0.6);">Alpler Hastane Malzemeleri</span>
+        </div>
+        <h1 class="hero-h1" data-tr="Tıbbi Teknolojiyle<br /><em>Hayatları</em><br />İyileştiriyoruz">Improving Lives<br />Through <em>Medical</em><br />Technology</h1>
+        <p class="hero-sub" data-tr="2008 yılında kurulan şirketimiz, on beş yılı aşkın süredir Türkiye'nin sağlık profesyonellerine en yüksek kalitede tıbbi sarf malzemeleri tedarik etmektedir.">Founded in 2008, we have been supplying Turkey's healthcare professionals with the highest-quality medical consumables for over fifteen years.</p>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat-card">
+          <div class="hero-stat-num">20<span>08</span></div>
+          <div class="hero-stat-label" data-tr="Kuruluş Yılı">Year Founded</div>
+        </div>
+        <div class="hero-stat-card">
+          <div class="hero-stat-num">4<span>+</span></div>
+          <div class="hero-stat-label" data-tr="Şehir — Doğrudan Varlık">Cities — Direct Presence</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STORY ═══ -->
+<section class="story-section">
+  <div class="story-inner">
+    <div class="story-grid">
+
+      <!-- Text -->
+      <div>
+        <span class="section-label" data-tr="Hikayemiz">Our Story</span>
+        <h2 class="section-title" data-tr="Sağlıkta Mükemmelliğe Bağlılık">A Commitment to Healthcare Excellence</h2>
+        <p class="section-body" data-tr="2008 yılında, Türkiye Sağlık Sistemi içinde hastane sarf malzemelerinin tedarik ve temin edilmesi amacıyla kurulmuş bir şirketiz. Yurt içinde Ankara, İstanbul, İzmir ve Adana'da kendi kadromuzla faaliyet gösterirken, diğer illerde bayi ağımız aracılığıyla ürünlerimizin satış ve tedarikini sağlıyoruz. Ankara'daki merkezimizde tüm çalışanlarımız, ulaşabildiğimiz sağlık profesyonellerine ve hastalarına mümkün olan en iyi hizmeti sunmak için özveriyle çalışmaktadır. Alpler Hastane Malzemeleri olarak, tıbbi teknolojinin hayatları iyileştirme gücüne inanıyoruz. En büyük hedefimiz, sağlık hizmetlerinde gerekli olan ürünleri tedarik ederek ulaşabildiğimiz kadar çok hayatı kurtarmaya yardımcı olmaktır.">
+          We are a company founded in 2008 with the aim of supplying and procuring hospital consumable materials within the Turkish Healthcare System. While we operate with our own staff in Ankara, Istanbul, Izmir, and Adana domestically, we ensure the sales and supply of our products through our dealer network in other provinces. At our headquarters in Ankara, all of our employees work with dedication to provide the best possible service to the healthcare professionals we can reach and their patients. As Alpler Hospital Supplies, we believe in the power of medical technology to improve lives. Our greatest goal is to help save as many lives as we can reach by supplying the products necessary in healthcare services.
+        </p>
+        <p class="section-body" style="margin-top:18px;" data-tr="En yüksek kalitedeki ürünlerimiz ve deneyimli kadromuzla ülkemize kapsamlı sağlık çözümleri sunuyoruz. Anestezi ve yoğun bakım cihazları için sarf malzemesi satışıyla başladığımız bu yolculukta, bugün Türkiye'nin önde gelen tıbbi cihaz şirketleri arasında yer alıyoruz. Geniş ürün yelpazemizle şirketimiz; Anestezi ve Yoğun Bakım, Monitör ve Küvöz cihazları, vital monitörler, kapalı devre aspirasyon sistemleri, infüzyon pompaları, şırınga pompaları ve ağrı pompaları için sarf malzemelerine odaklanmaktadır. Ürünlerimiz her yıl birçok kişiye ulaşarak; acıyı hafifletme, sağlığı iyileştirme ve yaşam süresini uzatma misyonumuzu destekliyor. Bu alanlardaki tüm dünya çapındaki yenilik ve gelişmeleri yakından takip ederken, hizmet verdiğimiz kurumlar için en uygun çözüm ve ürünleri bulmaya çalışıyoruz. GE Healthcare, Becton Dickinson (BD) ve Avanos/Halyard gibi önde gelen küresel markalarla olan iş birliklerimiz aracılığıyla en büyük hedefimiz, ihtiyaç sahiplerine en yüksek kaliteli ürünleri en rekabetçi fiyatlarla ve en kısa sürede ulaştırmaktır.">
+          We offer our comprehensive healthcare solutions to our country with our highest quality products and experienced staff. Starting out on this journey by selling consumables for anesthesia and intensive care devices, we are today among Turkey's leading medical device companies. With a wide product range, our company focuses on consumables for Anesthesia and Intensive Care, Monitor and Incubator devices, vital monitors, closed-circuit aspiration systems, infusion pumps, syringe pumps, and pain pumps. Our products reach many people every year, supporting our mission of relieving pain, improving health, and extending life expectancy. While closely following all innovations and developments in these fields worldwide, we strive to find the most suitable solutions and products for the institutions we serve. Our greatest goal, through our partnerships with leading global brands such as GE Healthcare, Becton Dickinson (BD), and Avanos/Halyard, is to deliver the highest quality products to those in need at the most competitive prices and in the shortest time possible.
+        </p>
+        <p class="section-body" style="margin-top:18px;" data-tr="İthalat ve satışın yanı sıra, müşteri memnuniyetini rehber ilke edinerek müşterilerimize satış sonrası hizmet de sunuyoruz. Derin bilgi birikimimiz ve deneyimli kadromuzla şirketimiz, sektörümüzün tüm ihtiyaçlarını karşılamak için her zaman hazır durumdadır.">
+          In addition to import and sales, we also provide after-sales service to our customers, with customer satisfaction as our guiding principle. With our deep knowledge base and experienced staff, our company stands ready at all times to meet all the needs of our industry.
+        </p>
+        <div class="pull-quote">
+          <p data-tr="&quot;Tıbbi teknolojinin hayatları iyileştirme gücüne inanıyoruz. En büyük hedefimiz, ulaşabildiğimiz kadar çok hayatı kurtarmaya yardımcı olmaktır.&quot;">"We believe in the power of medical technology to improve lives. Our greatest goal is to help save as many lives as we can reach."</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MISSION & VISION ═══ -->
+<section class="mv-section">
+  <div class="mv-glow"></div>
+  <div class="mv-inner">
+    <div class="mv-header">
+      <span class="mv-label" data-tr="Bizi Yönlendiren Değer">What Drives Us</span>
+      <h2 class="mv-title" data-tr="Misyon ve Vizyon">Mission &amp; Vision</h2>
+    </div>
+    <div class="mv-cards">
+
+      <div class="mv-card">
+        <div class="mv-card-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <circle cx="11" cy="11" r="9" stroke="#c8006d" stroke-width="1.5"/>
+            <path d="M7 11l3 3 5-5" stroke="#c8006d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="mv-card-tag" data-tr="Misyon">Mission</span>
+        <h3 class="mv-card-title" data-tr="Daha Fazlasına Ulaşmak.<br />Daha Fazla Yardım Etmek.">Reaching More.<br />Helping More.</h3>
+        <p class="mv-card-body" data-tr="Farklılaşan ürün kalitemiz, güçlü müşteri ilişkilerimiz ve deneyimli çalışanlarımız aracılığıyla, mümkün olduğunca çok insan için acıyı hafifletmeye, sağlığı iyileştirmeye ve yaşam süresini uzatmaya yardımcı olmak.">
+          To help relieve pain, improve health, and extend life expectancy for as many people as possible, through our distinctive product quality, strong customer relationships, and experienced employees.
+        </p>
+      </div>
+
+      <div class="mv-card">
+        <div class="mv-card-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M11 3l1.8 5.5H18l-4.5 3.3 1.7 5.2L11 13.8 6.8 17l1.7-5.2L4 8.5h5.2L11 3z" stroke="#c8006d" stroke-width="1.5" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <span class="mv-card-tag" data-tr="Vizyon">Vision</span>
+        <h3 class="mv-card-title" data-tr="Küresel Çözümler.<br />Yerel Güven.">Global Solutions.<br />Local Trust.</h3>
+        <p class="mv-card-body" data-tr="Müşterilerimizin yaşam kalitesini artırmak amacıyla, en yüksek kaliteli ürünlerle küresel çözümler üreten bir şirket olmak.">
+          To become a company that creates global solutions with the highest quality products in order to improve our customers' quality of life.
+        </p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ VALUES ═══ -->
+<section class="values-section">
+  <div class="values-inner">
+    <div class="values-header">
+      <span class="section-label" style="display:block;margin-bottom:14px;" data-tr="Neyi Temsil Ediyoruz">What We Stand For</span>
+      <h2 class="section-title" style="margin-bottom:0;" data-tr="Temel Değerlerimiz">Our Core Values</h2>
+    </div>
+    <div class="values-grid">
+
+      <div class="value-card">
+        <div class="value-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M11 2l1.7 5.2H18l-4.4 3.2 1.7 5.1L11 12.4 6.7 15.5l1.7-5.1L4 7.2h5.3L11 2z" stroke="#c8006d" stroke-width="1.4" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="value-title" data-tr="Taviz Vermeyen Kalite">Uncompromising Quality</h3>
+        <p class="value-body" data-tr="Yalnızca dünya çapında akredite üreticilerden tedarik sağlıyoruz. Portföyümüzdeki her ürün CE işaretli, FDA onaylı veya eşdeğer sertifikaya sahiptir.">We source exclusively from globally accredited manufacturers. Every product in our portfolio is CE-marked, FDA-cleared, or holds equivalent certification.</p>
+      </div>
+
+      <div class="value-card">
+        <div class="value-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M11 2c5 0 9 4 9 9s-4 9-9 9-9-4-9-9 4-9 9-9zm0 0v9l4 2" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="value-title" data-tr="Güvenilirlik ve Hız">Reliability &amp; Speed</h3>
+        <p class="value-body" data-tr="Sağlık hizmeti bekleyemez. Klinisyenlerin ihtiyaç duydukları anda ihtiyaç duydukları şeye sahip olmalarını sağlamak için güçlü stok seviyeleri koruyor ve acil siparişlere öncelik veriyoruz.">Healthcare cannot wait. We maintain strong stock levels and prioritize urgent orders so clinicians always have what they need, when they need it.</p>
+      </div>
+
+      <div class="value-card">
+        <div class="value-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M4 13c0-4.97 3.13-9 7-9s7 4.03 7 9" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round"/>
+            <path d="M2 13h4M16 13h4M11 18v2M8 20h6" stroke="#c8006d" stroke-width="1.3" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3 class="value-title" data-tr="Uzman Bilgi Birikimi">Expert Knowledge</h3>
+        <p class="value-body" data-tr="Ekibimiz, ürünlerimizin kullanıldığı klinik ortamları anlayan eğitimli uzmanlardan oluşuyor — bu da satın alma ekiplerine gerçek ve bilinçli rehberlik sunmamızı sağlıyor.">Our team includes trained specialists who understand the clinical environments our products work in — enabling us to give real, informed guidance to procurement teams.</p>
+      </div>
+
+      <div class="value-card">
+        <div class="value-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M11 3C7.13 3 4 6.13 4 10c0 5.25 7 12 7 12s7-6.75 7-12c0-3.87-3.13-7-7-7zm0 9a2 2 0 110-4 2 2 0 010 4z" stroke="#c8006d" stroke-width="1.4" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="value-title" data-tr="Ülke Geneli Erişim">Nationwide Reach</h3>
+        <p class="value-body" data-tr="Dört şehirdeki doğrudan operasyonlarımız ve tüm illere yayılan bayi ağımızla, Türkiye genelinde tıbbi malzemelere tutarlı ve eşit erişim sağlıyoruz.">With direct operations in four cities and a dealer network spanning all provinces, we ensure consistent, equitable access to medical supplies across Turkey.</p>
+      </div>
+
+      <div class="value-card">
+        <div class="value-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <path d="M18 8s-2.5-4-7-4-7 4-7 4 2.5 4 7 4 7-4 7-4z" stroke="#c8006d" stroke-width="1.4" stroke-linejoin="round"/>
+            <circle cx="11" cy="8" r="2" stroke="#c8006d" stroke-width="1.2"/>
+            <path d="M4 15c2-2 4-3 7-3s5 1 7 3" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <h3 class="value-title" data-tr="Hasta Odaklı Yaklaşım">Patient-Centred Focus</h3>
+        <p class="value-body" data-tr="Tedarikçi seçiminden son teslimat aşamasına kadar verdiğimiz her karar tek bir soruyla yönlendirilir: bu, müşterilerimizin hizmet verdiği hastalar için sonuçları iyileştiriyor mu?">Every decision we make — from supplier selection to last-mile delivery — is guided by one question: does this improve outcomes for the patients our customers serve?</p>
+      </div>
+
+      <div class="value-card">
+        <div class="value-icon">
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <circle cx="11" cy="11" r="9" stroke="#c8006d" stroke-width="1.4"/>
+            <path d="M7 11l2 2 6-4" stroke="#c8006d" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <h3 class="value-title" data-tr="Uzun Vadeli İş Birlikleri">Long-Term Partnerships</h3>
+        <p class="value-body" data-tr="Biz işlemler değil, kalıcı ilişkiler kurarız. Müşterilerimiz bize geri dönüyor çünkü tutarlı, şeffaf ve her zaman hesap verebilir bir yapıya sahibiz.">We build lasting relationships — not transactions. Our customers return to us because we are consistent, transparent, and always accountable.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA ═══ -->
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <div class="cta-inner">
+    <span class="cta-label" data-tr="Bizimle Çalışın">Work With Us</span>
+    <h2 class="cta-title" data-tr="Bizimle iş birliği yapmaya hazır mısınız?">Ready to partner with us?</h2>
+    <p class="cta-sub" data-tr="İster bir hastane satın alma ekibi ister bölgesel bir distribütör olun, ihtiyaçlarınızı nasıl destekleyebileceğimizi konuşmaktan memnuniyet duyarız.">Whether you're a hospital procurement team or a regional distributor, we'd love to talk about how we can support your needs.</p>
+    <div class="cta-actions">
+      <a href="index.html#contact" class="btn-prim">
+        <span data-tr="Bize Ulaşın">Get in Touch</span>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="products.html" class="btn-ghost" data-tr="Ürünlere Göz At">Browse Products</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <img src="brand_assets/AlplerMedicalLogoPink-300x88.png" alt="Alpler Hospital Supplies" style="height:34px;width:auto;" />
+        <p class="footer-brand-desc" data-tr="Ankara merkezli, sertifikalı tıbbi sarf malzemeleri distribütörü — anestezi, yoğun bakım, monitörizasyon ve yenidoğan. 2008'de kuruldu.">Ankara-based distributor of certified medical consumables — anesthesia, intensive care, monitoring, and neonatology. Founded 2008.</p>
+        <div class="footer-social">
+          <a href="#" aria-label="Twitter">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M14 2l-4.5 5.2L14.5 14h-3L9 10.4 5.5 14H2l4.7-5.5L1.5 2h3L7.8 5.4 11 2h3z" fill="#6a6a7a"/></svg>
+          </a>
+          <a href="#" aria-label="Facebook">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M12 1H10a3 3 0 00-3 3v2H5v3h2v6h3V9h2l1-3H10V4a1 1 0 011-1h1V1z" fill="#6a6a7a"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title" data-tr="Şirket">Company</div>
+        <ul class="footer-links">
+          <li><a href="about.html" data-tr="Hakkımızda">About Us</a></li>
+          <li><a href="index.html#quality" data-tr="Kalite ve Sertifikalar">Quality &amp; Certifications</a></li>
+          <li><a href="index.html#export" data-tr="İhracat">Export</a></li>
+          <li><a href="index.html#partners" data-tr="İş Ortakları">Business Partners</a></li>
+          <li><a href="index.html#contact" data-tr="İletişim">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title" data-tr="Ürünler">Products</div>
+        <ul class="footer-links">
+          <li><a href="products.html#anestezi" data-tr="Anestezi">Anesthesia</a></li>
+          <li><a href="products.html#yogun-bakim" data-tr="Yoğun Bakım">Intensive Care</a></li>
+          <li><a href="products.html#monitor" data-tr="Monitörizasyon">Monitoring</a></li>
+          <li><a href="products.html#kuvoz" data-tr="Küvöz Sarf Malzemeleri">Incubator Supplies</a></li>
+          <li><a href="products.html#single" data-tr="Tıbbi Cihazlar">Medical Devices</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title" data-tr="İletişim">Contact</div>
+        <ul class="footer-links" style="gap:8px;">
+          <li style="font-size:13px;color:#8a8a9a;line-height:1.6;">Bahçekapı Mah. 2500 Cadde No:15/10<br />Şaşmaz, 06797 Etimesgut / Ankara</li>
+          <li><a href="tel:+903124413436" style="font-size:13px;">+90 312 441 34 36</a></li>
+          <li style="font-size:13px;color:#8a8a9a;" data-tr="Faks: +90 312 441 34 31">Fax: +90 312 441 34 31</li>
+          <li style="font-size:13px;color:#9a9aaa;" data-tr="Pzt–Cum: 08:00 – 17:30">Mon–Fri: 08:00 – 17:30</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy" data-tr="© 2024 Alpler Hastane Malzemeleri. Tüm hakları saklıdır.">© 2024 Alpler Hastane Malzemeleri. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="#" data-tr="Gizlilik Politikası">Privacy Policy</a>
+        <a href="#" data-tr="Kullanım Koşulları">Terms of Service</a>
+        <a href="#" data-tr="Yasal Uyarı">Legal Notice</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── TR/EN language toggle ──
+  (function() {
+    var LANG_KEY = 'alpler_lang';
+    var els = document.querySelectorAll('[data-tr]');
+    els.forEach(function(el) {
+      if (el.dataset.en === undefined) el.dataset.en = el.innerHTML;
+    });
+    function applyLang(lang) {
+      els.forEach(function(el) {
+        el.innerHTML = lang === 'tr' ? el.dataset.tr : el.dataset.en;
+      });
+      document.querySelectorAll('.lang-btn').forEach(function(b) {
+        b.classList.toggle('active', b.dataset.lang === lang);
+      });
+      document.documentElement.lang = lang;
+      localStorage.setItem(LANG_KEY, lang);
+    }
+    var saved = localStorage.getItem(LANG_KEY) || 'en';
+    applyLang(saved);
+    document.querySelectorAll('.lang-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() { applyLang(btn.dataset.lang); });
+    });
+  })();
+
+  document.getElementById('hamburger').addEventListener('click', function () {
+    document.getElementById('mobile-nav').classList.toggle('open');
+  });
+</script>
+</body>
+</html>

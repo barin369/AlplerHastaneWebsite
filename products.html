@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Products — Alpler Hospital Supplies</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; background: #fff; color: #1a1a2a; overflow-x: hidden; }
+
+    .display { font-weight: 800; letter-spacing: -0.045em; line-height: 1.05; }
+    .title    { font-weight: 700; letter-spacing: -0.03em;  line-height: 1.15; }
+    .label    { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
+
+    /* ── NAV (identical to index.html) ── */
+    #nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(200,0,109,0.94);
+      backdrop-filter: blur(20px) saturate(160%);
+      border-bottom: 1px solid rgba(255,255,255,0.14);
+    }
+    .nav-inner {
+      max-width: 1280px; margin: 0 auto; padding: 0 32px;
+      height: 76px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-link { font-size: 13px; font-weight: 500; color: #fff; text-decoration: none; transition: color 0.2s; }
+    .nav-link:hover { color: #fff; }
+    .nav-link.active { color: #fff; }
+    .nav-cta {
+      font-size: 13px; font-weight: 600; color: #c8006d; text-decoration: none;
+      background: #fff; padding: 9px 20px; border-radius: 8px;
+      transition: opacity 0.2s, transform 0.2s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .nav-cta:hover { opacity: 0.85; transform: translateY(-1px); }
+    .lang-switch { display: flex; align-items: center; gap: 2px; background: rgba(255,255,255,0.16); border-radius: 100px; padding: 3px; }
+    .lang-btn { font-size: 11px; font-weight: 700; letter-spacing: 0.03em; color: rgba(255,255,255,0.7); background: none; border: none; padding: 5px 11px; border-radius: 100px; cursor: pointer; transition: background 0.2s, color 0.2s; }
+    .lang-btn.active { background: #fff; color: #c8006d; }
+    .lang-btn:hover:not(.active) { color: #fff; }
+    .mobile-lang-switch { display: flex; align-items: center; gap: 2px; background: rgba(255,255,255,0.14); border-radius: 100px; padding: 3px; margin-top: 10px; width: fit-content; }
+    .mobile-lang-switch .lang-btn { padding: 6px 14px; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .hamburger span { width: 22px; height: 1.5px; background: rgba(255,255,255,0.7); border-radius: 2px; display: block; }
+    #mobile-nav { display: none; flex-direction: column; gap: 4px; padding: 16px 24px; border-top: 1px solid rgba(255,255,255,0.14); background: rgba(200,0,109,0.97); }
+    #mobile-nav.open { display: flex; }
+    #mobile-nav a { font-size: 15px; font-weight: 500; color: #fff; text-decoration: none; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+    #mobile-nav a:last-child { border-bottom: none; color: #fff; font-weight: 700; }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      background: linear-gradient(160deg, #2a0018 0%, #4a0028 45%, #1a000f 100%); padding: 120px 0 64px;
+      position: relative; overflow: hidden;
+    }
+    .page-hero-glow {
+      position: absolute; top: -120px; right: -80px;
+      width: 560px; height: 560px;
+      background: radial-gradient(ellipse, rgba(200,0,109,0.2) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .page-hero-inner { max-width: 1280px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
+    .breadcrumb { display: flex; align-items: center; gap: 8px; margin-bottom: 24px; }
+    .breadcrumb a { font-size: 13px; color: rgba(255,255,255,0.4); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: #c8006d; }
+    .breadcrumb-sep { color: rgba(255,255,255,0.2); font-size: 13px; }
+    .breadcrumb-cur { font-size: 13px; color: rgba(255,255,255,0.7); }
+    .page-hero-h1 { font-size: clamp(36px, 4.5vw, 58px); font-weight: 800; letter-spacing: -0.04em; color: #fff; margin-bottom: 16px; line-height: 1.05; }
+    .page-hero-h1 em { font-style: normal; color: #c8006d; }
+    .page-hero-sub { font-size: 16px; color: rgba(255,255,255,0.45); line-height: 1.7; max-width: 540px; }
+
+    /* ── CATEGORY SCROLL NAV ── */
+    .cat-nav-bar {
+      position: sticky; top: 76px; z-index: 90;
+      background: rgba(255,255,255,0.98);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(0,0,0,0.07);
+      overflow-x: auto;
+    }
+    .cat-nav-bar::-webkit-scrollbar { display: none; }
+    .cat-nav-inner { max-width: 1280px; margin: 0 auto; padding: 0 32px; display: flex; align-items: center; gap: 0; }
+    .cat-tab {
+      flex-shrink: 0; display: flex; align-items: center; gap: 8px;
+      padding: 0 20px; height: 52px; font-size: 13px; font-weight: 600;
+      color: #6a6a7a; text-decoration: none; border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s; white-space: nowrap; cursor: pointer;
+    }
+    .cat-tab:hover { color: #c8006d; }
+    .cat-tab.active { color: #c8006d; border-bottom-color: #c8006d; }
+    .cat-tab-count { font-size: 11px; font-weight: 700; background: rgba(200,0,109,0.1); color: #c8006d; border-radius: 100px; padding: 2px 7px; }
+
+    /* ── LAYOUT: sidebar + content ── */
+    .products-layout { max-width: 1280px; margin: 0 auto; padding: 0 32px; display: grid; grid-template-columns: 240px 1fr; gap: 48px; align-items: start; padding-top: 60px; padding-bottom: 100px; }
+
+    /* Sidebar */
+    .sidebar { position: sticky; top: 128px; }
+    .sidebar-group { margin-bottom: 32px; }
+    .sidebar-group-title { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #b0b0c0; margin-bottom: 8px; padding: 0 12px; }
+    .sidebar-link { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; border-radius: 8px; font-size: 13px; font-weight: 500; color: #5a5a72; text-decoration: none; transition: background 0.15s, color 0.15s; cursor: pointer; }
+    .sidebar-link:hover { background: rgba(200,0,109,0.06); color: #c8006d; }
+    .sidebar-link.active { background: rgba(200,0,109,0.08); color: #c8006d; font-weight: 600; }
+    .sidebar-count { font-size: 10px; font-weight: 700; background: rgba(0,0,0,0.06); color: #8a8a9a; border-radius: 100px; padding: 1px 6px; }
+    .sidebar-link.active .sidebar-count { background: rgba(200,0,109,0.12); color: #c8006d; }
+
+    /* ── PRODUCT CONTENT AREA ── */
+    .cat-section { display: none; margin-bottom: 80px; }
+    .cat-section.active { display: block; animation: fadeSection 0.25s ease; }
+    @keyframes fadeSection { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    .sidebar-group { display: none; margin-bottom: 32px; }
+    .sidebar-group.active { display: block; }
+    .cat-section-header { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 32px; padding-bottom: 20px; border-bottom: 1px solid rgba(0,0,0,0.06); }
+    .cat-section-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #c8006d; margin-bottom: 8px; }
+    .cat-section-title { font-size: clamp(24px, 2.5vw, 34px); font-weight: 800; letter-spacing: -0.035em; color: #0f0f1a; line-height: 1.1; }
+    .cat-section-count { font-size: 13px; color: #9a9aaa; font-weight: 500; }
+
+    /* Subcategory group */
+    .subcat { margin-bottom: 48px; }
+    .subcat-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; }
+    .subcat-line { flex: 1; height: 1px; background: rgba(0,0,0,0.06); }
+    .subcat-title { font-size: 13px; font-weight: 700; letter-spacing: -0.01em; color: #1a1a2a; white-space: nowrap; padding: 4px 12px; background: #f4f4f8; border-radius: 100px; }
+
+    /* Product card grid */
+    .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .product-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+    .product-grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+    .product-grid.cols-5 { grid-template-columns: repeat(5, 1fr); }
+
+    /* Product card */
+    .pcard {
+      border: 1px solid rgba(0,0,0,0.08); border-radius: 16px;
+      overflow: hidden; background: #fff;
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), border-color 0.25s, box-shadow 0.25s;
+      display: flex; flex-direction: column;
+    }
+    .pcard:hover { transform: translateY(-5px); border-color: rgba(200,0,109,0.25); box-shadow: 0 16px 40px rgba(200,0,109,0.08), 0 4px 12px rgba(0,0,0,0.06); }
+
+    /* Image slot */
+    .pcard-img {
+      width: 100%; aspect-ratio: 4/3; position: relative; overflow: hidden;
+      background: #f4f4f8; display: flex; align-items: center; justify-content: center;
+    }
+    .pcard-img img { width: 100%; height: 100%; object-fit: contain; padding: 16px; }
+    .pcard-img-placeholder {
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 8px; color: #c8c8d8; font-size: 12px; font-weight: 500; letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .pcard-img-placeholder svg { opacity: 0.35; }
+    .pcard-img-badge {
+      position: absolute; top: 10px; right: 10px;
+      background: rgba(200,0,109,0.1); border: 1px solid rgba(200,0,109,0.2);
+      color: #c8006d; font-size: 10px; font-weight: 700; letter-spacing: 0.06em;
+      text-transform: uppercase; padding: 3px 8px; border-radius: 100px;
+    }
+
+    /* Card body */
+    .pcard-body { padding: 18px 20px 20px; display: flex; flex-direction: column; flex: 1; }
+    .pcard-title { font-size: 14px; font-weight: 700; color: #0f0f1a; letter-spacing: -0.02em; margin-bottom: 8px; line-height: 1.3; }
+    .pcard-desc { font-size: 12.5px; color: #8a8a9a; line-height: 1.65; flex: 1; margin-bottom: 14px; font-style: italic; white-space: pre-line; }
+    .pcard-desc.has-content { font-style: normal; color: #5a5a72; }
+    .pcard-footer { display: flex; align-items: center; justify-content: space-between; margin-top: auto; padding-top: 14px; border-top: 1px solid rgba(0,0,0,0.05); }
+    .pcard-tag { font-size: 10px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: #c8c8d8; }
+    .pcard-cta { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; color: #c8006d; text-decoration: none; transition: gap 0.2s; }
+    .pcard-cta:hover { gap: 8px; }
+    .pcard-cta svg { transition: transform 0.2s; }
+    .pcard-cta:hover svg { transform: translateX(2px); }
+
+    /* Standalone products row */
+    .standalone-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+
+    /* ── PRODUCT DETAIL PANEL ── */
+    .pcard { cursor: pointer; }
+
+    .panel-backdrop {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(42,0,24,0.55);
+      backdrop-filter: blur(4px);
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .panel-backdrop.open { opacity: 1; pointer-events: all; }
+
+    .panel-drawer {
+      position: fixed; top: 0; right: 0; bottom: 0; z-index: 201;
+      width: 560px; max-width: 100vw;
+      background: #fff;
+      box-shadow: -24px 0 80px rgba(0,0,0,0.15);
+      transform: translateX(100%);
+      transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+      display: flex; flex-direction: column;
+      overflow: hidden;
+    }
+    .panel-drawer.open { transform: translateX(0); }
+
+    .panel-close {
+      position: absolute; top: 20px; right: 20px; z-index: 10;
+      width: 36px; height: 36px; border-radius: 50%;
+      background: rgba(0,0,0,0.06); border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s;
+    }
+    .panel-close:hover { background: rgba(200,0,109,0.1); }
+
+    .panel-img {
+      width: 100%; flex-shrink: 0;
+      background: #f4f4f8; overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+    .panel-img-main { width: 100%; aspect-ratio: 4/3; display: flex; align-items: center; justify-content: center; }
+    .panel-img-main img { width: 100%; height: 100%; object-fit: contain; padding: 32px; }
+    .panel-img-placeholder { display: flex; flex-direction: column; align-items: center; gap: 10px; color: #c8c8d8; font-size: 12px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; }
+    .panel-thumbs { display: flex; gap: 8px; padding: 10px 12px; background: #eeeef2; }
+    .panel-thumb { width: 64px; height: 52px; border-radius: 8px; overflow: hidden; border: 2px solid transparent; cursor: pointer; flex-shrink: 0; transition: border-color 0.15s; background: #fff; }
+    .panel-thumb img { width: 100%; height: 100%; object-fit: contain; padding: 4px; }
+    .panel-thumb.active { border-color: #c8006d; }
+    .panel-thumb:hover { border-color: rgba(200,0,109,0.4); }
+
+    .panel-body { padding: 32px; overflow-y: auto; flex: 1; }
+    .panel-tag { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #c8006d; margin-bottom: 12px; display: block; }
+    .panel-title { font-size: 26px; font-weight: 800; letter-spacing: -0.03em; color: #0f0f1a; margin-bottom: 6px; line-height: 1.15; }
+    .panel-subtitle { font-size: 14px; color: #9a9aaa; font-weight: 500; margin-bottom: 24px; }
+    .panel-divider { height: 1px; background: rgba(0,0,0,0.06); margin-bottom: 24px; }
+    .panel-desc-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #b0b0c0; margin-bottom: 10px; display: block; }
+    .panel-desc { font-size: 15px; color: #5a5a72; line-height: 1.78; font-style: italic; white-space: pre-line; }
+    .panel-desc.has-content { font-style: normal; color: #1a1a2a; }
+    .panel-cta {
+      display: inline-flex; align-items: center; gap: 8px;
+      margin-top: 32px; font-size: 14px; font-weight: 600; color: #fff;
+      text-decoration: none; background: linear-gradient(135deg, #c8006d, #a8005b);
+      padding: 13px 26px; border-radius: 10px;
+      transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s;
+      border: none; cursor: pointer; width: 100%; justify-content: center;
+    }
+    .panel-cta:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(200,0,109,0.35); }
+
+    @media (max-width: 600px) {
+      .panel-drawer { width: 100vw; top: auto; height: 90vh; border-radius: 20px 20px 0 0; transform: translateY(100%); }
+      .panel-drawer.open { transform: translateY(0); }
+    }
+
+    /* Buttons */
+    .btn-prim { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: #fff; text-decoration: none; background: linear-gradient(135deg, #c8006d, #a8005b); padding: 14px 28px; border-radius: 10px; transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s; }
+    .btn-prim:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(200,0,109,0.4); }
+
+    /* Footer (matching index.html) */
+    footer { background: #fafafa; border-top: 1px solid rgba(0,0,0,0.06); padding: 64px 0 40px; }
+    .footer-inner { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+    .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 48px; }
+    .footer-brand-desc { font-size: 14px; color: #8a8a9a; line-height: 1.7; margin: 16px 0 24px; max-width: 300px; }
+    .footer-col-title { font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #1a1a2a; margin-bottom: 18px; }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { font-size: 14px; color: #6a6a7a; text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: #c8006d; }
+    .footer-bottom { border-top: 1px solid rgba(0,0,0,0.06); padding-top: 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+    .footer-copy { font-size: 13px; color: #9a9aaa; }
+    .footer-legal { display: flex; gap: 20px; }
+    .footer-legal a { font-size: 13px; color: #9a9aaa; text-decoration: none; transition: color 0.2s; }
+    .footer-legal a:hover { color: #c8006d; }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .products-layout { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .product-grid { grid-template-columns: repeat(2, 1fr); }
+      .product-grid.cols-4, .product-grid.cols-5 { grid-template-columns: repeat(2, 1fr); }
+      .standalone-grid { grid-template-columns: repeat(2, 1fr); }
+      .footer-top { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .page-hero { padding: 100px 0 48px; }
+      .products-layout { padding: 32px 20px 64px; }
+      .cat-nav-inner { padding: 0 20px; }
+      .product-grid, .product-grid.cols-2, .product-grid.cols-4, .product-grid.cols-5 { grid-template-columns: 1fr; }
+      .standalone-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<header id="nav">
+  <div class="nav-inner">
+    <a href="index.html">
+      <img src="brand_assets/AlplerMedicalLogoPink-300x88.png" alt="Alpler Hospital Supplies" style="height:50px;width:auto;filter:brightness(0) invert(1);" />
+    </a>
+    <nav class="nav-links">
+      <a href="index.html"          class="nav-link" data-tr="Ana Sayfa">Home</a>
+      <a href="index.html#about"    class="nav-link" data-tr="Hakkımızda">About</a>
+      <a href="products.html"       class="nav-link active" data-tr="Ürünler">Products</a>
+      <a href="index.html#quality"  class="nav-link" data-tr="Kalite">Quality</a>
+      <a href="index.html#services" class="nav-link" data-tr="Hizmetler">Services</a>
+      <a href="index.html#contact"  class="nav-link" data-tr="İletişim">Contact</a>
+      <a href="index.html#contact"  class="nav-cta" data-tr="Teklif Alın">Get a Quote</a>
+      <div class="lang-switch">
+        <button class="lang-btn active" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="tr">TR</button>
+      </div>
+    </nav>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <nav id="mobile-nav">
+    <a href="index.html" data-tr="Ana Sayfa">Home</a>
+    <a href="index.html#about" data-tr="Hakkımızda">About</a>
+    <a href="products.html" data-tr="Ürünler">Products</a>
+    <a href="index.html#quality" data-tr="Kalite">Quality</a>
+    <a href="index.html#services" data-tr="Hizmetler">Services</a>
+    <a href="index.html#contact" data-tr="İletişim">Contact</a>
+    <a href="index.html#contact" data-tr="Teklif Alın →">Get a Quote →</a>
+    <div class="mobile-lang-switch">
+      <button class="lang-btn active" data-lang="en">EN</button>
+      <button class="lang-btn" data-lang="tr">TR</button>
+    </div>
+  </nav>
+</header>
+
+<!-- ═══ PAGE HERO ═══ -->
+<section class="page-hero">
+  <div class="page-hero-glow"></div>
+  <div class="page-hero-inner">
+    <div class="breadcrumb">
+      <a href="index.html" data-tr="Ana Sayfa">Home</a>
+      <span class="breadcrumb-sep">/</span>
+      <span class="breadcrumb-cur" data-tr="Ürünler">Products</span>
+    </div>
+    <h1 class="page-hero-h1 display" data-tr="Ürün <em>Portföyümüz</em>">Our <em>Product</em> Portfolio</h1>
+    <p class="page-hero-sub" data-tr="Anestezi, yoğun bakım, monitörizasyon ve yenidoğan alanlarında dünya lideri üreticilerden temin edilen sertifikalı tıbbi sarf malzemeleri.">Certified medical consumables across anesthesia, intensive care, monitoring, and neonatology — sourced from world-leading manufacturers.</p>
+  </div>
+</section>
+
+<!-- ═══ CATEGORY SCROLL NAV ═══ -->
+<div class="cat-nav-bar">
+  <div class="cat-nav-inner">
+    <a class="cat-tab" href="#anestezi" data-cat="anestezi"><span data-tr="Anestezi">Anesthesia</span> <span class="cat-tab-count">4</span></a>
+    <a class="cat-tab" href="#yogun-bakim" data-cat="yogun-bakim"><span data-tr="Yoğun Bakım">Intensive Care</span> <span class="cat-tab-count">4</span></a>
+    <a class="cat-tab" href="#monitor" data-cat="monitor"><span data-tr="Monitörizasyon">Monitoring</span> <span class="cat-tab-count">5</span></a>
+    <a class="cat-tab" href="#single" data-cat="single"><span data-tr="Cihazlar">Devices</span> <span class="cat-tab-count">4</span></a>
+  </div>
+</div>
+
+<!-- ═══ MAIN LAYOUT ═══ -->
+<div class="products-layout">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="sidebar-group" data-cat="anestezi">
+      <div class="sidebar-group-title" data-tr="Anestezi">Anesthesia</div>
+      <a class="sidebar-link" href="#anestezi-masks" data-tr="Esnek Yüz Maskeleri">Flexible Face Masks</a>
+      <a class="sidebar-link" href="#anestezi-masks-semi" data-tr="Yarı Esnek Yüz Maskeleri">Semi-Flexible Face Masks</a>
+      <a class="sidebar-link" href="#anestezi-water" data-tr="Su Tutucular">Water Traps</a>
+      <a class="sidebar-link" href="#anestezi-filters" data-tr="Filtreler">Filters</a>
+      <a class="sidebar-link" href="#anestezi-gas" data-tr="Gaz Örnekleme Hattı">Gas Sampling Line</a>
+    </div>
+    <div class="sidebar-group" data-cat="yogun-bakim">
+      <div class="sidebar-group-title" data-tr="Yoğun Bakım">Intensive Care</div>
+      <a class="sidebar-link" href="#yb-suction-bag" data-tr="Aspirasyon Torbası">Suction Bag</a>
+      <a class="sidebar-link" href="#yb-laryngoscope" data-tr="Laringoskop Setleri">Laryngoscope Sets</a>
+      <a class="sidebar-link" href="#yb-filters" data-tr="Filtreler">Filters</a>
+      <a class="sidebar-link" href="#yb-giraffe" data-tr="Giraffe Küvöz Sarfları">Giraffe Incubator Supplies</a>
+    </div>
+    <div class="sidebar-group" data-cat="monitor">
+      <div class="sidebar-group-title" data-tr="Monitörizasyon">Monitoring</div>
+      <a class="sidebar-link" href="#mon-spo2">SpO₂</a>
+      <a class="sidebar-link" href="#mon-ecg">ECG</a>
+      <a class="sidebar-link" href="#mon-nibp">NIBP</a>
+      <a class="sidebar-link" href="#mon-ibp">IBP</a>
+      <a class="sidebar-link" href="#mon-temp" data-tr="Sıcaklık">Temperature</a>
+    </div>
+    <div class="sidebar-group" data-cat="single">
+      <div class="sidebar-group-title" data-tr="Cihazlar">Devices</div>
+      <a class="sidebar-link" href="#single" data-tr="Vital Monitör · İnfüzyon · Şırınga · Ağrı Pompası">Vital Monitor · Infusion · Syringe · Pain Pump</a>
+    </div>
+  </aside>
+
+  <!-- ── MAIN CONTENT ── -->
+  <main>
+
+    <!-- ════════════ ANESTHESIA ════════════ -->
+    <section class="cat-section" id="anestezi">
+      <div class="cat-section-header">
+        <div>
+          <div class="cat-section-label label"><span data-tr="Kategori 01">Category 01</span></div>
+          <h2 class="cat-section-title title" data-tr="Anestezi">Anesthesia</h2>
+        </div>
+        <span class="cat-section-count" data-tr="4 ürün grubu">4 product lines</span>
+      </div>
+
+      <!-- Anesthesia Masks -->
+      <div class="subcat" id="anestezi-masks">
+        <div class="subcat-header">
+          <div class="subcat-title">Flexible Face Masks — Esnek Yüz Maskeleri</div>
+          <div class="subcat-line"></div>
+        </div>
+        <div class="product-grid cols-2">
+          <div class="pcard">
+            <div class="pcard-img">
+              <img src="product pictures/Anesthesia1/esnek_yuz_maskesi.png" alt="Flexible Face Masks" />
+            </div>
+            <div class="pcard-body">
+              <div class="pcard-title">Flexible Face Masks<br /><span style="font-weight:500;color:#8a8a9a;font-size:12px;">Esnek Yüz Maskeleri</span></div>
+              <p class="pcard-desc has-content" data-tr="Esnek Anestezi Maskesi, hızlı ve kolay boyut tespiti sağlamak için birçok farklı renkte üretilmektedir. Damla şeklindeki maske, kolayca şişirilip söndürülebilen bir yastık içerir.
+
+• Renk kodlu ambalaj ile kolay boyut tespiti
+• Üst valften kolay şişirme/söndürme özellikli hava yastığı
+• Yumuşak yüz plakası
+• Damla şekli
+• Üstün tutuş
+• Pediatrik boylarda sakızlı koku seçeneği
+• Üst valf stiliyle kolay şişirme/söndürme özellikli hava yastığı">The Flexible Anesthesia Mask comes in many different colors to ensure quick and easy size identification. The teardrop-shaped mask features a cushion that is easy to deflate or inflate.
+
+• Color coded packaging allows for easy size identification
+• Easy to inflate or deflate air cushion with top valve convenience
+• Soft face plate
+• Teardrop shape
+• Superior grip
+• Pediatric sizes offered in bubble gum scent
+• Easy to inflate or deflate air cushion with top valve style</p>
+              <div class="pcard-footer">
+                <span class="pcard-tag" data-tr="Anestezi">Anesthesia</span>
+                <a href="index.html#contact" class="pcard-cta"><span data-tr="Bilgi İste">Request Info</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /Flexible Masks -->
+
+      <!-- Semi-Flexible Face Masks -->
+      <div class="subcat" id="anestezi-masks-semi">
+        <div class="subcat-header">
+          <div class="subcat-title">Semi-Flexible Face Masks — Yarı Esnek Yüz Maskeleri</div>
+          <div class="subcat-line"></div>
+        </div>
+        <div class="product-grid cols-2">
+          <div class="pcard">
+            <div class="pcard-img">
+              <img src="product pictures/Anesthesia1/yari_esnek_maske.jpg" alt="Semi-Flexible Face Masks" />
+            </div>
+            <div class="pcard-body">
+              <div class="pcard-title">Semi-Flexible Face Masks<br /><span style="font-weight:500;color:#8a8a9a;font-size:12px;">Yarı Esnek Yüz Maskeleri</span></div>
+              <p class="pcard-desc has-content" data-tr="Yumuşak, esnek, hava dolu yastık yüze kolayca uyum sağlayarak düşük basınçlı bir sızdırmazlık sunar
+
+• Renk kodlu kanca halkaları
+• Üstün berraklık
+• Damla şeklinde yüz plakaları">Soft, pliable, air-filled cushion molds easily to face to deliver a low-pressure seal
+
+• Features color coded hook rings
+• Brilliant clarity
+• Teardrop face plates</p>
+              <div class="pcard-footer">
+                <span class="pcard-tag" data-tr="Anestezi">Anesthesia</span>
+                <a href="index.html#contact" class="pcard-cta"><span data-tr="Bilgi İste">Request Info</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /Semi-Flexible Masks -->
+
+
+
+      <!-- Water Traps -->
+      <div class="subcat" id="anestezi-water">
+        <div class="subcat-header"><div class="subcat-title">Water Traps — Su Tutucular</div><div class="subcat-line"></div></div>
+        <div class="product-grid cols-2">
+          <div class="pcard" data-images='["product pictures/Anesthesia1/su tutucu 1.jpg","product pictures/Anesthesia1/su tutucular 2.jpg"]'>
+            <div class="pcard-img"><img src="product pictures/Anesthesia1/su tutucu 1.jpg" alt="Water Traps" /></div>
+            <div class="pcard-body">
+              <div class="pcard-title">Water Traps<br /><span style="font-weight:500;color:#8a8a9a;font-size:12px;">Su Tutucular</span></div>
+              <p class="pcard-desc has-content" data-tr="Gaz monitöre ulaşmadan önce örneklenen gazdaki yoğuşmayı toplayarak hassas bileşenleri korur ve gaz okumalarının doğruluğunu sağlar. Standart anestezi gaz örnekleme hatlarıyla uyumludur.">Collects condensate from sampled gas before it reaches the monitor, protecting sensitive components while keeping gas readings accurate. Compatible with standard anesthesia gas sampling lines.</p>
+              <div class="pcard-footer"><span class="pcard-tag" data-tr="Anestezi">Anesthesia</span><a href="index.html#contact" class="pcard-cta"><span data-tr="Bilgi İste">Request Info</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Filters -->
+      <div class="subcat" id="anestezi-filters">
+        <div class="subcat-header"><div class="subcat-title">Filters — Filtreler</div><div class="subcat-line"></div></div>
+        <div class="product-grid cols-2">
+          <div class="pcard">
+            <div class="pcard-img"><img src="product pictures/Anesthesia1/20200224_130740_resized-1.jpg" alt="Anesthesia Filters" /></div>
+            <div class="pcard-body">
+              <div class="pcard-title">Anesthesia Filters<br /><span style="font-weight:500;color:#8a8a9a;font-size:12px;">Filtreler</span></div>
+              <p class="pcard-desc has-content" data-tr="• Standart ISO bağlantılar
+• BFE/VFE %99,999">• Standard ISO connections
+• BFE/VFE 99.999%</p>
+              <div class="pcard-footer"><span class="pcard-tag" data-tr="Anestezi">Anesthesia</span><a href="index.html#contact" class="pcard-cta"><span data-tr="Bilgi İste">Request Info</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gas Sampling Line -->
+      <div class="subcat" id="anestezi-gas">
+        <div class="subcat-header"><div class="subcat-title">Gas Sampling Line — Gaz Örnekleme Hattı</div><div class="subcat-line"></div></div>
+        <div class="product-grid cols-2">
+          <div class="pcard" data-images='["product pictures/Anesthesia1/73319-1.jpg","product pictures/Anesthesia1/gas_sampling_line-1.jpg"]'>
+            <div class="pcard-img"><img src="product pictures/Anesthesia1/73319-1.jpg" alt="Gas Sampling Line" /></div>
+            <div class="pcard-body">
+              <div class="pcard-title">Gas Sampling Line<br /><span style="font-weight:500;color:#8a8a9a;font-size:12px;">Gaz Örnekleme Hattı</span></div>
+              <p class="pcard-desc has-content" data-tr="Gaz Örnekleme Hatları çeşitli uzunluk ve hortum bağlantı seçenekleriyle sunulur. Döner dirsek, birlikte ekstrüde ve 0,8 Mikron hidrofobik filtre seçeneklerini içerir.
+
+• Çeşitli uzunluk ve hortum bağlantı seçenekleri
+• Birlikte ekstrüde seçenekler
+• Döner dirsek seçenekli örnekleme hattı
+• 0,8 Mikron hidrofobik filtre seçeneği">Gas Sampling Lines come in a variety of lengths and tubing connection options. Includes swivel elbow, co-extruded, and 0.8 Micron hydrophobic filter options.
+
+• Available in various lengths and tubing connections
+• Co-extruded options
+• Sampling line with swivel elbow option
+• 0.8 Micron hydrophobic filter option</p>
+              <div class="pcard-footer"><span class="pcard-tag" data-tr="Anestezi">Anesthesia</span><a href="index.html#contact" class="pcard-cta"><span data-tr="Bilgi İste">Request Info</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+    </section><!-- /Anesthesia -->
+
+    <!-- ════════════ INTENSIVE CARE ════════════ -->
+    <section class="cat-section" id="yogun-bakim">
+      <div class="cat-section-header">
+        <div>
+          <div class="cat-section-label label"><span data-tr="Kategori 02">Category 02</span></div>
+          <h2 class="cat-section-title title" data-tr="Yoğun Bakım">Intensive Care</h2>
+        </div>
+        <span class="cat-section-count" data-tr="4 ürün grubu">4 product lines</span>
+      </div>
+
+      <!-- Closed Suction System -->
+
+      <!-- Suction Bag -->
+      <div class="subcat" id="yb-suction-bag">
+        <div class="subcat-header"><div class="subcat-title">Suction Bag — Aspirasyon Torbası</div><div class="subcat-line"></div></div>
+        <div class="product-grid cols-2">
+          <div class="pcard">
+            <div class="pcard-img"><img src="product pictures/Yoğun bakım/stervacpichast.webp" alt="Suction Bag" /></div>
+            <div class="pcard-body">
+              <div class="pcard-title">Suction Bag<br /><span style="font-weight:500;color:#8a8a9a;font-size:12px;">Aspirasyon Torbası</span></div>
+              <p class="pcard-desc has-content" data-tr="Aspire edilen sekresyonlar için kapalı sistem toplama torbası; yoğun bakım ve cerrahi ortamlarda güvenli, kontaminasyonsuz imha için tasarlanmıştır.">Closed-system collection bag for aspirated secretions, designed for safe, contamination-free disposal in intensive care and surgical settings.</p>
+              <div class="pcard-footer"><span class="pcard-tag" data-tr="Yoğun Bakım">ICU</span><a href="index.html#contact" class="pcard-cta"><span data-tr="Bilgi İste">Request Info</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Laryngoscope Sets -->
+      <div class="subcat" id="yb-laryngoscope">
+        <div class="subcat-header"><div class="subcat-title">Laryngoscope Sets — Laringoskop Setler</div><div class="subcat-line"></div></div>
+        <div class="product-grid cols-2">
+          <div class="pcard">
+            <div class="pcard-img"><img src="product pictures/Yoğun bakım/celik_laringoskop_2.jpg" alt="Laryngoscope Sets" /></div>
+            <div class="pcard-body">
+              <div class="pcard-title">Laryngoscope Sets (Steel Tips)<br /><span style="font-weight:500;color:#8a8a9a;font-size:12px;">Laringoskop Setler — Çelik Uçlu</span></div>
+              <p class="pcard-desc has-content" data-tr="Entübasyon sırasında güvenilir görüş sağlayan dayanıklı paslanmaz çelik laringoskop bıçakları; tam yetişkin ve pediatrik boy aralığında mevcuttur.">Durable stainless steel laryngoscope blades for reliable visualization during intubation, available in a full range of adult and pediatric sizes.</p>
+              <div class="pcard-footer"><span class="pcard-tag" data-tr="Yoğun Bakım">ICU</span><a href="index.html#contact" class="pcard-cta"><span data-tr="Bilgi İste">Request Info</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ICU Filters -->
+      <div class="subcat" id="yb-filters">
+        <div class="subcat-header"><div class="subcat-title">Filters — Filtreler</div><div class="subcat-line"></div></div>
+        <div class="product-grid cols-2">
+          <div class="pcard">
+            <div class="pcard-img"><img src="product pictures/Yoğun bakım/Filtreler.png" alt="ICU Filters" /></div>
+            <div class="pcard-body">
+              <div class="pcard-title">ICU Filters<br /><span style="font-weight:500;color:#8a8a9a;font-size:12px;">Filtreler</span></div>
+              <p class="pcard-desc has-content" data-tr="Hasta ve ventilatör devresi arasında bakteri ve virüs geçişini azaltan yüksek verimli solunum filtreleri; yoğun bakımda güvenli solunum bakımını destekler.">High-efficiency breathing filters that reduce bacterial and viral transmission between patient and ventilator circuit, supporting safe respiratory care in the ICU.</p>
+              <div class="pcard-footer"><span class="pcard-tag" data-tr="Yoğun Bakım">ICU</span><a href="index.html#contact" class="pcard-cta"><span data-tr="Bilgi İste">Request Info</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Giraffe Incubator Supplies -->
+      <div class="subcat" id="yb-giraffe">
+        <div class="subcat-header"><div class="subcat-title">Giraffe Incubator Supplies — Giraffe Küvöz Sarfları</div><div class="subcat-line"></div></div>
+        <div class="product-grid cols-2">
+          <div class="pcard" data-images='["product pictures/Yoğun bakım/giraffe1.jpg","product pictures/Yoğun bakım/girraffe2.jpg"]'>
+            <div class="pcard-img"><img src="product pictures/Yoğun bakım/giraffe1.jpg" alt="Giraffe Incubator Supplies" /></div>
+            <div class="pcard-body">
+              <div class="pcard-title">Giraffe Incubator Supplies<br /><span style="font-weight:500;color:#8a8a9a;font-size:12px;">Giraffe Küvöz Sarfları</span></div>
+              <p class="pcard-desc has-content" data-tr="Giraffe küvöz sistemleri için uyumlu sarf malzemeleri ve aksesuarlar; yenidoğan hastalar için güvenli, kontrollü termal bakımı destekler.">Compatible consumables and accessories for Giraffe incubator systems, supporting safe, controlled thermal care for neonatal patients.</p>
+              <div class="pcard-footer"><span class="pcard-tag" data-tr="Yoğun Bakım">ICU</span><a href="index.html#contact" class="pcard-cta"><span data-tr="Bilgi İste">Request Info</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section><!-- /Intensive Care -->
+
+    <!-- ════════════ MONITORING ════════════ -->
+    <section class="cat-section" id="monitor">
+      <div class="cat-section-header">
+        <div>
+          <div class="cat-section-label label"><span data-tr="Kategori 03">Category 03</span></div>
+          <h2 class="cat-section-title title" data-tr="Monitörizasyon">Monitoring</h2>
+        </div>
+        <span class="cat-section-count" data-tr="5 ürün grubu">5 product lines</span>
+      </div>
+
+      <div class="product-grid" style="grid-template-columns:repeat(3,1fr);">
+
+        <div class="pcard" id="mon-spo2" data-images='["product pictures/Prob cables/SpO2.jpg","product pictures/Prob cables/SpO23.jpg","product pictures/Prob cables/SpO24.jpg","product pictures/Prob cables/SpO25.jpg","product pictures/Prob cables/Spo26.jpg","product pictures/Prob cables/SpO27.jpg","product pictures/Prob cables/SpO28.png","product pictures/Prob cables/SpO29.jpg"]'>
+          <div class="pcard-img">
+            <img src="product pictures/Prob cables/SpO2.jpg" alt="SpO₂ Sensors & Probes" />
+          </div>
+          <div class="pcard-body">
+            <div class="pcard-title">SpO₂ Sensors &amp; Probes<br /><span style="font-weight:500;color:#8a8a9a;font-size:12px;">Oksijen Saturasyonu Monitörizasyonu</span></div>
+            <p class="pcard-desc has-content" data-tr="Kan oksijen saturasyonunun sürekli, invaziv olmayan takibi için nabız oksimetresi sensörleri; yetişkin, pediatrik ve yenidoğan yapılandırmalarında mevcuttur.">Pulse oximetry sensors for continuous, non-invasive monitoring of blood oxygen saturation, available in adult, pediatric, and neonatal configurations.</p>
+            <div class="pcard-footer"><span class="pcard-tag" data-tr="Monitörizasyon">Monitoring</span><a href="index.html#contact" class="pcard-cta"><span data-tr="Bilgi İste">Request Info</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+          </div>
+        </div>
+
+        <div class="pcard" id="mon-ecg" data-images='["product pictures/Prob cables/ekg1.jpg","product pictures/Prob cables/ekg2.jpg","product pictures/Prob cables/ekg3.jpg","product pictures/Prob cables/ekg4.jpg","product pictures/Prob cables/ekg5.jpg","product pictures/Prob cables/ekg6.jpg"]'>
+          <div class="pcard-img">
+            <img src="product pictures/Prob cables/ekg1.jpg" alt="ECG Electrodes & Cables" />
+          </div>
+          <div class="pcard-body">
+            <div class="pcard-title">ECG Electrodes &amp; Cables<br /><span style="font-weight:500;color:#8a8a9a;font-size:12px;">EKG Elektrotları ve Kablolar</span></div>
+            <p class="pcard-desc has-content" data-tr="Sürekli kardiyak takip için yüksek yapışmalı elektrotlar ve kablo setleri; kısa ve uzun süreli kullanımda güvenilir sinyal kalitesi sunar.">High-adhesion electrodes and lead cables for continuous cardiac monitoring, delivering reliable signal quality across short- and long-term use.</p>
+            <div class="pcard-footer"><span class="pcard-tag" data-tr="Monitörizasyon">Monitoring</span><a href="index.html#contact" class="pcard-cta"><span data-tr="Bilgi İste">Request Info</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+          </div>
+        </div>
+
+        <div class="pcard" id="mon-nibp">
+          <div class="pcard-img">
+            <img src="product pictures/Prob cables/NİBPCRITIKON_CUFFS.jpg" alt="NIBP Cuffs & Tubing" />
+          </div>
+          <div class="pcard-body">
+            <div class="pcard-title">NIBP Cuffs &amp; Tubing<br /><span style="font-weight:500;color:#8a8a9a;font-size:12px;">Non-invasif Kan Basıncı Manşetleri</span></div>
+            <p class="pcard-desc has-content" data-tr="Tam yetişkin, pediatrik ve yenidoğan boy aralığında non-invaziv kan basıncı manşetleri; standart monitör hortumlarıyla uyumlu, doğru ve tekrarlanabilir ölçümler sağlar.">Non-invasive blood pressure cuffs in a full adult, pediatric, and neonatal size range, compatible with standard monitor tubing for accurate, repeatable readings.</p>
+            <div class="pcard-footer"><span class="pcard-tag" data-tr="Monitörizasyon">Monitoring</span><a href="index.html#contact" class="pcard-cta"><span data-tr="Bilgi İste">Request Info</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+          </div>
+        </div>
+
+        <div class="pcard" id="mon-ibp">
+          <div class="pcard-img">
+            <img src="product pictures/Prob cables/ibp.jpg" alt="IBP Transducers" />
+          </div>
+          <div class="pcard-body">
+            <div class="pcard-title">IBP Transducers<br /><span style="font-weight:500;color:#8a8a9a;font-size:12px;">Invasif Kan Basıncı Transdüserleri</span></div>
+            <p class="pcard-desc has-content" data-tr="Kritik bakım ve ameliyathane ortamlarında sürekli invaziv kan basıncı ve hemodinamik takip için tek kullanımlık basınç transdüserleri.">Disposable pressure transducers for continuous invasive blood pressure and hemodynamic monitoring in critical care and operating room settings.</p>
+            <div class="pcard-footer"><span class="pcard-tag" data-tr="Monitörizasyon">Monitoring</span><a href="index.html#contact" class="pcard-cta"><span data-tr="Bilgi İste">Request Info</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+          </div>
+        </div>
+
+        <div class="pcard" id="mon-temp" data-images='["product pictures/Prob cables/ısıprob1.jpg","product pictures/Prob cables/ısıprob2.jpg"]'>
+          <div class="pcard-img">
+            <img src="product pictures/Prob cables/ısıprob1.jpg" alt="Temperature Sensors" />
+          </div>
+          <div class="pcard-body">
+            <div class="pcard-title">Temperature Sensors<br /><span style="font-weight:500;color:#8a8a9a;font-size:12px;">Isı Ölçüm Sensörleri</span></div>
+            <p class="pcard-desc has-content" data-tr="Sürekli hasta sıcaklık takibi için cilt ve vücut içi sıcaklık probları; standart monitör girişleriyle uyumludur.">Skin and core temperature probes for continuous patient temperature monitoring, compatible with standard monitor inputs.</p>
+            <div class="pcard-footer"><span class="pcard-tag" data-tr="Monitörizasyon">Monitoring</span><a href="index.html#contact" class="pcard-cta"><span data-tr="Bilgi İste">Request Info</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+          </div>
+        </div>
+
+      </div>
+    </section><!-- /Monitoring -->
+
+    <!-- ════════════ STANDALONE DEVICES ════════════ -->
+    <section class="cat-section" id="single">
+      <div class="cat-section-header">
+        <div>
+          <div class="cat-section-label label"><span data-tr="Kategori 05">Category 05</span></div>
+          <h2 class="cat-section-title title" data-tr="Tıbbi Cihazlar">Medical Devices</h2>
+        </div>
+        <span class="cat-section-count" data-tr="4 cihaz">4 devices</span>
+      </div>
+
+      <div class="standalone-grid">
+
+        <div class="pcard">
+          <div class="pcard-img">
+            <img src="product pictures/Pumps/infüzyon pump BD.jpg" alt="Infusion Pump" />
+          </div>
+          <div class="pcard-body">
+            <div class="pcard-title">Infusion Pump<br /><span style="font-weight:500;color:#8a8a9a;font-size:12px;">İnfüzyon Pompası</span></div>
+            <p class="pcard-desc has-content" data-tr="Hastane ve yoğun bakım kullanımı için serbest akış önleyici ve tıkanıklık korumalı, hassas ve sürekli IV sıvı uygulaması sağlayan hacimsel infüzyon pompası.">Volumetric infusion pump delivering precise, continuous IV fluid administration with anti-free-flow and occlusion protection for hospital and ICU use.</p>
+            <div class="pcard-footer"><span class="pcard-tag" data-tr="Cihaz">Device</span><a href="index.html#contact" class="pcard-cta"><span data-tr="Bilgi İste">Request Info</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+          </div>
+        </div>
+
+        <div class="pcard">
+          <div class="pcard-img">
+            <img src="product pictures/Pumps/Syring pump BD.jpg" alt="Syringe Pump" />
+          </div>
+          <div class="pcard-body">
+            <div class="pcard-title">Syringe Pump<br /><span style="font-weight:500;color:#8a8a9a;font-size:12px;">Şırınga Pompası</span></div>
+            <p class="pcard-desc has-content" data-tr="Kritik bakım ve yenidoğan uygulamaları için 0,1 mL/sa'ya kadar düşük akış hızlarını destekleyen, mikro doz ilaç uygulaması için hassas şırınga pompası.">Precision syringe pump for micro-dose drug delivery, supporting flow rates as low as 0.1 mL/h for critical care and neonatal applications.</p>
+            <div class="pcard-footer"><span class="pcard-tag" data-tr="Cihaz">Device</span><a href="index.html#contact" class="pcard-cta"><span data-tr="Bilgi İste">Request Info</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+          </div>
+        </div>
+
+        <div class="pcard" data-images='["product pictures/Pumps/ağrı pumo bd 595.jpg","product pictures/Pumps/BD-BodyguardT-Family-Pumps_2.jpg","product pictures/Pumps/BD-BodyguardT-Pain-Manager-and-PCA-Set.jpg"]'>
+          <div class="pcard-img">
+            <img src="product pictures/Pumps/ağrı pumo bd 595.jpg" alt="Pain Pump" />
+          </div>
+          <div class="pcard-body">
+            <div class="pcard-title">Pain Pump<br /><span style="font-weight:500;color:#8a8a9a;font-size:12px;">Ağrı Pompası</span></div>
+            <p class="pcard-desc has-content" data-tr="Tam doz geçmişi ve kurcalamaya karşı izlenebilir kayıt ile güvenli, programlanabilir ağrı yönetimi sağlayan hasta kontrollü analjezi (PCA) pompası.">Patient-controlled analgesia (PCA) pump enabling safe, programmable pain management with full dose history and tamper-evident tracking.</p>
+            <div class="pcard-footer"><span class="pcard-tag" data-tr="Cihaz">Device</span><a href="index.html#contact" class="pcard-cta"><span data-tr="Bilgi İste">Request Info</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+          </div>
+        </div>
+
+        <div class="pcard" data-images='["product pictures/Pumps/enFlow-controllerkan ısıtıcı1.jpg","product pictures/Pumps/enFlow-warmerkartus_A.jpg"]'>
+          <div class="pcard-img">
+            <img src="product pictures/Pumps/enFlow-controllerkan ısıtıcı1.jpg" alt="enFlow Fluid and Blood Warmer" />
+          </div>
+          <div class="pcard-body">
+            <div class="pcard-title">enFlow™ Fluid &amp; Blood Warming<br /><span style="font-weight:500;color:#8a8a9a;font-size:12px;">Sıvı ve Kan Isıtıcı</span></div>
+            <p class="pcard-desc has-content" data-tr="Bakım noktasında ısıtılmış IV sıvıları uygulayan, tüm klinik alanlarda hasta normotermisinin korunmasına yardımcı olan kompakt sıvı ve kan ısıtma sistemi.">Compact fluid and blood warming system that delivers warmed IV fluids at the point of care, helping maintain patient normothermia across clinical areas.</p>
+            <div class="pcard-footer"><span class="pcard-tag" data-tr="Cihaz">Device</span><a href="index.html#contact" class="pcard-cta"><span data-tr="Bilgi İste">Request Info</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+          </div>
+        </div>
+
+      </div>
+    </section><!-- /Devices -->
+
+  </main>
+</div><!-- /products-layout -->
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <img src="brand_assets/AlplerMedicalLogoPink-300x88.png" alt="Alpler Hospital Supplies" style="height:34px;width:auto;" />
+        <p class="footer-brand-desc" data-tr="Ankara merkezli, sertifikalı tıbbi sarf malzemeleri distribütörü — anestezi, yoğun bakım, monitörizasyon ve yenidoğan.">Ankara-based distributor of certified medical consumables — anesthesia, intensive care, monitoring, and neonatology.</p>
+        <div style="display:flex;gap:8px;">
+          <a href="#" aria-label="Twitter" style="width:34px;height:34px;border-radius:8px;background:rgba(0,0,0,0.05);border:1px solid rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:center;transition:background 0.2s;">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M14 2l-4.5 5.2L14.5 14h-3L9 10.4 5.5 14H2l4.7-5.5L1.5 2h3L7.8 5.4 11 2h3z" fill="#6a6a7a"/></svg>
+          </a>
+          <a href="#" aria-label="Facebook" style="width:34px;height:34px;border-radius:8px;background:rgba(0,0,0,0.05);border:1px solid rgba(0,0,0,0.08);display:flex;align-items:center;justify-content:center;transition:background 0.2s;">
+            <svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M12 1H10a3 3 0 00-3 3v2H5v3h2v6h3V9h2l1-3H10V4a1 1 0 011-1h1V1z" fill="#6a6a7a"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <div class="footer-col-title" data-tr="Ürünler">Products</div>
+        <ul class="footer-links">
+          <li><a href="#anestezi" data-tr="Anestezi">Anesthesia</a></li>
+          <li><a href="#yogun-bakim" data-tr="Yoğun Bakım">Intensive Care</a></li>
+          <li><a href="#monitor" data-tr="Monitörizasyon">Monitoring</a></li>
+          <li><a href="#kuvoz" data-tr="Küvöz Sarf Malzemeleri">Incubator Supplies</a></li>
+          <li><a href="#single" data-tr="Tıbbi Cihazlar">Medical Devices</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title" data-tr="Şirket">Company</div>
+        <ul class="footer-links">
+          <li><a href="index.html#about" data-tr="Hakkımızda">About Us</a></li>
+          <li><a href="index.html#quality" data-tr="Kalite ve Sertifikalar">Quality & Certifications</a></li>
+          <li><a href="index.html#export" data-tr="İhracat">Export</a></li>
+          <li><a href="index.html#partners" data-tr="İş Ortakları">Business Partners</a></li>
+          <li><a href="index.html#contact" data-tr="İletişim">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title" data-tr="İletişim">Contact</div>
+        <ul class="footer-links" style="gap:8px;">
+          <li style="font-size:13px;color:#8a8a9a;line-height:1.6;">Bahçekapı Mah. 2500 Cadde No:15/10<br />Şaşmaz, 06797 Etimesgut / Ankara</li>
+          <li><a href="tel:+903124413436" style="font-size:13px;">+90 312 441 34 36</a></li>
+          <li style="font-size:13px;color:#9a9aaa;" data-tr="Pzt–Cum: 08:00 – 17:30">Mon–Fri: 08:00 – 17:30</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy" data-tr="© 2024 Alpler Hastane Malzemeleri. Tüm hakları saklıdır.">© 2024 Alpler Hastane Malzemeleri. All rights reserved.</span>
+      <div class="footer-legal">
+        <a href="#" data-tr="Gizlilik Politikası">Privacy Policy</a>
+        <a href="#" data-tr="Kullanım Koşulları">Terms of Service</a>
+        <a href="#" data-tr="Yasal Uyarı">Legal Notice</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ═══ PRODUCT DETAIL PANEL ═══ -->
+<div class="panel-backdrop" id="panel-backdrop"></div>
+<aside class="panel-drawer" id="panel-drawer">
+  <button class="panel-close" id="panel-close" aria-label="Close">
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1l12 12M13 1L1 13" stroke="#1a1a2a" stroke-width="1.6" stroke-linecap="round"/></svg>
+  </button>
+  <div class="panel-img" id="panel-img">
+    <div class="panel-img-main" id="panel-img-main">
+      <div class="panel-img-placeholder">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="4" y="8" width="32" height="24" rx="3" stroke="#c8c8d8" stroke-width="1.4"/><circle cx="14" cy="18" r="4" stroke="#c8c8d8" stroke-width="1.2"/><path d="M4 28l8-7 6 5 5-4 9 7" stroke="#c8c8d8" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span data-tr="Fotoğraf yakında">Photo coming soon</span>
+      </div>
+    </div>
+    <div class="panel-thumbs" id="panel-thumbs" style="display:none;"></div>
+  </div>
+  <div class="panel-body">
+    <span class="panel-tag" id="panel-tag"></span>
+    <h2 class="panel-title" id="panel-title"></h2>
+    <p class="panel-subtitle" id="panel-subtitle"></p>
+    <div class="panel-divider"></div>
+    <span class="panel-desc-label" data-tr="Ürün Açıklaması">Product Description</span>
+    <p class="panel-desc" id="panel-desc"></p>
+    <a href="index.html#contact" class="panel-cta">
+      <span data-tr="Bilgi İste / Teklif Al">Request Info / Get a Quote</span>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="#fff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
+  </div>
+</aside>
+
+<script>
+  // ── TR/EN language toggle ──
+  (function() {
+    var LANG_KEY = 'alpler_lang';
+    var els = document.querySelectorAll('[data-tr]');
+    els.forEach(function(el) {
+      if (el.dataset.en === undefined) el.dataset.en = el.innerHTML;
+    });
+    function applyLang(lang) {
+      els.forEach(function(el) {
+        el.innerHTML = lang === 'tr' ? el.dataset.tr : el.dataset.en;
+      });
+      document.querySelectorAll('.lang-btn').forEach(function(b) {
+        b.classList.toggle('active', b.dataset.lang === lang);
+      });
+      document.documentElement.lang = lang;
+      localStorage.setItem(LANG_KEY, lang);
+    }
+    var saved = localStorage.getItem(LANG_KEY) || 'en';
+    applyLang(saved);
+    document.querySelectorAll('.lang-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() { applyLang(btn.dataset.lang); });
+    });
+  })();
+
+  // Mobile hamburger
+  document.getElementById('hamburger').addEventListener('click', function() {
+    document.getElementById('mobile-nav').classList.toggle('open');
+  });
+
+  const catTabs      = document.querySelectorAll('.cat-tab');
+  const catSections  = document.querySelectorAll('.cat-section');
+  const sidebarGroups = document.querySelectorAll('.sidebar-group');
+
+  function switchTo(id) {
+    // Tabs
+    catTabs.forEach(t => t.classList.toggle('active', t.dataset.cat === id));
+    // Sections
+    catSections.forEach(s => s.classList.toggle('active', s.id === id));
+    // Sidebar groups
+    sidebarGroups.forEach(g => g.classList.toggle('active', g.dataset.cat === id));
+    // Scroll content area to top
+    window.scrollTo({ top: document.querySelector('.cat-nav-bar').offsetTop - 64, behavior: 'smooth' });
+  }
+
+  // Wire up tabs
+  catTabs.forEach(tab => {
+    tab.addEventListener('click', e => {
+      e.preventDefault();
+      switchTo(tab.dataset.cat);
+    });
+  });
+
+  // Wire up sidebar links (scroll within section)
+  document.querySelectorAll('.sidebar-link').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      const target = document.querySelector(link.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  // Activate first tab on load (or from URL hash)
+  const hash = location.hash.replace('#','');
+  const valid = ['anestezi','yogun-bakim','monitor','single'];
+  switchTo(valid.includes(hash) ? hash : 'anestezi');
+
+  // ── PRODUCT DETAIL PANEL ──
+  const backdrop = document.getElementById('panel-backdrop');
+  const drawer   = document.getElementById('panel-drawer');
+  const panelImg    = document.getElementById('panel-img');
+  const panelTag    = document.getElementById('panel-tag');
+  const panelTitle  = document.getElementById('panel-title');
+  const panelSub    = document.getElementById('panel-subtitle');
+  const panelDesc   = document.getElementById('panel-desc');
+
+  const panelImgMain = document.getElementById('panel-img-main');
+  const panelThumbs  = document.getElementById('panel-thumbs');
+
+  function setMainImage(src, alt) {
+    panelImgMain.innerHTML = `<img src="${src}" alt="${alt}" />`;
+  }
+
+  function openPanel(card) {
+    const titleEl   = card.querySelector('.pcard-title');
+    const titleText = titleEl ? titleEl.childNodes[0].textContent.trim() : '';
+    const subEl     = titleEl ? titleEl.querySelector('span') : null;
+    const subText   = subEl ? subEl.textContent.trim() : '';
+    const descText  = (card.querySelector('.pcard-desc') || {}).textContent || '';
+    const tagText   = (card.querySelector('.pcard-tag') || {}).textContent || '';
+
+    // Populate text
+    panelTag.textContent   = tagText;
+    panelTitle.textContent = titleText;
+    panelSub.textContent   = subText;
+    panelDesc.textContent  = descText;
+    panelDesc.classList.toggle('has-content', !descText.includes('coming soon'));
+
+    // Gather images — prefer data-images attribute, fall back to single card img
+    let images = [];
+    if (card.dataset.images) {
+      try { images = JSON.parse(card.dataset.images); } catch(e) {}
+    }
+    if (!images.length) {
+      const imgEl = card.querySelector('.pcard-img img');
+      if (imgEl) images = [imgEl.getAttribute('src')];
+    }
+
+    // Render main image
+    if (images.length) {
+      setMainImage(images[0], titleText);
+    } else {
+      var photoSoonText = document.documentElement.lang === 'tr' ? 'Fotoğraf yakında' : 'Photo coming soon';
+      panelImgMain.innerHTML = `<div class="panel-img-placeholder">
+        <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="4" y="8" width="32" height="24" rx="3" stroke="#c8c8d8" stroke-width="1.4"/><circle cx="14" cy="18" r="4" stroke="#c8c8d8" stroke-width="1.2"/><path d="M4 28l8-7 6 5 5-4 9 7" stroke="#c8c8d8" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        ${photoSoonText}</div>`;
+    }
+
+    // Render thumbnails (only when >1 image)
+    panelThumbs.innerHTML = '';
+    if (images.length > 1) {
+      panelThumbs.style.display = 'flex';
+      images.forEach((src, i) => {
+        const thumb = document.createElement('div');
+        thumb.className = 'panel-thumb' + (i === 0 ? ' active' : '');
+        thumb.innerHTML = `<img src="${src}" alt="${titleText} ${i + 1}" />`;
+        thumb.addEventListener('click', () => {
+          setMainImage(src, titleText);
+          panelThumbs.querySelectorAll('.panel-thumb').forEach(t => t.classList.remove('active'));
+          thumb.classList.add('active');
+        });
+        panelThumbs.appendChild(thumb);
+      });
+    } else {
+      panelThumbs.style.display = 'none';
+    }
+
+    backdrop.classList.add('open');
+    drawer.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closePanel() {
+    backdrop.classList.remove('open');
+    drawer.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // Click any product card
+  document.querySelectorAll('.pcard').forEach(card => {
+    card.addEventListener('click', e => {
+      // Don't open if the "Request Info" link was clicked
+      if (e.target.closest('.pcard-cta')) return;
+      openPanel(card);
+    });
+  });
+
+  document.getElementById('panel-close').addEventListener('click', closePanel);
+  backdrop.addEventListener('click', closePanel);
+
+  // Close on Escape
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closePanel(); });
+</script>
+</body>
+</html>
