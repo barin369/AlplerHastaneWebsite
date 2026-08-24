@@ -11,6 +11,7 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body { font-family: 'Plus Jakarta Sans', sans-serif; background: #fff; color: #1a1a2a; overflow-x: hidden; }
+    img, svg { max-width: 100%; }
 
     .display { font-weight: 800; letter-spacing: -0.045em; line-height: 1.05; }
     .title    { font-weight: 700; letter-spacing: -0.03em;  line-height: 1.15; }
@@ -279,6 +280,13 @@
       .standalone-grid { grid-template-columns: 1fr; }
       .footer-top { grid-template-columns: 1fr; }
     }
+    @media (max-width: 480px) {
+      .nav-inner, .page-hero-inner, .cat-nav-inner, .footer-inner { padding-left: 18px; padding-right: 18px; }
+      .products-layout { padding-left: 18px; padding-right: 18px; }
+      .page-hero { padding: 104px 0 48px; }
+      .panel-body { padding: 22px; }
+      .panel-img-main { padding: 0; }
+    }
   </style>
 </head>
 <body>
@@ -287,7 +295,7 @@
 <header id="nav">
   <div class="nav-inner">
     <a href="index.html">
-      <img src="brand_assets/AlplerMedicalLogoPink-300x88.png" alt="Alpler Hospital Supplies" style="height:50px;width:auto;filter:brightness(0) invert(1);" />
+      <img src="brand_assets/AlplerMedicalLogoPink-300x88.png" alt="Alpler Hospital Supplies" style="height:64px;width:auto;filter:brightness(0) invert(1);" />
     </a>
     <nav class="nav-links">
       <a href="index.html"          class="nav-link" data-tr="Ana Sayfa">Home</a>

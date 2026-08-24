@@ -11,6 +11,7 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html { scroll-behavior: smooth; }
     body { font-family: 'Plus Jakarta Sans', sans-serif; background: #fff; color: #1a1a2a; overflow-x: hidden; }
+    img, svg { max-width: 100%; }
     .display { font-weight: 800; letter-spacing: -0.045em; line-height: 1.05; }
     .title    { font-weight: 700; letter-spacing: -0.03em; line-height: 1.15; }
     .label    { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; }
@@ -123,13 +124,22 @@
       .footer-top { grid-template-columns: 1fr; }
       .footer-bottom { flex-direction: column; align-items: flex-start; }
     }
+    @media (max-width: 480px) {
+      .nav-inner, .footer-inner { padding-left: 18px; padding-right: 18px; }
+      .page-hero { padding: 112px 18px 56px; }
+      .breadcrumb-bar, .cat-nav-inner, .prod-section, .cta-section { padding-left: 18px; padding-right: 18px; }
+      .cta-section { padding-top: 64px; padding-bottom: 64px; }
+      .prod-section { padding-top: 56px; padding-bottom: 0; }
+      .cta-actions { flex-direction: column; align-items: stretch; }
+      .cta-actions .btn-prim, .cta-actions .btn-ghost { justify-content: center; }
+    }
   </style>
 </head>
 <body>
 
 <nav id="nav">
   <div class="nav-inner">
-    <a href="index.html" style="flex-shrink:0;"><img src="brand_assets/AlplerMedicalLogoPink-300x88.png" alt="Alpler Hospital Supplies" style="height:50px;width:auto;filter:brightness(0) invert(1);" /></a>
+    <a href="index.html" style="flex-shrink:0;"><img src="brand_assets/AlplerMedicalLogoPink-300x88.png" alt="Alpler Hospital Supplies" style="height:64px;width:auto;filter:brightness(0) invert(1);" /></a>
     <div class="nav-links">
       <a href="index.html"         class="nav-link" data-tr="Ana Sayfa">Home</a>
       <a href="index.html#about"    class="nav-link" data-tr="Hakkımızda">About</a>
