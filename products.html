@@ -144,6 +144,7 @@
       background: #f4f4f8; display: flex; align-items: center; justify-content: center;
     }
     .pcard-img img { width: 100%; height: 100%; object-fit: contain; padding: 16px; }
+    .pcard-img img[src*="GP.png"] { padding: 6px; }
     .pcard-img-placeholder {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       gap: 8px; color: #c8c8d8; font-size: 12px; font-weight: 500; letter-spacing: 0.05em;
@@ -360,6 +361,7 @@
   <aside class="sidebar">
     <div class="sidebar-group" data-cat="anestezi">
       <div class="sidebar-group-title" data-tr="Anestezi">Anesthesia</div>
+      <a class="sidebar-link" href="#anestezi-pressure-transducer" data-tr="Basınç Transduseri">Pressure Transducer</a>
       <a class="sidebar-link" href="#anestezi-masks" data-tr="Esnek Yüz Maskeleri">Flexible Face Masks</a>
       <a class="sidebar-link" href="#anestezi-masks-semi" data-tr="Yarı Esnek Yüz Maskeleri">Semi-Flexible Face Masks</a>
       <a class="sidebar-link" href="#anestezi-water" data-tr="Su Tutucular">Water Traps</a>
@@ -397,8 +399,26 @@
           <div class="cat-section-label label"><span data-tr="Kategori 01">Category 01</span></div>
           <h2 class="cat-section-title title" data-tr="Anestezi">Anesthesia</h2>
         </div>
-        <span class="cat-section-count" data-tr="4 ürün grubu">4 product lines</span>
+        <span class="cat-section-count" data-tr="5 ürün grubu">5 product lines</span>
       </div>
+
+      <!-- Pressure Transducer -->
+      <div class="subcat" id="anestezi-pressure-transducer">
+        <div class="subcat-header"><div class="subcat-title">Pressure Transducer — Basınç Transduseri</div><div class="subcat-line"></div></div>
+        <div class="product-grid cols-2">
+          <div class="pcard" data-images='["product pictures/Anesthesia1/pressure-transducer 1 .jpg.webp","product pictures/Anesthesia1/Pressure tranducer 2.jpg"]'>
+            <div class="pcard-img"><img src="product pictures/Anesthesia1/pressure-transducer 1 .jpg.webp" alt="Pressure Transducer" /></div>
+            <div class="pcard-body">
+              <div class="pcard-title">Pressure Transducer<br /><span style="font-weight:500;color:#8a8a9a;font-size:12px;">Basınç Transduseri</span></div>
+              <p class="pcard-desc has-content" data-tr="Ameliyathane ve yoğun bakımda invaziv kan basıncı izlemi için kullanılan tek kullanımlık basınç transduseri seti. Standart monitör kablolarıyla uyumludur.">Single-use pressure transducer set for invasive blood pressure monitoring in the operating room and ICU. Compatible with standard monitor cables.</p>
+              <div class="pcard-footer">
+                <span class="pcard-tag" data-tr="Anestezi">Anesthesia</span>
+                <a href="index.html#contact" class="pcard-cta"><span data-tr="Bilgi İste">Request Info</span><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 6h8M6 2l4 4-4 4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /Pressure Transducer -->
 
       <!-- Anesthesia Masks -->
       <div class="subcat" id="anestezi-masks">
@@ -691,7 +711,7 @@
 
         <div class="pcard">
           <div class="pcard-img">
-            <img src="product pictures/Pumps/infüzyon pump BD.jpg" alt="Infusion Pump" />
+            <img src="product pictures/Pumps/GP.png" alt="Infusion Pump" />
           </div>
           <div class="pcard-body">
             <div class="pcard-title">Infusion Pump<br /><span style="font-weight:500;color:#8a8a9a;font-size:12px;">İnfüzyon Pompası</span></div>
